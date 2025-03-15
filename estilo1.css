@@ -1,0 +1,166 @@
+.container {
+    width: 100%;
+    height: 130px;
+}
+
+.container2 {
+    width: 100%;
+    height: 95px;
+    border: 2px solid gray;
+    
+}
+
+.container3 {
+    width: 100%;
+    /*height: 360px;*/
+    height: 395px;
+    background-color: red;
+
+    border: 1px solid gray;
+
+    /* border-left: 2px solid gray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray; */
+    /* border-top: none; */
+    /* padding: 0px; */
+    /*background-color: lightgrey;*/
+
+}
+
+.container3 > table > thead > tr {
+    background-color: lightgrey;
+}
+
+.container3 table {
+    width: 100%;
+}
+
+.container3 table td {
+    width: auto; 
+}
+
+.container4{
+    width: 100%;
+    font-size: 0.6em;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: -10px;
+}
+
+.container5{
+    width: 100%;
+    font-size: 1.2em;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: flex-end;
+    
+}
+
+.container5 table {    
+
+border: 2px solid gray;
+border-collapse: collapse;
+/*margin-left: 523.5px;*/
+margin-left: auto;
+}
+
+.container5 table tr.hr-row td {
+    border-top: 2px solid gray;
+}
+
+.container5 table td {
+    padding: 0 10px; 
+}
+
+.container6 {
+    width: 100%;
+    height: 120px;
+    border: 2px solid gray;
+    margin-top: 3px;
+}
+
+.container7 {
+    width: 100%;
+    height: 40px;
+    border: 2px solid gray;
+    margin-top: 3px;
+    
+}
+
+
+.columna1 {
+    float: left;
+    width: 33.33%; /* Ancho de la columna */
+    text-align: left;
+}
+
+.columna2 {
+    float: left;
+    width: 33.33%; /* Ancho de la columna */
+    text-align: center;
+}
+
+.columna3 {
+float: left;
+width: 33.33%;
+text-align: center;
+border: 2px solid gray; /* Añadir borde de 2px sólido negro */
+padding: 0px; /* Añadir relleno de 0px */
+}
+
+.texto-peque {
+    font-size: 1.0em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.texto-peque1 {
+    font-size: 1.0em;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(37, 37, 185);
+}
+
+.texto-cabecera {
+    font-size: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.logo img {
+    width: 200px;
+    height: 60px;
+}
+
+.td2{
+    text-align: right;
+}
+
+.texto-peque2{
+    font-size: 0.6em;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+.texto-peque2-1{
+    font-size: 0.6em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.texto-peque3{
+    font-size: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+.texto-peque3-1{
+    font-size: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.texto-peque4{
+    font-size: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    
+}
+
+tbody > tr > td {
+    font-size: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+
+}

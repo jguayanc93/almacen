@@ -1,0 +1,85 @@
+*{
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+/* SOLO LOS TITULOS DE LAS CABESERAS */
+#titulos{
+    width: 90vw;
+    display: flex;
+    flex-direction: row;
+}
+#head-izquierda{
+    width: 33%;
+    display: flex;
+}
+#head-centro{
+    width: 33%;
+    display: flex;
+}
+#head-derecha{
+    width: 33%;
+    display: flex;
+}
+/* CONTENEDORES DE LAS TABLAS */
+#contenedor{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+#izquierda{
+    width: 40%;
+    display: flex;
+}
+#centro{
+    width: 30%;
+    display: flex;
+}
+#derecha{
+    width: 30%;
+    display: flex;
+}
+
+#izquierda>table{
+    width: 100%;
+}
+
+#centro>table{
+    width: 100%;
+}
+
+#derecha>table{
+    width: 100%;
+}
+
+/* revisar el maquetado */
+#contenedor3{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+
+#d-venideros{
+    width: 40%;
+    display: flex;
+}
+#d-embalados{
+    width: 30%;
+    display: flex;
+}
+#d-guias{
+    width: 30%;
+    display: flex;
+}
+
+#d-venideros>table{
+    width: 100%;
+}
+
+#d-embalados>table{
+    width: 100%;
+}
+
+#d-guias>table{
+    width: 100%;
+}

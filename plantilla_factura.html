@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura</title>
+    <!-- <link rel="stylesheet" href="./estilo2.css"> -->
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0px;
+            margin: 0px;
+        }
+        .container {
+            width: 100%;
+            height: 133px;
+            margin-top: 40px;
+            /* padding-top: 25px; */
+            /* agregado para mimetizar la anchura del documento */
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .container2 {
+            margin-top: 7px;
+            width: 100%;
+            height: 95px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            /* align-items: center; */
+        }
+
+        .container3 {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            /* border-left: 2px solid gray;
+            border-right: 2px solid gray;
+            border-bottom: 2px solid gray;
+            border-top: none;
+            padding: 0px; */
+            /*background-color: lightgrey;*/
+
+        }
+
+        /* .container3 > table > thead > tr {
+            background-color: lightgrey;
+        }
+
+        .container3 table {
+            width: 100%;
+        }
+
+        .container3 table td {
+            width: auto; 
+        } */
+
+        /* .container4{
+            width: 100%;
+            font-size: 0.6em;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: -10px;
+        } */
+
+        .container4{
+            width: 100%;
+            height: 95px;
+            margin-top: 7px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .cliente-monto-total{
+            width: 91.5%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .total-texto{
+            display: flex;
+            height: 100%;
+            width: 60%;
+            flex-direction: column;
+        }
+        .total-texto > p{
+            font-size: 0.7em;
+        }
+
+        .total-numeros{
+            display: flex;
+            height: 100%;
+            width: 40%;
+            border: 1px solid black;
+            flex-direction: column;
+        }
+
+        .tabla-montos-finales{
+            font-size: 0.6em;
+        }
+
+        .container6{
+            width: 100%;
+            height: 95px;
+            margin-top: 7px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .factura-destino{
+            width: 91.5%;
+            height: 100%;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: row;
+        }
+        .factura-destino-izquierda{
+            display: flex;
+            height: 100%;
+            width: 60%;
+            flex-direction: column;            
+        }
+        .factura-destino-izquierda > p{
+            font-size: 0.7em;
+        }
+
+        .factura-destino-derecha{
+            display: flex;
+            height: 100%;
+            width: 40%;
+            flex-direction: column;
+        }
+        .factura-destino-derecha > p{
+            font-size: 0.7em;
+        }
+        
+
+        .container5{
+            width: 100%;
+            font-size: 1.2em;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: flex-end;
+            
+        }
+
+        .container5 table {    
+        
+        border: 2px solid gray;
+        border-collapse: collapse;
+        /*margin-left: 523.5px;*/
+        margin-left: auto;
+        }
+        
+        .container5 table tr.hr-row td {
+            border-top: 2px solid gray;
+        }
+
+        .container5 table td {
+            padding: 0 10px; 
+        }
+
+        /* .container6 {
+            width: 100%;
+            height: 120px;
+            border: 2px solid gray;
+            margin-top: 3px;
+        } */
+
+        .container7 {
+            width: 100%;
+            height: 95px;
+            margin-top: 7px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .observacion{
+            width: 91.5%;
+            height: 100%;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .observacion > p {
+            font-size: 0.7em;
+        }
+
+        .container8 {
+            width: 100%;
+            height: 95px;
+            margin-top: 7px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .extra{
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .extra > p{
+            font-size: 0.7em;
+        }
+
+        
+        .columna1 {
+            /* float: left; */
+            /* width: 33.33%; Ancho de la columna */
+            width: 20.5%;
+            /* text-align: left; */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .columna2 {
+            /* width: 33.33%; */
+            width: 40.5%;
+            /* text-align: center; */
+            display: flex;
+            flex-direction: column;
+        }
+        .cabesera-parte2-titulo{
+            width: 100%;
+            padding-top: 10px;
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .cabesera-parte2-cuerpo{
+            /* estilo para la data de compudiskett */
+            margin-top: 12px;
+            height: 130px;
+            /*border: 1px solid black;*/
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .cabesera-parte2-cuerpo-izquierda{
+            height: 100%;
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: flex-start; */
+        }
+        .cabesera-parte2-cuerpo-izquierda > p{
+            margin-bottom: 10px;
+            height: 20%;
+            width: 100%;
+        }
+        .cabesera-parte2-cuerpo-derecha{
+            height: 100%;
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: flex-start; */
+        }
+        .cabesera-parte2-cuerpo-derecha > p{
+            margin-bottom: 8px;
+            height: 20%;
+            width: 100%;
+        }
+
+
+        .columna3 {
+        /* float: left; */
+        height: 100%;
+        width: 30.5%;
+        /* text-align: center; */
+        border: 1.5px solid gray;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: space-around;
+        }
+
+        .cabesera-parte3-cuerpo{
+            height: 20%;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .cliente-data{
+            width: 91.5%;
+            height: 100%;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .cliente-data-izquierda{
+            display: flex;
+            height: 100%;
+            width: 60%;
+            flex-direction: column;
+        }
+        .cliente-data-izquierda > p{
+            font-size: 0.7em;
+        }
+
+        .cliente-data-derecha{
+            display: flex;
+            height: 100%;
+            width: 40%;
+            flex-direction: column;
+        }
+        .cliente-data-derecha > p{
+            font-size: 0.7em;
+        }
+
+
+        .factura-detalle{
+            width: 91.5%;
+            height: 100%;
+            border: 1px solid black;
+            display: flex;
+            /* flex-direction: row; */
+        }
+
+        .factura-detalle > table{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .factura-detalle-titulos{
+            /* font-size: 0.7em; */
+            width: 100%;
+            background-color: lightgray;
+            display: flex;
+        }
+
+        .factura-detalle-titulos > tr{
+            font-size: 0.7em;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            /* justify-content: space-between; */
+        }
+
+        /* .factura-detalle-titulos-tr{} */
+
+        .factura-detalle > tbody{
+            display: flex;
+            font-size: 0.8em;
+            width: 100%;
+        }
+
+        .factura-detalle-items > tr{
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+        }
+
+
+        .texto-peque {
+            font-size: 1.0em;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+        }
+
+        .texto-peque1 {
+            font-size: 1.0em;
+            font-family: Arial, Helvetica, sans-serif;
+            color: rgb(37, 37, 185);
+            display: flex;
+        }
+
+        .texto-cabecera {
+            font-size: 0.5em;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* .logo img {
+            width: 200px;
+            height: 60px;
+        } */
+
+        /* .td2{
+            text-align: right;
+        }
+
+        .texto-peque2{
+            font-size: 0.6em;
+            font-family: Arial, Helvetica, sans-serif;
+
+        }
+        .texto-peque2-1{
+            font-size: 0.6em;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .texto-peque3{
+            font-size: 0.5em;
+            font-family: Arial, Helvetica, sans-serif;
+
+        }
+        .texto-peque3-1{
+            font-size: 0.5em;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .texto-peque4{
+            font-size: 0.5em;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: left;
+            
+        }
+
+        tbody > tr > td {
+            font-size: 0.5em;
+            font-family: Arial, Helvetica, sans-serif;
+        } */
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="columna1 logo">
+        <img src="logo_empresa_2019.png" style="width: 200px;height: 60px;">
+        {{tipdespacho}}
+        <img src="factura-barras.png">
+        <!-- <img src="file://{{empresalogotipo}}" alt="logo"> -->
+    </div>
+    <div class="columna2">
+        <div class="cabesera-parte2-titulo">
+            <p style="font-weight:bolder;"><strong>COMPUDISKETT S R L</strong></p>
+        </div>
+        <div class="cabesera-parte2-cuerpo">
+            <div class="cabesera-parte2-cuerpo-izquierda">
+                <p style="font-weight:bolder;font-size: 11px;">Domicilio Fiscal:</p>
+                <p style="font-weight:bolder;font-size: 11px;">Teléfono:</p>
+                <p style="font-weight:bolder;font-size: 11px;">WebSite:</p>
+                <p style="font-weight:bolder;font-size: 11px;">Email:</p>
+            </div>
+            <div class="cabesera-parte2-cuerpo-derecha">
+                <p style="font-size: 10px;">AV.REPUBLICA DE CHILE NRO. 504-JESUS MARIA-LIMA-LIMA</p>
+                <p style="font-size: 10px;">614-3800/640-0150</p>
+                <p style="font-size: 10px;">https://www.compudiskett.com.pe</p>
+                <p style="font-size: 10px;">https://www.ecommerce.compudiskett.com.pe</p>
+                <p style="font-size: 10px;">informes@compudiskett.com.pe</p>
+            </div>
+        </div>
+    </div>
+    <div class="columna3">
+        <div class="cabesera-parte3-cuerpo">
+            <p class="texto-peque1"><strong>R.U.C. 20123053037</strong></p>
+        </div>
+        <div class="cabesera-parte3-cuerpo">
+            <p class="texto-peque1"><strong>FACTURA ELECTRÓNICA </strong></p>
+        </div>
+        <div class="cabesera-parte3-cuerpo">
+            <p class="texto-peque"><strong>N° {{NUMEROFACTURA}}</strong></p>
+        </div>
+    </div>
+</div>
+<div class="container2">
+    <div class="cliente-data">
+        <div class="cliente-data-izquierda">
+            <p><strong>SEÑOR(ES)</strong>: {{clientenombre}}</p>
+            <p><strong>DIRECCIÓN</strong>: {{clientedireccion}}</p>
+            <p><strong>R.U.C.</strong>: {{clienteruc}}</p>
+            <p><strong>TIP.VENTA</strong>: {{clientetipventa}}</p>
+            <p><strong>N° de GUIA</strong>: {{clientenguia}}</p>
+            <p><strong>CONTACTO</strong>: {{clientecontacto}}</p>
+        </div>
+        <div class="cliente-data-derecha">
+            <p><strong>MONEDA</strong>: {{clientemoneda}}</p>
+            <p><strong>ORDEN DE COMPRA</strong>: {{clienteorden}}</p>
+            <p><strong>CONDICION DE PAGO</strong>: {{clientecondicionpago}}</p>
+            <p><strong>FECHA DE EMISION</strong>: {{clientefechaemision}}</p>
+            <p><strong>FECHA DE VENCIMIENTO</strong>: {{clientefechavencimiento}}</p>
+        </div>
+    </div>
+</div>
+<div class="container3">
+    <div class="factura-detalle">
+        <table>
+            <thead class="factura-detalle-titulos">
+                <tr class="factura-detalle-titulos-tr">
+                    <th style="flex-grow: 1;"><strong>CODIGO</strong></th>
+                    <th style="flex-grow: 1;"><strong>CANT.</strong></th>
+                    <th style="flex-grow: 1;"><strong>U.M.</strong></th>
+                    <th style="flex-grow: 7;"><strong>DESCRIPCION</strong></th>
+                    <th style="flex-grow: 1;"><strong>PART NUMBER</strong></th>
+                    <th style="flex-grow: 1;"><strong>VALOR<br> UNITARIO</strong></th>
+                    <th style="flex-grow: 1;"><strong>PRECIO <br>UNITARIO</strong></th>
+                    <th style="flex-grow: 1;"><strong>VALOR VENTA</strong></th>
+                </tr>
+            </thead>
+            <tbody class="factura-detalle-items">
+                {{tablabody}}
+                <!-- <tr>
+                    <td>{{tablabody}}</td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="container4">
+    <div class="cliente-monto-total">
+        <div class="total-texto">
+            <!-- <p><strong>SON:</strong> {{montoletras}}</p> -->
+            <p><strong>SON:</strong> TRESCIENTOS UNO CON 40/100 DOLARES AMERICANOS</p>
+        </div>
+        <div class="total-numeros">
+            <table class="tabla-montos-finales">
+                <tr>
+                    <td><strong>Total Gravado</strong></td>
+                    <td><strong>{{MONESIMBOL}}:</strong></td>
+                    <td>{{clientetotalgravado}}</td>  
+                </tr>
+                <tr>
+                    <td><strong>Total Inafecto</strong></td>
+                    <td><strong>{{MONESIMBOL}}:</strong></td>
+                    <td>00.00</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Exonerado</strong></td>
+                    <td><strong>{{MONESIMBOL}}:</strong></td>
+                    <td>00.00</td>
+                </tr>
+                <tr>
+                    <td><strong>I.G.V.</strong></td>
+                    <td><strong>{{MONESIMBOL}}:</strong></td>
+                    <td>{{clienteigv}}</td>
+                </tr>
+                <tr class="hr-row">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>{{MONESIMBOL}}:</strong></td>
+                    <td>{{clientetotal}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container6">
+    <div class="factura-destino">
+        <div class="factura-destino-izquierda">
+            <p><strong>PTO. PARTIDA</strong>: {{clienteptopartida}}</p>
+            <p><strong>UBIGEO P.P.</strong>: {{clienteubigeopp}}</p>
+            <p><strong>PTO. LLEGADA</strong>: {{clienteptollegada}}</p>
+            <p><strong>UBIGEO PLL.</strong>: {{clienteubigeopll}}</p>
+            <p><strong>MOT. TRASL</strong>: {{clientemottrasl}}</p>
+            <p><strong>CONSIGNATARIO</strong>: {{clienteconsignatario}}</p>
+        </div>
+        <div class="factura-destino-derecha">
+            <p><strong>FECHA TRASLADO</strong>: {{clientefechatraslado}}</p>
+            <p><strong>RUC DESTINATARIO</strong>: {{clienterucdestinatario}}</p>
+            <p><strong>DESTINATARIO</strong>: {{clientedestinatario}}</p>
+            <p><strong>RUC TRANSPORTISTA</strong>: {{clienteructransportista}}</p>
+            <p><strong>R.SOCIAL TRANSPORTISTA</strong>: {{clientesocialtransportista}}</p>
+            <p><strong>PESO BRUTO</strong>: 0</p>
+        </div>
+    </div>
+</div>
+<div class="container7">
+    <div class="observacion">
+        <p><strong>OBSERVACION:</strong> {{clienteobservacion}}</p>
+    </div>
+</div>
+<div class="container8">
+    <div class="extra">
+        <p>Representacion impresa de la Factura Electronica</p>
+        <p>Podra ser consultada en www.compudiskett.com.pe/cpe</p>
+        <p>Autorizado mediante Resolucion de Intendencia Nº018-005-0002664/SUNAT</p>
+    </div>
+</div>
+</body>
+</html>

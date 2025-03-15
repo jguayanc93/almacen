@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>almacen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <!--CABEZERA PARA MOVERSE-->
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div class="relative flex h-16 items-center justify-between">
+            <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+              <!-- Mobile menu button-->
+              <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset" aria-controls="mobile-menu" aria-expanded="false">
+                <span class="absolute -inset-0.5"></span>
+                <span class="sr-only">Open main menu</span>
+                <!--
+                  Icon when menu is closed.
+      
+                  Menu open: "hidden", Menu closed: "block"
+                -->
+                <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+                <!--
+                  Icon when menu is open.
+      
+                  Menu open: "block", Menu closed: "hidden"
+                -->
+                <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div class="flex shrink-0 items-center">
+                <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                <!-- <img class="h-8 w-auto" src="logo_empresa_2019.png" alt="compudiskett logo"> -->
+              </div>
+              <div class="hidden sm:ml-6 sm:block">
+                <div class="flex space-x-4">
+                  <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                  <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">ALMACEN</a>
+                  <a href="#" id="ventanilla" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Ventanilla</a>
+                  <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a>
+                  <a href="#" id="despacho" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Despacho</a>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                <span class="absolute -inset-1.5"></span>
+                <span class="sr-only">View notifications</span>
+                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                </svg>
+              </button>
+      
+              <!-- Profile dropdown -->
+              <div class="relative ml-3">
+                <div>
+                  <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                    <span class="absolute -inset-1.5"></span>
+                    <span class="sr-only">Open user menu</span>
+                    <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                  </button>
+                </div>
+                
+                <!-- <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="sm:hidden" id="mobile-menu">
+          <div class="space-y-1 px-2 pt-2 pb-3">
+            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
+            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
+            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
+            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>
+          </div>
+        </div>
+    </nav>
+    <!--FIN CABEZERA PARA MOVERSE-->
+
+
+    <!-- PRIMER DISEÑO REVISAR EN CASO DE VER ID -->  
+    <!-- <h1>ALMACEN</h1> -->
+    <div>
+        <button type="button" id="descargar">descargar pdf</button>
+    </div>
+    <!-- <div>
+        <button type="button" id="ventanilla">VENTANILLA</button>
+        <button type="button" id="lp">LOCAL/PROVINCIA</button>
+    </div>
+    <div>
+        <button type="button" id="despacho">DESPACHO</button>
+    </div> -->
+    <div id="fac-data">
+        <label for="data1">documento</label>
+        <p id="data1"></p>
+        <!-- <input type="text" name="data1" id="data1" disabled><br> -->
+        <label for="data2">despacho</label>
+        <p id="data2"></p>
+        <!-- <input type="text" name="data2" id="data2"><br> -->
+        <label for="data3">cliente</label>
+        <p id="data3"></p>
+        <!-- <input type="text" name="data3" id="data3"><br> -->
+        <label for="data4">destino</label>
+        <p id="data4"></p>
+        <!-- <input type="text" name="data4" id="data4"><br> -->
+        <label for="data5">departamento</label>
+        <p id="data5"></p>
+        <!-- <input type="text" name="data5" id="data5"><br> -->
+        <label for="data6">provincia</label>
+        <p id="data6"></p>
+        <!-- <input type="text" name="data6" id="data6"><br> -->
+        <label for="data7">transporte</label>
+        <p id="data7"></p>
+        <!-- <input type="text" name="data7" id="data7"><br> -->
+        <label for="data8">vendedor</label>
+        <p id="data8"></p>
+        <!-- <input type="text" name="data8" id="data8"><br> -->
+        <label for="data9">zonas</label>
+        <p id="data9"></p>
+        <!-- <input type="text" name="data9" id="data9"><br> -->
+        <label for="data10">cantidad zonas</label>
+        <p id="data10"></p>
+        <!-- <input type="text" name="data10" id="data10"><br> -->
+    </div>
+    <h2>selecciona tu zona</h2>
+    <div id="distribucion">
+        <!-- <select name="zonas" id="zonas">
+            <option value="Z1" selected>ZONA 1</option>
+            <option value="Z2">ZONA 2</option>
+            <option value="Z3">ZONA 3</option>
+            <option value="desconocido">ZONA DESCONOCIDA</option>
+        </select> -->
+    </div>
+    <!-- no te olvides meter las 3 tablas en el contenedor para abarcar solo 1 espacio -->
+    <div id="titulos">
+        <div id="head-izquierda"><p>NUEVOS DOCUMENTOS</p></div>
+        <div id="head-centro"><p>DOCUMENTOS IMPRESOS</p></div>
+        <div id="head-derecha"><p>DOCUMENTOS EN PICKING</p></div>
+    </div>
+    <div id="contenedor">
+        <div id="izquierda">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DOCUMENTO</th>
+                        <th>ACCION</th>
+                        <th>DESPACHO</th>
+                        <th>CLIENTE</th>
+                        <th>HORA</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-lista"></tbody>
+            </table>
+        </div>
+        <div id="centro">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DOCUMENTO</th>
+                        <th>USUARIO</th>
+                        <th>ACCION</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-lista-impreso"></tbody>
+            </table>
+        </div>
+        <div id="derecha">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DOCUMENTO</th>
+                        <th>USUARIO</th>
+                        <th>ACCION</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-lista-picking"></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="contenedor2">
+        <div id="observador-impresos">
+            <table>
+                <thead id="cabesa-tabla-lista-general">
+                    <!-- <tr>
+                        <th>FECHA</th>
+                        <th>DOCUMENTO</th>
+                        <th>CLIENTE</th>
+                        <th>HORA</th>
+                        <th>ZONAS</th>
+                        <th>IMPR.Z1</th>
+                        <th>IMPR.Z2</th>
+                        <th>IMPR.Z3</th>
+                        <th>IMPR.desconocido</th>
+                    </tr> -->
+                </thead>
+                <tbody id="tabla-lista-general"></tbody>
+            </table>
+        </div>
+        <div id="observador-pikings">
+            <table>
+                <thead id="cabesa-tabla-lista-general2">
+                    <!-- <tr>
+                        <th>FECHA</th>
+                        <th>DOCUMENTO</th>
+                        <th>CLIENTE</th>
+                        <th>ZONAS</th>
+                        <th>PICK.Z1</th>
+                        <th>PICK.Z2</th>
+                        <th>PICK.Z3</th>
+                        <th>PICK.DESCONOCIDO</th>
+                        <th>CONF.Z1</th>
+                        <th>CONF.Z2</th>
+                        <th>CONF.Z3</th>
+                        <th>CONF.DESCONOCIDO</th>
+                        <th>USER.Z1</th>
+                        <th>USER.Z2</th>
+                        <th>USER.Z3</th>
+                        <th>USER.DESCONOCIDO</th>
+                    </tr> -->
+                </thead>
+                <tbody id="tabla-lista-general2"></tbody>
+            </table>
+        </div>
+        <div id="observador-checkings">
+            <table>
+                <thead id="cabesa-tabla-lista-general3">
+                    <!-- <tr>
+                        <th>DOCUMENTO</th>
+                        <th>CLIENTE</th>
+                        <th>HORA</th>
+                        <th>ACCION</th>
+                    </tr> -->
+                </thead>
+                <tbody id="tabla-lista-general3"></tbody>
+            </table>
+        </div>
+    </div>
+    <!-- contenedor general solo para los despachos no olvidar -->
+    <div id="contenedor3">
+        <div id="d-venideros">
+            <table>
+                <thead id="cabesa-tabla-despacho-venideros"></thead>
+                <tbody id="tabla-despacho-venideros"></tbody>
+            </table>
+        </div>
+        <div id="d-embalados">
+            <table>
+                <thead id="cabesa-tabla-despacho-recolectados"></thead>
+                <tbody id="tabla-despacho-recolectados"></tbody>
+            </table>
+        </div>
+        <div id="d-guias">
+            <table>
+                <!-- <thead id="cabesa-tabla-despacho-guias"></thead>
+                <tbody id="tabla-despacho-venideros"></tbody> -->
+                <thead id="cabesa-tabla-despacho-embalados"></thead>
+                <tbody id="tabla-despacho-embalados"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--TABLERO DE CONTROL PARA MAESTRO OBSERVADOR-->
+    <!-- <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">Badge</span>
+    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">Badge</span>       -->
+    <div id="tablero-maestro-control"></div>
+    <div id="tablero-maestro-control-diseño">
+        <div class="bg-gray-100">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div class="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
+                <h2 class="text-2xl font-bold text-gray-900">Collections</h2>
+          
+                <div class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
+                  <div class="group relative">
+                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+                    <h3 class="mt-6 text-sm text-gray-500">
+                      <a href="#">
+                        <span class="absolute inset-0"></span>
+                        Nuevos Documentos
+                      </a>
+                    </h3>
+                    <p class="text-base font-semibold text-gray-900">Nuevos documentos programados para ser trabajados</p>
+                  </div>
+                  <div class="group relative">
+                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-02.jpg" alt="Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+                    <h3 class="mt-6 text-sm text-gray-500">
+                      <a href="#">
+                        <span class="absolute inset-0"></span>
+                        Tablero Control
+                      </a>
+                    </h3>
+                    <p class="text-base font-semibold text-gray-900">Permite observar el flujo del documento y en que estado se encuentra</p>
+                    
+                  </div>
+                  <div class="group relative">
+                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-03.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+                    <h3 class="mt-6 text-sm text-gray-500">
+                      <a href="#">
+                        <span class="absolute inset-0"></span>
+                        Checking
+                      </a>
+                    </h3>
+                    <p class="text-base font-semibold text-gray-900">Termina el procesado del documento</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+    </div>
+    <!--FIN TABLERO DE CONTROL PARA MAESTRO OBSERVADOR-->
+    
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="objeto_global.js"></script>
+    <script src="cambio_zona.js"></script>
+    <script src="./scripts/ventanilla.js"></script>
+    <script src="./scripts/local_provincia.js"></script>
+    <script src="./scripts/despacho.js"></script>
+    <script src="./scripts/documentos_registrados.js"></script>
+    <script src="./scripts/documento_informacion.js"></script>
+    <script src="./scripts/documentos_impresos.js"></script>
+    <script src="./scripts/documentos_picking.js"></script>
+    <script src="./scripts/refrescar_maestro.js"></script>
+
+    <script src="./scripts/documento_descargar.js"></script>
+    <!-- <script src="./scripts/"></script> -->
+    <!-- <script src="evento.js"></script> -->
+    <script src="receptor.js"></script>
+</body>
+</html>
