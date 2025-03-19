@@ -47,6 +47,10 @@
                   <a href="#" id="ventanilla" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Ventanilla</a>
                   <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a>
                   <a href="#" id="despacho" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Despacho</a>
+                  <a href="#" id="Z1" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 1</a>
+                  <a href="#" id="Z2" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 2</a>
+                  <a href="#" id="Z3" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 3</a>
+                  <a href="#" id="desconocido" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">DESCONOCIDO</a>
                 </div>
               </div>
             </div>
@@ -137,21 +141,14 @@
         <p id="data10"></p>
         <!-- <input type="text" name="data10" id="data10"><br> -->
     </div>
-    <h2>selecciona tu zona</h2>
-    <div id="distribucion">
-        <!-- <select name="zonas" id="zonas">
-            <option value="Z1" selected>ZONA 1</option>
-            <option value="Z2">ZONA 2</option>
-            <option value="Z3">ZONA 3</option>
-            <option value="desconocido">ZONA DESCONOCIDA</option>
-        </select> -->
-    </div>
-    <!-- no te olvides meter las 3 tablas en el contenedor para abarcar solo 1 espacio -->
-    <div id="titulos">
+    <!-- <h2>selecciona tu zona</h2> -->
+    <div id="distribucion"></div>
+    
+    <!-- <div id="titulos">
         <div id="head-izquierda"><p>NUEVOS DOCUMENTOS</p></div>
         <div id="head-centro"><p>DOCUMENTOS IMPRESOS</p></div>
         <div id="head-derecha"><p>DOCUMENTOS EN PICKING</p></div>
-    </div>
+    </div> -->
     <div id="contenedor">
         <div id="izquierda">
             <table>
@@ -280,7 +277,7 @@
     <div id="tablero-maestro-control"></div>
     <div id="tablero-maestro-control-diseño">
         <div class="bg-gray-100">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
               <div class="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
                 <h2 class="text-2xl font-bold text-gray-900">Collections</h2>
           
@@ -289,32 +286,34 @@
                     <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
                     <h3 class="mt-6 text-sm text-gray-500">
                       <a href="#">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         Nuevos Documentos
                       </a>
                     </h3>
                     <p class="text-base font-semibold text-gray-900">Nuevos documentos programados para ser trabajados</p>
+                    <table id="tablero-maestro-control-inicio" class="table-auto border-separate border-spacing-4 text-xs"></table>
                   </div>
                   <div class="group relative">
                     <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-02.jpg" alt="Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
                     <h3 class="mt-6 text-sm text-gray-500">
                       <a href="#">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         Tablero Control
                       </a>
                     </h3>
                     <p class="text-base font-semibold text-gray-900">Permite observar el flujo del documento y en que estado se encuentra</p>
-                    
+                    <table id="tablero-maestro-control-medio" class="table-auto border-separate border-spacing-4 text-xs"></table>
                   </div>
                   <div class="group relative">
                     <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-03.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
                     <h3 class="mt-6 text-sm text-gray-500">
                       <a href="#">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         Checking
                       </a>
                     </h3>
                     <p class="text-base font-semibold text-gray-900">Termina el procesado del documento</p>
+                    <table id="tablero-maestro-control-fin" class="table-auto border-separate border-spacing-4 text-xs"></table>
                   </div>
                 </div>
               </div>

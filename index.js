@@ -61,7 +61,7 @@ io.on('connection',(socket)=>{
                 if(err){console.log("ERROR: ",err);}
                 else{ ventanilla_registros(socket,user) }
             });
-            disparo=setInterval(nuevos_documentos,5000,socket);
+            disparo=setInterval(nuevos_documentos,3000,socket);
         }
         catch(err){console.log(err)}
     })
@@ -79,7 +79,7 @@ io.on('connection',(socket)=>{
                 if(err){console.log("ERROR: ",err);}
                 else{ local_provincia_registros(socket) }
             });
-            disparo=setInterval(nuevos_documentos_dinamicos,5000,socket);
+            disparo=setInterval(nuevos_documentos_dinamicos,3000,socket);
         }
         catch(err){console.log(err)}
     })
@@ -117,7 +117,7 @@ io.on('connection',(socket)=>{
                     if(err){console.log("ERROR: ",err);}
                     else{ identificar_zona(socket,zona) }
                 });
-                disparo=setInterval(mostrar_mensaje,5000,socket,zona);
+                disparo=setInterval(mostrar_mensaje,3000,socket,zona);
             }
             catch(err){console.log(err)}
         }

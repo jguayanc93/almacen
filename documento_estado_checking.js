@@ -12,20 +12,26 @@ function documento_bucle_actualisacion(io,socket,ndoc,array_temporal,despacho,us
         document_lista_actualisado(io,socket,ndoc,array_temporal,despacho,user);
     }
     else{
-        let sp_sql;
-        let texto="update tbl01_api_almacen_documento_piking set comodin_pick=2 where documento=@doc";
-        if(array_temporal[contador]=='desconocido'){sp_sql=texto.replace("comodin","desconocido")}
-        else if(array_temporal[contador]=='Z1'){sp_sql=texto.replace("comodin","z1")}
-        else if(array_temporal[contador]=='Z2'){sp_sql=texto.replace("comodin","z2")}
-        else if(array_temporal[contador]=='Z3'){sp_sql=texto.replace("comodin","z3")}
+        // let sp_sql;
+        // let texto="update tbl01_api_almacen_documento_piking set comodin_pick=2 where documento=@doc";
+        // if(array_temporal[contador]=='desconocido'){sp_sql=texto.replace("comodin","desconocido")}
+        // else if(array_temporal[contador]=='Z1'){sp_sql=texto.replace("comodin","z1")}
+        // else if(array_temporal[contador]=='Z2'){sp_sql=texto.replace("comodin","z2")}
+        // else if(array_temporal[contador]=='Z3'){sp_sql=texto.replace("comodin","z3")}
+        let sp_sql="jc_documentos_estados";
         let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
             if(err){console.log(err);}
             else{
                 documento_bucle_actualisacion(io,socket,ndoc,array_temporal,despacho,user,contador+1)
             }
         })
-        consulta.addParameter('doc',TYPES.VarChar,ndoc);
-        conexion.execSql(consulta);
+        // consulta.addParameter('doc',TYPES.VarChar,ndoc);
+        // conexion.execSql(consulta);
+        consulta.addParameter('documento',TYPES.VarChar,ndoc);
+        consulta.addParameter('zona',TYPES.VarChar,array_temporal[contador]);
+        consulta.addParameter('nivel',TYPES.Int,4);
+        consulta.addParameter('user',TYPES.VarChar,'nadie');
+        conexion.callProcedure(consulta);
     }
 }
 ////NO TE OLVIDES REPLANTEAR LA INSERCION EN LA NUEVA TABLA PORQE SOLO PUEDEN HACER CHEKING VENTANILLA Y LP
@@ -33,10 +39,12 @@ function documento_bucle_actualisacion(io,socket,ndoc,array_temporal,despacho,us
 function document_lista_actualisado(io,socket,ndoc,array_temporal,despacho,user){
     let sp_sql;
     if(despacho=="1"){
-        sp_sql="update tbl01_api_almacen_documento_checking2 set ventanilla=1,usr=@user where documento=@doc";
+        // sp_sql="update tbl01_api_almacen_documento_checking2 set ventanilla=1,usr=@user where documento=@doc";
+        sp_sql="update tbl01_api_almacen_documento_checking set ventanilla=1,usr=@user where documento=@doc";
     }
     else{
-        sp_sql="update tbl01_api_almacen_documento_checking2 set loca_provincia=1,usr=@user where documento=@doc";
+        // sp_sql="update tbl01_api_almacen_documento_checking2 set loca_provincia=1,usr=@user where documento=@doc";
+        sp_sql="update tbl01_api_almacen_documento_checking set loca_provincia=1,usr=@user where documento=@doc";
     }    
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){console.log(err);}
@@ -78,7 +86,7 @@ function document_lista_picking(io,socket,despacho,ndoc){
 
 function resto_zonas(io,socket,despacho,ndoc,contador2,zonas_aledañas){
     if(zonas_aledañas.length<=contador2){
-        conexion.close();
+        // conexion.close();
         if(despacho=="1"){
             io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
         }

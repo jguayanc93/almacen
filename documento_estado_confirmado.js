@@ -1,18 +1,30 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 ////////////SU ESTADO PASA A SER CONFIRMADO DEL PICKING EN SU ZONA
 function documento_estado_confirmado(io,socket,ndoc,cantidad,zona){
-    let sp_sql;
-    let texto="update tbl01_api_almacen_documento_piking set comodin_conf=1 where documento=@doc";
-    if(zona=='desconocido'){sp_sql=texto.replace("comodin","desconocido")}
-    else if(zona=='Z1'){sp_sql=texto.replace("comodin","z1")}
-    else if(zona=='Z2'){sp_sql=texto.replace("comodin","z2")}
-    else if(zona=='Z3'){sp_sql=texto.replace("comodin","z3")}
+    // let sp_sql;
+    // let texto="update tbl01_api_almacen_documento_piking set comodin_conf=1 where documento=@doc";
+    // if(zona=='desconocido'){sp_sql=texto.replace("comodin","desconocido")}
+    // else if(zona=='Z1'){sp_sql=texto.replace("comodin","z1")}
+    // else if(zona=='Z2'){sp_sql=texto.replace("comodin","z2")}
+    // else if(zona=='Z3'){sp_sql=texto.replace("comodin","z3")}
+    let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){ console.log(err); }
-        else{ documento_cantidad_confirmada(io,socket,ndoc,cantidad,zona) }
+        if(err){
+            console.log(err);
+            conexion.close();
+        }
+        else{
+            // documento_cantidad_confirmada(io,socket,ndoc,cantidad,zona);
+            document_lista_picking(io,socket,ndoc,cantidad,zona);
+        }
     })
-    consulta.addParameter('doc',TYPES.VarChar,ndoc);
-    conexion.execSql(consulta);
+    // consulta.addParameter('doc',TYPES.VarChar,ndoc);
+    // conexion.execSql(consulta);
+    consulta.addParameter('documento',TYPES.VarChar,ndoc);
+    consulta.addParameter('zona',TYPES.VarChar,zona);
+    consulta.addParameter('nivel',TYPES.Int,3);
+    consulta.addParameter('user',TYPES.VarChar,'nadie');
+    conexion.callProcedure(consulta);
 }
 ////////CALCULO SU CANTIDAD DE CONFIRMACIONES PARA SABER SI YA LLEGO A COMPLETAR TOTALMENTE EL PICKING
 function documento_cantidad_confirmada(io,socket,ndoc,cantidad,zona){
@@ -66,6 +78,7 @@ function document_lista_picking(io,socket,ndoc,cantidad,zona){
     else if(zona=='Z1'){sp_sql=texto.replaceAll("comodin","z1")}
     else if(zona=='Z2'){sp_sql=texto.replaceAll("comodin","z2")}
     else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
+    // let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){ console.log(err); }
         else{

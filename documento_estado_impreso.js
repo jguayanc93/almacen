@@ -19,7 +19,9 @@ function documento_estado_impreso(io,socket,ndoc,zona,user){
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){console.log(err);}
-        else{ document_lista_actualisado(io,socket,ndoc,zona,user); }
+        else{
+            document_lista_actualisado(io,socket,ndoc,zona,user);
+        }
     })
     // consulta.addParameter('user',TYPES.VarChar,user);
     // consulta.addParameter('documento',TYPES.VarChar,ndoc);
@@ -115,7 +117,8 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                leer_file(ndoc,socket)
+                //////REVIVIR LUEGO PARA COMPLETAR LA IMPRESION EN SU PROCESO DE CLICK
+                // leer_file(ndoc,socket)
                 /////////////
             }
         }

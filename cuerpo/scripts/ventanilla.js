@@ -191,120 +191,84 @@ socket.on('ventanilla impresos',(registros)=>{
 
 /////////PROTOTIPO PARA MOSTRAR LA TABLA MAESTRO DESTRUCTURADA
 socket.on('ventanilla mestro nuevos',(registros)=>{
-    document.getElementById("tablero-maestro-control").innerHTML="";
+    document.getElementById("tablero-maestro-control-inicio").innerHTML="";
+    // document.getElementById("tablero-maestro-control").innerHTML="";
+    const cuerpo=document.createElement('tbody');
     for(let doc in registros){
-        const fecha=document.createElement('span');
-        fecha.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
+        const fecha=document.createElement('td')
         fecha.textContent=registros[doc][0];
 
-        const numero=document.createElement('span');
-        numero.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        numero.textContent=registros[doc][1];
+        const hora=document.createElement('td')
+        hora.textContent=registros[doc][1];
 
-        const cliente=document.createElement('span');
-        cliente.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        cliente.textContent=registros[doc][2];
+        const documento=document.createElement('td')
+        documento.textContent=registros[doc][2];
 
-        const hora=document.createElement('span');
-        hora.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        hora.textContent=registros[doc][3];
+        const cliente=document.createElement('td')
+        cliente.textContent=registros[doc][3];
 
-        const zonas=document.createElement('span');
-        zonas.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
+        const zonas=document.createElement('td')
         zonas.textContent=registros[doc][4];
 
-        const z1impresion=document.createElement('span');
-        z1impresion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z1impresion.textContent=registros[doc][5];
+        const fila=document.createElement('tr');
+        fila.appendChild(fecha)
+        fila.appendChild(hora)
+        fila.appendChild(documento)
+        fila.appendChild(cliente)
+        fila.appendChild(zonas)
 
-        const z2impresion=document.createElement('span');
-        z2impresion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z2impresion.textContent=registros[doc][6];
+        cuerpo.appendChild(fila);
+    }
+    document.getElementById("tablero-maestro-control-inicio").appendChild(cuerpo)
+})
 
-        const z3impresion=document.createElement('span');
-        z3impresion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z3impresion.textContent=registros[doc][7];
+socket.on('ventanilla mestro estados',(registros)=>{
+    document.getElementById("tablero-maestro-control-medio").innerHTML="";
+    // document.getElementById("tablero-maestro-control").innerHTML="";
+    const cuerpo=document.createElement('tbody');
+    for(let doc in registros){
+        const documento=document.createElement('td')
+        documento.textContent=registros[doc][0];
 
-        const desconocidoimpresion=document.createElement('span');
-        desconocidoimpresion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        desconocidoimpresion.textContent=registros[doc][8];
+        const estado=document.createElement('td')
+        estado.textContent=registros[doc][1];
 
-        const z1pick=document.createElement('span');
-        z1pick.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z1pick.textContent=registros[doc][9];
+        const fila=document.createElement('tr');
+        fila.appendChild(documento)
+        fila.appendChild(estado)
 
-        const z2pick=document.createElement('span');
-        z2pick.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z2pick.textContent=registros[doc][10];
+        cuerpo.appendChild(fila);
+    }
+    document.getElementById("tablero-maestro-control-medio").appendChild(cuerpo)
+})
 
-        const z3pick=document.createElement('span');
-        z3pick.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z3pick.textContent=registros[doc][11];
+socket.on('ventanilla mestro terminados',(registros)=>{
+    document.getElementById("tablero-maestro-control-fin").innerHTML="";
+    // document.getElementById("tablero-maestro-control").innerHTML="";
+    const cuerpo=document.createElement('tbody');
+    for(let doc in registros){
+        const documento=document.createElement('td')
+        documento.textContent=registros[doc][0];
 
-        const desconocidopick=document.createElement('span');
-        desconocidopick.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        desconocidopick.textContent=registros[doc][12];
+        const estado=document.createElement('td')
+        estado.textContent=registros[doc][1];
 
-        const z1confirmacion=document.createElement('span');
-        z1confirmacion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z1confirmacion.textContent=registros[doc][13];
+        //////////BOTON ESPECIAL
+        const boton=document.createElement("button");
+        if(registros[doc][1]==0) boton.textContent="FALTA";
+        else if(registros[doc][1]==1){
+            boton.setAttribute("id","chk"+registros[doc][0]);
+            boton.textContent="CHECKING";
+            // boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][4],registros[doc][22]));
+            boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2]));
+        }   
 
-        const z2confirmacion=document.createElement('span');
-        z2confirmacion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z2confirmacion.textContent=registros[doc][14];
+        const fila=document.createElement('tr');
+        fila.appendChild(documento)
+        fila.appendChild(estado)
+        fila.appendChild(boton)
 
-        const z3confirmacion=document.createElement('span');
-        z3confirmacion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z3confirmacion.textContent=registros[doc][15];
-
-        const desconocidoconfirmacion=document.createElement('span');
-        desconocidoconfirmacion.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        desconocidoconfirmacion.textContent=registros[doc][16];
-
-        const z1usuario=document.createElement('span');
-        z1usuario.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z1usuario.textContent=registros[doc][17];
-
-        const z2usuario=document.createElement('span');
-        z2usuario.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z2usuario.textContent=registros[doc][18];
-
-        const z3usuario=document.createElement('span');
-        z3usuario.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        z3usuario.textContent=registros[doc][19];
-
-        const desconocidousuario=document.createElement('span');
-        desconocidousuario.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        desconocidousuario.textContent=registros[doc][20];
-
-        const pickfinal=document.createElement('span');
-        pickfinal.className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset";
-        pickfinal.textContent=registros[doc][21];
-
-        const conenedor=document.createElement('div');
-        conenedor.appendChild(fecha)
-        conenedor.appendChild(numero)
-        conenedor.appendChild(cliente)
-        conenedor.appendChild(hora)
-        conenedor.appendChild(zonas)
-        conenedor.appendChild(z1impresion)
-        conenedor.appendChild(z2impresion)
-        conenedor.appendChild(z3impresion)
-        conenedor.appendChild(desconocidoimpresion)
-        conenedor.appendChild(z1pick)
-        conenedor.appendChild(z2pick)
-        conenedor.appendChild(z3pick)
-        conenedor.appendChild(desconocidopick)
-        conenedor.appendChild(z1confirmacion)
-        conenedor.appendChild(z2confirmacion)
-        conenedor.appendChild(z3confirmacion)
-        conenedor.appendChild(desconocidoconfirmacion)
-        conenedor.appendChild(z1usuario)
-        conenedor.appendChild(z2usuario)
-        conenedor.appendChild(z3usuario)
-        conenedor.appendChild(desconocidousuario)
-        conenedor.appendChild(pickfinal)
-        document.getElementById("tablero-maestro-control").appendChild(conenedor)
-    }    
-
+        cuerpo.appendChild(fila);
+    }
+    document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo)
 })
