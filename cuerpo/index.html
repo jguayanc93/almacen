@@ -17,19 +17,11 @@
               <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset" aria-controls="mobile-menu" aria-expanded="false">
                 <span class="absolute -inset-0.5"></span>
                 <span class="sr-only">Open main menu</span>
-                <!--
-                  Icon when menu is closed.
-      
-                  Menu open: "hidden", Menu closed: "block"
-                -->
+                
                 <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
-                <!--
-                  Icon when menu is open.
-      
-                  Menu open: "block", Menu closed: "hidden"
-                -->
+                
                 <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
@@ -149,104 +141,26 @@
         <div id="head-centro"><p>DOCUMENTOS IMPRESOS</p></div>
         <div id="head-derecha"><p>DOCUMENTOS EN PICKING</p></div>
     </div> -->
-    <div id="contenedor">
-        <div id="izquierda">
-            <table>
-                <thead>
-                    <tr>
-                        <th>DOCUMENTO</th>
-                        <th>ACCION</th>
-                        <th>DESPACHO</th>
-                        <th>CLIENTE</th>
-                        <th>HORA</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-lista"></tbody>
-            </table>
-        </div>
-        <div id="centro">
-            <table>
-                <thead>
-                    <tr>
-                        <th>DOCUMENTO</th>
-                        <th>USUARIO</th>
-                        <th>ACCION</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-lista-impreso"></tbody>
-            </table>
-        </div>
-        <div id="derecha">
-            <table>
-                <thead>
-                    <tr>
-                        <th>DOCUMENTO</th>
-                        <th>USUARIO</th>
-                        <th>ACCION</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-lista-picking"></tbody>
-            </table>
-        </div>
-    </div>
-    <div id="contenedor2">
+    <!-- <div id="contenedor2">
         <div id="observador-impresos">
             <table>
-                <thead id="cabesa-tabla-lista-general">
-                    <!-- <tr>
-                        <th>FECHA</th>
-                        <th>DOCUMENTO</th>
-                        <th>CLIENTE</th>
-                        <th>HORA</th>
-                        <th>ZONAS</th>
-                        <th>IMPR.Z1</th>
-                        <th>IMPR.Z2</th>
-                        <th>IMPR.Z3</th>
-                        <th>IMPR.desconocido</th>
-                    </tr> -->
-                </thead>
+                <thead id="cabesa-tabla-lista-general"></thead>
                 <tbody id="tabla-lista-general"></tbody>
             </table>
         </div>
         <div id="observador-pikings">
             <table>
-                <thead id="cabesa-tabla-lista-general2">
-                    <!-- <tr>
-                        <th>FECHA</th>
-                        <th>DOCUMENTO</th>
-                        <th>CLIENTE</th>
-                        <th>ZONAS</th>
-                        <th>PICK.Z1</th>
-                        <th>PICK.Z2</th>
-                        <th>PICK.Z3</th>
-                        <th>PICK.DESCONOCIDO</th>
-                        <th>CONF.Z1</th>
-                        <th>CONF.Z2</th>
-                        <th>CONF.Z3</th>
-                        <th>CONF.DESCONOCIDO</th>
-                        <th>USER.Z1</th>
-                        <th>USER.Z2</th>
-                        <th>USER.Z3</th>
-                        <th>USER.DESCONOCIDO</th>
-                    </tr> -->
-                </thead>
+                <thead id="cabesa-tabla-lista-general2"></thead>
                 <tbody id="tabla-lista-general2"></tbody>
             </table>
         </div>
         <div id="observador-checkings">
             <table>
-                <thead id="cabesa-tabla-lista-general3">
-                    <!-- <tr>
-                        <th>DOCUMENTO</th>
-                        <th>CLIENTE</th>
-                        <th>HORA</th>
-                        <th>ACCION</th>
-                    </tr> -->
-                </thead>
+                <thead id="cabesa-tabla-lista-general3"></thead>
                 <tbody id="tabla-lista-general3"></tbody>
             </table>
         </div>
-    </div>
+    </div> -->
     <!-- contenedor general solo para los despachos no olvidar -->
     <div id="contenedor3">
         <div id="d-venideros">
@@ -279,7 +193,7 @@
         <div class="bg-gray-100">
             <div class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
               <div class="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
-                <h2 class="text-2xl font-bold text-gray-900">Collections</h2>
+                <h2 class="text-2xl font-bold text-gray-900">TABLA DE DOCUMENTOS</h2>
           
                 <div class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
                   <div class="group relative">

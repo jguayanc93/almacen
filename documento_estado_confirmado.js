@@ -10,8 +10,9 @@ function documento_estado_confirmado(io,socket,ndoc,cantidad,zona){
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            console.log("no deberia saltar este error")
             console.log(err);
-            conexion.close();
+            // conexion.close();
         }
         else{
             // documento_cantidad_confirmada(io,socket,ndoc,cantidad,zona);
@@ -83,6 +84,7 @@ function document_lista_picking(io,socket,ndoc,cantidad,zona){
         if(err){ console.log(err); }
         else{
             if(rows.length==0){
+                conexion.close();
                 console.log("OTRO VACIO ENCONTRADO");
                 io.to(`ZONA ${zona}`).emit('lista picking',{},zona);
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA

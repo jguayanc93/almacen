@@ -66,11 +66,10 @@ socket.on('lista picking',(pikings,zona)=>{
         const boton=document.createElement("button");
         boton.setAttribute("id","pick"+pikings[documento][0]);
         if(pikings[documento][2]==1){
-            // boton.textContent="checking";
             // boton.addEventListener("click",()=>estado_cambio_checking(pikings[documento][0],pikings[documento][2],zona));
-            boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
+            /////para q puse este activador?
+            // boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             if(pikings[documento][3]==1){
-                // boton.textContent="checking";
                 boton.textContent="ESPERANDO CHECKING";
                 // boton.addEventListener("click",()=>estado_cambio_checking(pikings[documento][0],pikings[documento][2],zona));
             }
@@ -89,14 +88,11 @@ socket.on('lista picking',(pikings,zona)=>{
                     boton.textContent="ESPERANDO OTRAS ZONAS";
                 }
                 else{
-                    // boton.textContent="checking";
                     boton.textContent="ESPERANDO CHECKING";
                     // boton.addEventListener("click",()=>estado_cambio_checking(pikings[documento][0],pikings[documento][2],zona));
                 }
             }
         }
-        // boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
-
         const armason=document.createElement("tr");
         armason.appendChild(item1)
         armason.appendChild(item2)
