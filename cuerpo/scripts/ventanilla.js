@@ -191,6 +191,8 @@ function pasando_a_ventanilla(){
 
 /////////PROTOTIPO PARA MOSTRAR LA TABLA MAESTRO DESTRUCTURADA
 socket.on('ventanilla mestro nuevos',(registros)=>{
+    document.getElementById("tabla1titulo").textContent="Nuevos Documentos";
+    document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados para ser trabajados";
     document.getElementById("tablero-maestro-control-inicio").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
     const cuerpo=document.createElement('tbody');
@@ -223,6 +225,8 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
 })
 
 socket.on('ventanilla mestro estados',(registros)=>{
+    document.getElementById("tabla2titulo").textContent="Tablero Control";
+    document.getElementById("tabla2descripcion").textContent="Permite observar el flujo del documento y en que estado se encuentra";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
     const cuerpo=document.createElement('tbody');
@@ -243,6 +247,8 @@ socket.on('ventanilla mestro estados',(registros)=>{
 })
 
 socket.on('ventanilla mestro terminados',(registros)=>{
+    document.getElementById("tabla3titulo").textContent="Checking";
+    document.getElementById("tabla3descripcion").textContent="Termina el procesado del documento y pasa a su despacho";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
     const cuerpo=document.createElement('tbody');

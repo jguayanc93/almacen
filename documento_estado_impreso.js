@@ -37,7 +37,8 @@ function documento_estado_impreso(io,socket,ndoc,zona,user){
 function document_lista_actualisado(io,socket,ndoc,zona,user){
     let sp_sql;
     // let sp_sql="select programada.documento,programada.despacho,programada.cliente,programada.destino,programada.nomdep,programada.nompro,programada.nomtra,programada.nom_ejecutivo,programada.tip_zona,programada.cant_zone from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
-    let texto="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
+    // let texto="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1";
+    let texto="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora',programada.almacen from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
     if(zona=='Z1'){ sp_sql=texto.replace("comodin1","zone1");sp_sql=sp_sql.replace("comodin2","z1") }
     else if(zona=='Z2'){sp_sql=texto.replace("comodin1","zone2");sp_sql=sp_sql.replace("comodin2","z2")}
     else if(zona=='Z3'){sp_sql=texto.replace("comodin1","zone3");sp_sql=sp_sql.replace("comodin2","z3")}
@@ -66,9 +67,9 @@ function document_lista_actualisado(io,socket,ndoc,zona,user){
                     })
                     respuesta.push(tmp);
                 });
-                Object.assign(respuesta2,respuesta);
-                io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);
-                documento_lista_impreso(io,socket,ndoc,zona,user)
+                Object.assign(respuesta2,respuesta);                
+                io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);                
+                documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
             }
         }
     })
@@ -93,9 +94,12 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
             if(rows.length==0){                
                 io.to(`ZONA ${zona}`).emit('impresos',{},zona);
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                leer_file(ndoc,socket)
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                // leer_file(ndoc,socket)
                 /////////////
             }
             else{
@@ -115,8 +119,11 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
                 io.to(`ZONA ${zona}`).emit('impresos',respuesta2,zona);
 
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
                 //////REVIVIR LUEGO PARA COMPLETAR LA IMPRESION EN SU PROCESO DE CLICK
                 // leer_file(ndoc,socket)
                 /////////////

@@ -37,7 +37,32 @@
                   <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                   <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">ALMACEN</a>
                   <a href="#" id="ventanilla" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Ventanilla</a>
-                  <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a>
+                  <!-- <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a> -->
+                  <div class="relative">
+                    <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a>
+                    <div id="almacenes" class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 hidden">
+                      <div class="p-4">
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="alm1" href="#" class="block font-semibold text-gray-900">
+                              Almacen Principal
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">el almacen favorito de todos.</p>
+                          </div>
+                        </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="alm8" href="#" class="block font-semibold text-gray-900">
+                              Almacen M&M
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">el almacen externo que se tiene que pagar</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <a href="#" id="despacho" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Despacho</a>
                   <a href="#" id="Z1" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 1</a>
                   <a href="#" id="Z2" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 2</a>
@@ -87,6 +112,65 @@
         </div>
     </nav>
     <!--FIN CABEZERA PARA MOVERSE-->
+    <!-- opciones para MYM -->
+    <!-- <header class="bg-white">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <div class="flex lg:flex-1">
+          <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Your Company</span>
+            <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="">
+          </a>
+        </div>
+        <div class="flex lg:hidden">
+          <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+            <span class="sr-only">Open main menu</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+        <div class="hidden lg:flex lg:gap-x-12">
+          <div class="relative">
+            <button type="button" class="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900" aria-expanded="false">
+              Product
+              <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>    
+            
+            <div class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5">
+              <div class="p-4">
+                <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                  <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                  </div>
+                  <div class="flex-auto">
+                    <a href="#" class="block font-semibold text-gray-900">
+                      Analytics
+                      <span class="absolute inset-0"></span>
+                    </a>
+                    <p class="mt-1 text-gray-600">Get a better understanding of your traffic</p>
+                  </div>
+                </div>
+                <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                  <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                  </div>
+                  <div class="flex-auto">
+                    <a href="#" class="block font-semibold text-gray-900">
+                      Engagement
+                      <span class="absolute inset-0"></span>
+                    </a>
+                    <p class="mt-1 text-gray-600">Speak directly to your customers</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <a href="#" class="text-sm/6 font-semibold text-gray-900">Features</a>
+        </div>
+      </nav>
+    </header> -->
+    
 
 
     <!-- PRIMER DISEÑO REVISAR EN CASO DE VER ID -->  
@@ -197,36 +281,36 @@
           
                 <div class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
                   <div class="group relative">
-                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-02.jpg" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
                     <h3 class="mt-6 text-sm text-gray-500">
-                      <a href="#">
+                      <a href="#" id="tabla1titulo">
                         <!-- <span class="absolute inset-0"></span> -->
-                        Nuevos Documentos
+                        <!-- Nuevos Documentos -->
                       </a>
                     </h3>
-                    <p class="text-base font-semibold text-gray-900">Nuevos documentos programados para ser trabajados</p>
+                    <p id="tabla1descripcion" class="text-base font-semibold text-gray-900"></p>
                     <table id="tablero-maestro-control-inicio" class="table-auto border-separate border-spacing-4 text-xs"></table>
                   </div>
                   <div class="group relative">
                     <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-02.jpg" alt="Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
                     <h3 class="mt-6 text-sm text-gray-500">
-                      <a href="#">
+                      <a href="#" id="tabla2titulo">
                         <!-- <span class="absolute inset-0"></span> -->
-                        Tablero Control
+                        <!-- Tablero Control -->
                       </a>
                     </h3>
-                    <p class="text-base font-semibold text-gray-900">Permite observar el flujo del documento y en que estado se encuentra</p>
+                    <p id="tabla2descripcion" class="text-base font-semibold text-gray-900"></p>
                     <table id="tablero-maestro-control-medio" class="table-auto border-separate border-spacing-4 text-xs"></table>
                   </div>
                   <div class="group relative">
-                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-03.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+                    <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
                     <h3 class="mt-6 text-sm text-gray-500">
-                      <a href="#">
+                      <a href="#" id="tabla3titulo">
                         <!-- <span class="absolute inset-0"></span> -->
-                        Checking
+                        <!-- Checking -->
                       </a>
                     </h3>
-                    <p class="text-base font-semibold text-gray-900">Termina el procesado del documento</p>
+                    <p id="tabla3descripcion" class="text-base font-semibold text-gray-900"></p>
                     <table id="tablero-maestro-control-fin" class="table-auto border-separate border-spacing-4 text-xs"></table>
                   </div>
                 </div>

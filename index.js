@@ -66,8 +66,9 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
     /////MASTER DE LOCAL-PROVINCIA
-    socket.on('local provincia',()=>{
-        socket.join("ZONA LOCAL");
+    socket.on('almacen principal',(alm)=>{
+        // socket.join("ZONA LOCAL");
+        socket.join("ZONA PRINCIPAL");
         if(disparo){
             clearInterval(disparo);
             disparo=null;
@@ -77,9 +78,28 @@ io.on('connection',(socket)=>{
             conexion.connect();
             conexion.on('connect',(err)=>{
                 if(err){console.log("ERROR: ",err);}
-                else{ local_provincia_registros(socket) }
+                else{ local_provincia_registros(socket,alm) }
             });
-            disparo=setInterval(nuevos_documentos_dinamicos,3000,socket);
+            disparo=setInterval(nuevos_documentos_dinamicos,3000,socket,alm);
+        }
+        catch(err){console.log(err)}
+    })
+
+    socket.on('almacen mym',(alm)=>{
+        // socket.join("ZONA LOCAL");
+        socket.join("ZONA MYM");
+        if(disparo){
+            clearInterval(disparo);
+            disparo=null;
+        }
+        try{
+            conexion = new Connection(config);
+            conexion.connect();
+            conexion.on('connect',(err)=>{
+                if(err){console.log("ERROR: ",err);}
+                else{ local_provincia_registros(socket,alm) }
+            });
+            disparo=setInterval(nuevos_documentos_dinamicos,3000,socket,alm);
         }
         catch(err){console.log(err)}
     })

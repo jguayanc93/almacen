@@ -37,6 +37,8 @@
 // })
 
 socket.on('lista documentos',(msg,zone)=>{
+    document.getElementById("tabla1titulo").textContent="Nuevos Documentos";
+    document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados para ser trabajados";
     document.getElementById("tablero-maestro-control-inicio").innerHTML="";
 
     for(let documento in msg){

@@ -53,6 +53,8 @@
 // })
 
 socket.on('lista picking',(pikings,zona)=>{
+    document.getElementById("tabla3titulo").textContent="Documentos Picking";
+    document.getElementById("tabla3descripcion").textContent="Documentos para pikar/confirmar y mandar a su checking";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
 
     for(let documento in pikings){

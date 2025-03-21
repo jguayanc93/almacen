@@ -48,7 +48,7 @@ function nuevos_registros(socket){
         }
     })
     // conexion.execSql(consulta);
-    consulta.addParameter('despacho', TYPES.Int,1);
+    consulta.addParameter('despacho', TYPES.Int,0);
     consulta.addParameter('mostrar', TYPES.VarChar,'nuevos');
     conexion.callProcedure(consulta);
 }
@@ -88,7 +88,7 @@ function ventanilla_registros2(socket){
         }
     })
     // conexion.execSql(consulta);
-    consulta.addParameter('despacho', TYPES.Int,1);
+    consulta.addParameter('despacho', TYPES.Int,0);
     consulta.addParameter('mostrar', TYPES.VarChar,'estados');
     conexion.callProcedure(consulta);
 }
@@ -129,7 +129,7 @@ function ventanilla_registros3(socket){
         }
     })
     // conexion.execSql(consulta);
-    consulta.addParameter('despacho', TYPES.Int,1);
+    consulta.addParameter('despacho', TYPES.Int,0);
     consulta.addParameter('mostrar', TYPES.VarChar,'terminados');
     conexion.callProcedure(consulta);
 }

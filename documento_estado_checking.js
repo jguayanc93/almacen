@@ -88,10 +88,12 @@ function resto_zonas(io,socket,despacho,ndoc,contador2,zonas_aledañas){
     if(zonas_aledañas.length<=contador2){
         // conexion.close();
         if(despacho=="1"){
-            io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+            io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");                
         }
         else{
-            io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+            // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+            io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+            io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
         }
         console.log("deberia estar ok todo")
         ////llamando ala funcion para ser trabajado por despacho
@@ -99,7 +101,6 @@ function resto_zonas(io,socket,despacho,ndoc,contador2,zonas_aledañas){
         // socket.join(`ZONA ${zona}`)
     }
     else{
-        console.log(contador2)
         console.log(zonas_aledañas[contador2]);
         // socket.join(`ZONA ${zonas_aledañas[contador2]}`)
         // let texto="select documento,comodin_pick,cantidad_pick,comodin_conf,cantidad_conf,comodin_usr from tbl01_api_almacen_documento_piking where comodin_pick=1";

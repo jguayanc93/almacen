@@ -95,9 +95,12 @@ function document_lista_picking(io,ndoc,cantidad,zona,user){
                 console.log("REVISAR VACIO PARA EL PICKING");
                 io.to(`ZONA ${zona}`).emit('lista picking',{},zona);
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 /////////////
+                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
             }
             else{
                 let respuesta=[];
@@ -115,9 +118,12 @@ function document_lista_picking(io,ndoc,cantidad,zona,user){
                 Object.assign(respuesta2,respuesta);
                 io.to(`ZONA ${zona}`).emit('lista picking',respuesta2,zona);
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 /////////////
+                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
             }
         }
     })

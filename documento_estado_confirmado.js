@@ -88,9 +88,12 @@ function document_lista_picking(io,socket,ndoc,cantidad,zona){
                 console.log("OTRO VACIO ENCONTRADO");
                 io.to(`ZONA ${zona}`).emit('lista picking',{},zona);
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 /////////////
+                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
             }
             else{
                 let respuesta=[];
@@ -154,10 +157,12 @@ function resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,conta
     if(4<=contador3){
         conexion.close();
         //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-        io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-        io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+        // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+        // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
         /////////////
-        console.log("deberia estar ok todo")
+        io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+        io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+        io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
         // socket.join(`ZONA ${zona}`)
     }
     else{

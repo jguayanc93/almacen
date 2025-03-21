@@ -24,6 +24,8 @@
 // })
 
 socket.on('impresos',(impresos,zona)=>{
+    document.getElementById("tabla2titulo").textContent="Documentos Impresos";
+    document.getElementById("tabla2descripcion").textContent="Documentos impresos y listos para su trabajo";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
 
     for(let documento in impresos){
