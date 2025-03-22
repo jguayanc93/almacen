@@ -28,7 +28,7 @@ function mostrar_mensaje2(socket,zona){
         else{
             // conexion.close();
             if(rows.length==0){
-                console.log(`nada que devolver de zona ${zona}`)
+                // console.log(`nada que devolver de zona ${zona}`)
                 socket.emit('lista documentos',{},zona);
                 listar_impresos(socket,zona);
             }
@@ -46,7 +46,7 @@ function mostrar_mensaje2(socket,zona){
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                console.log(`temporizador de zona ${zona}`)
+                // console.log(`temporizador de zona ${zona}`)
                 socket.emit('lista documentos',respuesta2,zona);
                 listar_impresos(socket,zona)
             }

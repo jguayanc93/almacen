@@ -6,6 +6,7 @@ function local_provincia_registros(socket,alm){
     let sp_sql="jc_documentos_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            console.log(alm)
             conexion.close();
             console.log("error de consulta general para tabla maestro")
             console.log(err);

@@ -15,6 +15,7 @@ const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
 const {data} = require('./documento_informacion')
 const {ventanilla_registros} = require('./ventanilla_documentos_nuevos')
 const {local_provincia_registros} = require('./local_provincia_documentos_nuevos')
+const {local_provincia_registros2} = require('./local_provincia_documentos_nuevos2')
 const {despacho_registros} = require('./despacho_documentos_nuevos')
 
 const app=express();
@@ -97,7 +98,7 @@ io.on('connection',(socket)=>{
             conexion.connect();
             conexion.on('connect',(err)=>{
                 if(err){console.log("ERROR: ",err);}
-                else{ local_provincia_registros(socket,alm) }
+                else{ local_provincia_registros2(socket,alm) }
             });
             disparo=setInterval(nuevos_documentos_dinamicos,3000,socket,alm);
         }
@@ -119,7 +120,9 @@ io.on('connection',(socket)=>{
 
     socket.on('cambio zona',(zona)=>{
         if(disparo){ clearInterval(disparo);disparo=null; }
-        socket.leave("ZONA LOCAL");
+        // socket.leave("ZONA LOCAL");
+        socket.leave("ZONA PRINCIPAL");
+        socket.leave("ZONA MYM");
         socket.leave("ZONA Z1");
         socket.leave("ZONA Z2");
         socket.leave("ZONA Z3");
