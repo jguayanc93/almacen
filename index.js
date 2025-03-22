@@ -12,10 +12,11 @@ const {documento_estado_impreso} = require('./documento_estado_impreso')
 const {documento_estado_confirmado} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
 const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
+const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')
 const {data} = require('./documento_informacion')
 const {ventanilla_registros} = require('./ventanilla_documentos_nuevos')
-const {local_provincia_registros} = require('./local_provincia_documentos_nuevos')
-const {local_provincia_registros2} = require('./local_provincia_documentos_nuevos2')
+const {local_provincia_registros1} = require('./local_provincia_documentos_nuevos')
+const {local_provincia_registrosmm1} = require('./local_provincia_documentos_nuevos2')
 const {despacho_registros} = require('./despacho_documentos_nuevos')
 
 const app=express();
@@ -37,7 +38,9 @@ io.on('connection',(socket)=>{
         socket.leave("ZONA Z3");
         socket.leave("ZONA desconocido");
         socket.leave("ZONA VENTANILLA");
-        socket.leave("ZONA LOCAL");
+        // socket.leave("ZONA LOCAL");
+        socket.leave("ZONA PRINCIPAL");
+        socket.leave("ZONA MYM");
         if(disparo){
             clearInterval(disparo);
             disparo=null;
@@ -45,13 +48,15 @@ io.on('connection',(socket)=>{
     })
     ////MASTER DE VENTANILLA
     socket.on('ventanilla',(user)=>{
-        socket.leave("ZONA LOCAL");
-        socket.leave("ZONA Z1");
-        socket.leave("ZONA Z2");
-        socket.leave("ZONA Z3");
-        socket.leave("ZONA desconocido");
+        // socket.leave("ZONA LOCAL");
+        // socket.leave("ZONA Z1");
+        // socket.leave("ZONA Z2");
+        // socket.leave("ZONA Z3");
+        // socket.leave("ZONA desconocido");
+        // socket.leave("ZONA PRINCIPAL");
+        // socket.leave("ZONA MYM");
         socket.join("ZONA VENTANILLA");
-        if(disparo){
+        if(disparo !=null){
             clearInterval(disparo);
             disparo=null;
         }
@@ -62,45 +67,53 @@ io.on('connection',(socket)=>{
                 if(err){console.log("ERROR: ",err);}
                 else{ ventanilla_registros(socket,user) }
             });
-            disparo=setInterval(nuevos_documentos,3000,socket);
+            disparo=setInterval(nuevos_documentos,1000,socket);
         }
         catch(err){console.log(err)}
     })
     /////MASTER DE LOCAL-PROVINCIA
     socket.on('almacen principal',(alm)=>{
+        console.log(`alguien pidio el ${alm}`)
         // socket.join("ZONA LOCAL");
+        socket.leave("ZONA PRINCIPAL");
         socket.join("ZONA PRINCIPAL");
-        if(disparo){
+        if(disparo != null){
             clearInterval(disparo);
             disparo=null;
         }
         try{
+            console.log("ver q tiene asignado el contador en la otra vuelta de 1")
+            console.log(disparo);
             conexion = new Connection(config);
             conexion.connect();
             conexion.on('connect',(err)=>{
                 if(err){console.log("ERROR: ",err);}
-                else{ local_provincia_registros(socket,alm) }
+                else{ local_provincia_registros1(socket,alm) }
             });
-            disparo=setInterval(nuevos_documentos_dinamicos,3000,socket,alm);
+            disparo=setInterval(nuevos_documentos_dinamicos,1000,socket,alm);
         }
         catch(err){console.log(err)}
     })
 
     socket.on('almacen mym',(alm)=>{
+        console.log(`alguien pidio el ${alm}`)
         // socket.join("ZONA LOCAL");
+        socket.leave("ZONA MYM");
         socket.join("ZONA MYM");
-        if(disparo){
+        if(disparo !=null){
             clearInterval(disparo);
             disparo=null;
         }
         try{
+            console.log("ver q tiene asignado el contador en la otra vuelta de 8")
+            console.log(disparo);
             conexion = new Connection(config);
             conexion.connect();
             conexion.on('connect',(err)=>{
                 if(err){console.log("ERROR: ",err);}
-                else{ local_provincia_registros2(socket,alm) }
+                else{ local_provincia_registrosmm1(socket,alm) }
             });
-            disparo=setInterval(nuevos_documentos_dinamicos,3000,socket,alm);
+            disparo=setInterval(nuevos_documentos_dinamicosmm,1000,socket,alm);
         }
         catch(err){console.log(err)}
     })
@@ -140,7 +153,7 @@ io.on('connection',(socket)=>{
                     if(err){console.log("ERROR: ",err);}
                     else{ identificar_zona(socket,zona) }
                 });
-                disparo=setInterval(mostrar_mensaje,3000,socket,zona);
+                disparo=setInterval(mostrar_mensaje,1000,socket,zona);
             }
             catch(err){console.log(err)}
         }

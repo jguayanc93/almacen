@@ -92,6 +92,7 @@ function ventanilla_registros3(socket){
     let sp_sql="jc_documentos_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            conexion.close();
             console.log("error de consulta general para tabla maestro")
             console.log(err);
         }

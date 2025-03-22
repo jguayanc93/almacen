@@ -54,12 +54,13 @@ document.getElementById("lp").addEventListener("click",()=>{
 })
 ///////RECORDATORIO TERMINAR LA SEPARACION DE ALMACENES DE PRINCIPAL Y M&M NO PUEDEN ESTAR JUNTOS
 document.getElementById("alm1").addEventListener("click",()=>{
-    // socket.emit('local provincia',1);
+    console.log("fui clikeado el alm1");
     socket.emit('almacen principal',1);
     document.getElementById("almacenes").classList.toggle('hidden');
 })
 
 document.getElementById("alm8").addEventListener("click",()=>{
+    console.log("fui clikeado el alm8");
     // socket.emit('local provincia',8);
     socket.emit('almacen mym',8);
     document.getElementById("almacenes").classList.toggle('hidden');
@@ -68,4 +69,4 @@ document.getElementById("alm8").addEventListener("click",()=>{
 document.getElementById("Z1").addEventListener("click",()=>socket.emit('cambio zona','Z1'))
 document.getElementById("Z2").addEventListener("click",()=>socket.emit('cambio zona','Z2'))
 document.getElementById("Z3").addEventListener("click",()=>socket.emit('cambio zona','Z3'))
-document.getElementById("desconocido").addEventListener("click",()=>socket.emit('cambio zona','desconocido'))
+document.getElementById("desconocido").addEventListener("click",()=>{socket.emit('cambio zona','desconocido')})

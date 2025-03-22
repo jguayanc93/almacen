@@ -20,6 +20,7 @@ function mostrar_mensaje2(socket,zona){
     let sp_sql="jc_documentos_zonas";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            ///////////////ESTE ERROR PODRIA SER CAUSADO POR EL ALERT Q DETIENE EL BROWSER Y NO ENVIA EL PARAMETRO EN ESE LAPSO
             console.log("error extraño de temporizador?")
             console.log("revisar las variables pasadas")
             console.log(zona);

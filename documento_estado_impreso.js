@@ -96,9 +96,13 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                //////////
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
+                //////////////////
+                // io.emit("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                // socket.emit('f5 maestros',"actualisa maestro");
                 // leer_file(ndoc,socket)
                 /////////////
             }
@@ -121,9 +125,12 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                ///////////////
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
+                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
+                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
+                /////////////
+                socket.emit('f5 maestros',"actualisa maestro");
                 //////REVIVIR LUEGO PARA COMPLETAR LA IMPRESION EN SU PROCESO DE CLICK
                 // leer_file(ndoc,socket)
                 /////////////
