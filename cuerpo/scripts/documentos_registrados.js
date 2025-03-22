@@ -79,4 +79,5 @@ function estado_cambiado_impreso(documento,zona){
     else{
         socket.emit('estado impreso',documento,zona,user)
     }
+    // socket.emit('estado impreso',documento,zona,'yo ps')
 }

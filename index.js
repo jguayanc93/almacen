@@ -77,11 +77,20 @@ io.on('connection',(socket)=>{
         // socket.join("ZONA LOCAL");
         socket.leave("ZONA PRINCIPAL");
         socket.join("ZONA PRINCIPAL");
-        if(disparo != null){
-            clearInterval(disparo);
-            disparo=null;
-        }
+        // if(disparo != null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        // }
         try{
+            if(disparo != null){
+                console.log("verficando lo q tenia el disparo del 1")
+                console.log(disparo)
+                clearInterval(disparo);
+                disparo=null;
+                console.log("verficando lo q tiene aora el disparo del 1")
+                console.log(disparo)
+            }
+            else{console.log("intervalo activo1")}
             console.log("ver q tiene asignado el contador en la otra vuelta de 1")
             console.log(disparo);
             conexion = new Connection(config);
@@ -100,11 +109,20 @@ io.on('connection',(socket)=>{
         // socket.join("ZONA LOCAL");
         socket.leave("ZONA MYM");
         socket.join("ZONA MYM");
-        if(disparo !=null){
-            clearInterval(disparo);
-            disparo=null;
-        }
+        // if(disparo !=null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        // }
         try{
+            if(disparo !=null){
+                console.log("verficando lo q tenia el disparo del 8")
+                console.log(disparo)
+                clearInterval(disparo);
+                disparo=null;
+                console.log("verficando lo q tiene aora el disparo del 8")
+                console.log(disparo)
+            }
+            else{console.log("intervalo activo8")}
             console.log("ver q tiene asignado el contador en la otra vuelta de 8")
             console.log(disparo);
             conexion = new Connection(config);
