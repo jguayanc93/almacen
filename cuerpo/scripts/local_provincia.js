@@ -62,11 +62,11 @@ document.getElementById("alm1").addEventListener("click",()=>{
 document.getElementById("alm8").addEventListener("click",()=>{
     console.log("fui clikeado el alm8");
     // socket.emit('local provincia',8);
-    socket.emit('almacen mym',8);
+    socket.emit('almacen mym',8,'nuevos');
     document.getElementById("almacenes").classList.toggle('hidden');
 })
-
+///////EMISORES DE ZONAS
 document.getElementById("Z1").addEventListener("click",()=>socket.emit('cambio zona','Z1'))
 document.getElementById("Z2").addEventListener("click",()=>socket.emit('cambio zona','Z2'))
 document.getElementById("Z3").addEventListener("click",()=>socket.emit('cambio zona','Z3'))
-document.getElementById("desconocido").addEventListener("click",()=>{socket.emit('cambio zona','desconocido')})
+document.getElementById("desconocido").addEventListener("click",()=>socket.emit('cambio zona','desconocido'))

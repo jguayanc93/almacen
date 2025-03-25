@@ -2,6 +2,7 @@ const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
 function mostrar_mensaje(socket,zona){
     try{
+        console.log(zona);
         conexion = new Connection(config);
         conexion.connect();
         conexion.on('connect',(err)=>err ? console.log(err) : mostrar_mensaje2(socket,zona));

@@ -1,15 +1,16 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
-function nuevos_documentos_dinamicosmm(socket,alm){
+function nuevos_documentos_dinamicosmm(socket,alm,primero){
     try{
+        console.log("deberia ejecutarme despues porqe soy el intervalo")
         conexion = new Connection(config);
         conexion.connect();
-        conexion.on('connect',(err)=>err ? console.log(err) : nuevos_registrosmm(socket,alm));
+        conexion.on('connect',(err)=>err ? console.log(err) : nuevos_registrosmm(socket,alm,primero));
     }
     catch(err){console.log(err)}
 }
 
-function nuevos_registrosmm(socket,alm){
+function nuevos_registrosmm(socket,alm,primero){
     // let sp_sql="select programada.documento,programada.despacho,programada.cliente,programada.destino,programada.nomdep,programada.nompro,programada.nomtra,programada.nom_ejecutivo,programada.tip_zona,programada.cant_zone from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.z1_imp=0) where programada.zone1=1"
     // let texto="select programada.documento,programada.despacho,programada.cliente,programada.destino,programada.nomdep,programada.nompro,programada.nomtra,programada.nom_ejecutivo,programada.tip_zona,programada.cant_zone from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
     // let sp_sql="select convert(varchar,a.fecha,103)as 'fecha',a.documento,a.cliente,CONCAT(a.hora,':',a.minutos)as 'hora',a.tip_zona,b.z1_imp,b.z2_imp,b.z3_imp,b.desconocido_imp,c.z1_pick,c.z2_pick,c.z3_pick,c.desconocido_pick,c.z1_conf,c.z2_conf,c.z3_conf,c.desconocido_conf,c.z1_usr,c.z2_usr,c.z3_usr,c.desconocido_usr,a.piking,a.despacho from tbl01_api_programar a join tbl01_api_almacen_documento_impreso b on (a.documento=b.documento) join tbl01_api_almacen_documento_piking c on (a.documento=c.documento) where a.despacho<>1 and cheking=0";
@@ -55,7 +56,8 @@ function nuevos_registrosmm(socket,alm){
     })
     // conexion.execSql(consulta);
     consulta.addParameter('despacho',TYPES.Int,alm);
-    consulta.addParameter('mostrar',TYPES.VarChar,'nuevos');
+    // consulta.addParameter('mostrar',TYPES.VarChar,'nuevos');
+    consulta.addParameter('mostrar',TYPES.VarChar,primero);
     conexion.callProcedure(consulta);
 }
 

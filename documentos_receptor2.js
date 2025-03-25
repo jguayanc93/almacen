@@ -18,7 +18,7 @@ function nuevos_registros(socket,alm){
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
             console.log(alm)
-            console.log("error de consulta general para tabla maestro 1")
+            console.log("error de consulta general para tabla maestro principal soy intervalo")
             console.log(err);
         }
         else{

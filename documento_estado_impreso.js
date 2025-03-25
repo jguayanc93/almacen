@@ -10,12 +10,6 @@ const canvas=createCanvas();
 
 /////INSERTAR EL DOCUMENTO EN LA LISTA DE IMPRESOS
 function documento_estado_impreso(io,socket,ndoc,zona,user){
-    // let texto="update tbl01_api_almacen_documento_impreso set comodin_imp=1,comodin_usr=@user where documento=@documento";
-    // let sp_sql;
-    // if(zona=='desconocido'){sp_sql=texto.replaceAll("comodin","desconocido")}
-    // else if(zona=='Z1'){sp_sql=texto.replaceAll("comodin","z1")}
-    // else if(zona=='Z2'){sp_sql=texto.replaceAll("comodin","z2")}
-    // else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){console.log(err);}
@@ -69,7 +63,8 @@ function document_lista_actualisado(io,socket,ndoc,zona,user){
                 });
                 Object.assign(respuesta2,respuesta);                
                 io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);                
-                documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
+                // documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
+                documento_lista_impreso(io,socket,ndoc,zona,user)
             }
         }
     })
@@ -91,15 +86,15 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
         }
         else{
             conexion.close();
-            if(rows.length==0){                
+            if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('impresos',{},zona);
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 //////////
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
+                // io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
+                // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
                 //////////////////
                 // io.emit("ZONA MYM").emit('f5 a8',"actualisa maestro");
                 // socket.emit('f5 maestros',"actualisa maestro");
@@ -127,10 +122,10 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 ///////////////
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
+                // io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
+                // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
                 /////////////
-                socket.emit('f5 maestros',"actualisa maestro");
+                // socket.emit('f5 maestros',"actualisa maestro");
                 //////REVIVIR LUEGO PARA COMPLETAR LA IMPRESION EN SU PROCESO DE CLICK
                 // leer_file(ndoc,socket)
                 /////////////
