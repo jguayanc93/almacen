@@ -48,25 +48,74 @@
 //     document.getElementById("distribucion").appendChild(select);
 // }
 
-document.getElementById("lp").addEventListener("click",()=>{
-    // socket.emit('local provincia');
-    document.getElementById("almacenes").classList.toggle('hidden');
-})
+// document.getElementById("lp").addEventListener("click",()=>{
+//     // socket.emit('local provincia');
+//     document.getElementById("almacenes").classList.toggle('hidden');
+// })
 ///////RECORDATORIO TERMINAR LA SEPARACION DE ALMACENES DE PRINCIPAL Y M&M NO PUEDEN ESTAR JUNTOS
+// document.getElementById("alm1").addEventListener("click",()=>{
+//     console.log("fui clikeado el alm1");
+//     socket.emit('almacen principal',1);
+//     document.getElementById("almacenes").classList.toggle('hidden');
+// })
+
+// document.getElementById("alm8").addEventListener("click",()=>{
+//     console.log("fui clikeado el alm8");
+//     // socket.emit('local provincia',8);
+//     socket.emit('almacen mym',8,'nuevos');
+//     document.getElementById("almacenes").classList.toggle('hidden');
+// })
+///////EMISORES DE ZONAS
+// document.getElementById("Z1").addEventListener("click",()=>socket.emit('cambio zona','Z1'))
+// document.getElementById("Z2").addEventListener("click",()=>socket.emit('cambio zona','Z2'))
+// document.getElementById("Z3").addEventListener("click",()=>socket.emit('cambio zona','Z3'))
+// document.getElementById("desconocido").addEventListener("click",()=>socket.emit('cambio zona','desconocido'))
+
+/////////EXTRACCION DE ZONAS SEGUN ALMACEN EVENTOS DISCRIMINATORIOS
+////////ALMACEN PRINCIPAL
+document.getElementById("almprincipal").addEventListener("click",()=>{
+    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+})
+
 document.getElementById("alm1").addEventListener("click",()=>{
-    console.log("fui clikeado el alm1");
     socket.emit('almacen principal',1);
-    document.getElementById("almacenes").classList.toggle('hidden');
+    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+})
+
+///////EMISORES DE ZONAS
+document.getElementById("Z1").addEventListener("click",()=>{
+    socket.emit('cambio zona','Z1');
+    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+})
+document.getElementById("Z2").addEventListener("click",()=>{
+    socket.emit('cambio zona','Z2');
+    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+})
+document.getElementById("Z3").addEventListener("click",()=>{
+    socket.emit('cambio zona','Z3');
+    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+})
+document.getElementById("desconocido").addEventListener("click",()=>{
+    socket.emit('cambio zona','desconocido');
+    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+})
+
+////////////ALMACEN MYM
+document.getElementById("almmym").addEventListener("click",()=>{
+    document.getElementById("almmym-opc").classList.toggle('hidden');
 })
 
 document.getElementById("alm8").addEventListener("click",()=>{
-    console.log("fui clikeado el alm8");
-    // socket.emit('local provincia',8);
-    socket.emit('almacen mym',8,'nuevos');
-    document.getElementById("almacenes").classList.toggle('hidden');
+    socket.emit('almacen mym',8);
+    document.getElementById("almmym-opc").classList.toggle('hidden');
 })
-///////EMISORES DE ZONAS
-document.getElementById("Z1").addEventListener("click",()=>socket.emit('cambio zona','Z1'))
-document.getElementById("Z2").addEventListener("click",()=>socket.emit('cambio zona','Z2'))
-document.getElementById("Z3").addEventListener("click",()=>socket.emit('cambio zona','Z3'))
-document.getElementById("desconocido").addEventListener("click",()=>socket.emit('cambio zona','desconocido'))
+
+//////DESPACHO
+document.getElementById("despacho").addEventListener("click",()=>{
+    document.getElementById("despacho-opc").classList.toggle('hidden');
+})
+
+// document.getElementById("").addEventListener("click",()=>{
+//     socket.emit('almacen principal',1);
+//     document.getElementById("despacho-opc").classList.toggle('hidden');
+// })

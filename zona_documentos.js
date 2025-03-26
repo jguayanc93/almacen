@@ -9,16 +9,21 @@ function obtenerpromesa_zona(socket,alm){
 function nuevos_documentos_zona(resolve,reject,socket,alm){
     conexion = new Connection(config);
     conexion.connect();
-    // conexion.on('connect',(err)=>err ? console.log(err) : local_provincia_registros1(socket,alm));
     conexion.on('connect',(err)=>{
         if(err){
             reject(err);
         }
         else{
-            identificar_zona(resolve,reject,socket,alm);
+            resolve("exitoso la promesa de zona de conexion")
+            // identificar_zona(resolve,reject,socket,alm);
         }
     });
-    
+}
+
+function obtenerpromesa_zona_consulta(socket,alm){
+    return new Promise((resolve,reject)=>{
+        identificar_zona(resolve,reject,socket,alm);
+    })
 }
 
 function identificar_zona(resolve,reject,socket,zona){
@@ -104,7 +109,10 @@ function listar_picking(resolve,reject,socket,zona){
         }
         else{
             conexion.close();
-            if(rows.length==0){ socket.emit('lista picking',{},zona);resolve("exitoso la promesa de zona") }
+            if(rows.length==0){
+                socket.emit('lista picking',{},zona);
+                resolve("exitoso la promesa de zona de consulta");
+            }
             else{
                 let respuesta=[];
                 let respuesta2={};
@@ -120,7 +128,7 @@ function listar_picking(resolve,reject,socket,zona){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('lista picking',respuesta2,zona);
-                resolve("exitoso la promesa de zona")
+                resolve("exitoso la promesa de zona de consulta");
             }
         }
     })
@@ -130,4 +138,4 @@ function listar_picking(resolve,reject,socket,zona){
 }
 
 // module.exports={identificar_zona}
-module.exports={obtenerpromesa_zona}
+module.exports={obtenerpromesa_zona,obtenerpromesa_zona_consulta}

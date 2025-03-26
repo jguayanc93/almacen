@@ -9,16 +9,21 @@ function obtenerpromesa_principal(socket,alm){
 function nuevos_documentos_principal(resolve,reject,socket,alm){
     conexion = new Connection(config);
     conexion.connect();
-    // conexion.on('connect',(err)=>err ? console.log(err) : local_provincia_registros1(socket,alm));
     conexion.on('connect',(err)=>{
         if(err){
             reject(err);
         }
         else{
-            local_provincia_registros1(resolve,reject,socket,alm);
+            resolve("exitoso la promesa principal de conexion")
+            // local_provincia_registros1(resolve,reject,socket,alm);
         }
     });
-    
+}
+
+function obtenerpromesa_principal_consulta(socket,alm){
+    return new Promise((resolve,reject)=>{
+        local_provincia_registros1(resolve,reject,socket,alm);
+    })
 }
 
 function local_provincia_registros1(resolve,reject,socket,alm){
@@ -108,7 +113,7 @@ function local_provincia_registros3(resolve,reject,socket,alm){
             conexion.close();
             if(rows.length==0){
                 socket.emit('ventanilla mestro terminados',{});
-                resolve("exitoso la promesa")
+                resolve("exitoso la promesa principal de consulta")
             }
             else{
                 let respuesta=[];
@@ -125,7 +130,7 @@ function local_provincia_registros3(resolve,reject,socket,alm){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('ventanilla mestro terminados',respuesta2);
-                resolve("exitoso la promesa")
+                resolve("exitoso la promesa principal de consulta");
                 // local_provincia_registros2(socket)
             }
         }
@@ -137,7 +142,7 @@ function local_provincia_registros3(resolve,reject,socket,alm){
 }
 
 // module.exports={local_provincia_registros1}
-module.exports={obtenerpromesa_principal}
+module.exports={obtenerpromesa_principal,obtenerpromesa_principal_consulta}
 // consulta para ver los impresos
 // let sp_sql="select convert(varchar,a.fecha,103)as 'fecha',a.documento,a.cliente,CONCAT(a.hora,':',a.minutos)as 'hora',a.tip_zona,b.z1_imp,b.z2_imp,b.z3_imp,b.desconocido_imp from tbl01_api_programar a join tbl01_api_almacen_documento_impreso b on (a.documento=b.documento) where a.despacho<>1 and a.piking=0";
 // consulta para ver los picking sin completar

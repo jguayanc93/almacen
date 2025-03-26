@@ -15,10 +15,16 @@ function nuevos_documentos_mym(resolve,reject,socket,alm){
             reject(err);
         }
         else{
-            local_provincia_registrosmm1(resolve,reject,socket,alm);
+            resolve("exitoso la promesa mym de conexion");
+            // local_provincia_registrosmm1(resolve,reject,socket,alm);
         }
     });
-    
+}
+
+function obtenerpromesa_mym_consulta(socket,alm){
+    return new Promise((resolve,reject)=>{
+        local_provincia_registrosmm1(resolve,reject,socket,alm)
+    })
 }
 
 function local_provincia_registrosmm1(resolve,reject,socket,alm){
@@ -105,7 +111,7 @@ function local_provincia_registrosmm3(resolve,reject,socket,alm){
             conexion.close();
             if(rows.length==0){
                 socket.emit('ventanilla mestro terminados',{});
-                resolve("exitoso la promesa de mym")
+                resolve("exitoso la promesa mym de consulta")
             }
             else{
                 let respuesta=[];
@@ -122,7 +128,7 @@ function local_provincia_registrosmm3(resolve,reject,socket,alm){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('ventanilla mestro terminados',respuesta2);
-                resolve("exitoso la promesa de mym")
+                resolve("exitoso la promesa mym de consulta")
             }
         }
     })
@@ -132,7 +138,7 @@ function local_provincia_registrosmm3(resolve,reject,socket,alm){
 }
 
 // module.exports={local_provincia_registrosmm1}
-module.exports={obtenerpromesa_mym}
+module.exports={obtenerpromesa_mym,obtenerpromesa_mym_consulta}
 // consulta para ver los impresos
 // let sp_sql="select convert(varchar,a.fecha,103)as 'fecha',a.documento,a.cliente,CONCAT(a.hora,':',a.minutos)as 'hora',a.tip_zona,b.z1_imp,b.z2_imp,b.z3_imp,b.desconocido_imp from tbl01_api_programar a join tbl01_api_almacen_documento_impreso b on (a.documento=b.documento) where a.despacho<>1 and a.piking=0";
 // consulta para ver los picking sin completar

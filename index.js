@@ -7,7 +7,7 @@ const {Server} = require('socket.io')
 const {mostrar_mensaje} = require('./documentos_atender')
 const {documento_estado_piking} = require('./documento_estado_piking')
 const {documento_estado_checking} = require('./documento_estado_checking')
-const {obtenerpromesa_zona} = require('./zona_documentos')
+const {obtenerpromesa_zona,obtenerpromesa_zona_consulta} = require('./zona_documentos')
 const {documento_estado_impreso} = require('./documento_estado_impreso')
 const {documento_estado_confirmado} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
@@ -16,9 +16,10 @@ const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')
 const {data} = require('./documento_informacion')
 const {ventanilla_registros} = require('./ventanilla_documentos_nuevos')
 //const {local_provincia_registros1} = require('./local_provincia_documentos_nuevos')
-const {obtenerpromesa_principal} = require('./local_provincia_documentos_nuevos')
-const {obtenerpromesa_mym} = require('./local_provincia_documentos_nuevos2')
+const {obtenerpromesa_principal,obtenerpromesa_principal_consulta} = require('./local_provincia_documentos_nuevos')
+const {obtenerpromesa_mym,obtenerpromesa_mym_consulta} = require('./local_provincia_documentos_nuevos2')
 const {despacho_registros} = require('./despacho_documentos_nuevos')
+// const {ejecutar_intervalo_zona} = require('./manejador')
 
 const app=express();
 const server=createServer(app);
@@ -74,139 +75,208 @@ io.on('connection',(socket)=>{
     })
     /////MASTER DE LOCAL-PROVINCIA
     socket.on('almacen principal',(alm)=>{
-        console.log(`alguien pidio el ${alm}`)
-        // socket.join("ZONA LOCAL");
-        socket.join("ZONA PRINCIPAL");
-        if(disparo != null){
-            console.log("tiene un intervalo")
-            clearInterval(disparo);
-            disparo=null;
+        // socket.join("ZONA PRINCIPAL");
+        function contador_balas(){
+            return new Promise((resolve)=>{
+                console.log(disparo)
+                resolve("resuelto con exito el conocer el valor del intervalo actual");
+            })
         }
-        // function limpiar_disparador(){}
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
+        }
+        
 
         async function almprincipal(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_principal(socket,alm);
-                // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
+                console.log(primera_llamada);
+                /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
+                const segunda_llamada=await obtenerpromesa_principal_consulta(socket,alm);
+                console.log(segunda_llamada);
             }
             catch(error){ console.log(error);}
         }
 
-        function ejecutar_intervalo1(socket,alm){
-            // const intervalo=setInterval(almprincipal,2000,socket,alm);
+        async function ejecutar_intervalo1(socket,alm){
+            const cargador=await contador_balas();
+            console.log(cargador);
+            const observador=await zonas_limpiador();
+            console.log(observador);
+            const grupo=await nueva_zone("PRINCIPAL");
+            console.log(grupo);
             disparo=setInterval(almprincipal,2000,socket,alm);
-            setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
+            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
         }
-        ejecutar_intervalo1(socket,alm);
-        // try{
-        //     obtenerpromesa_principal(socket,alm)
-        //     .then(resultado=>{
-        //         console.log(resultado)
-        //     })
-        //     .catch(err=>{
-        //         console.log(err);
-        //     })
-        //     // conexion = new Connection(config);
-        //     // conexion.connect();
-        //     // conexion.on('connect',(err)=>{
-        //     //     if(err){console.log("ERROR: ",err);}
-        //     //     else{ local_provincia_registros1(socket,alm) }
-        //     // });
-        //     // disparo=setInterval(nuevos_documentos_dinamicos,2000,socket,alm);
-        // }
-        // catch(err){console.log(err)}
-    })
 
-    socket.on('almacen mym',(alm,primero)=>{
-        console.log(`alguien pidio el ${alm}`)
-        // socket.join("ZONA LOCAL");
-        socket.join("ZONA MYM");
         if(disparo!=null){
-            console.log("tiene un intervalo")
             clearInterval(disparo);
             disparo=null;
+            ejecutar_intervalo1(socket,alm);
+        }
+        else{ ejecutar_intervalo1(socket,alm);}
+    })
+
+    socket.on('almacen mym',(alm)=>{
+        // socket.join("ZONA MYM");
+        function contador_balas(){
+            return new Promise((resolve)=>{
+                console.log("esto es lo que tiene el intervalo al cambiar de zona en zona")
+                console.log(disparo)
+                resolve("resuelto con exito el conocer el valor del intervalo actual");
+            })
+        }
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
         }
 
         async function almmym(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_mym(socket,alm);
+                console.log(primera_llamada);
+                const segunda_llamada=await obtenerpromesa_mym_consulta(socket,alm);
+                console.log(segunda_llamada);
                 // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
             }
             catch(error){ console.log(error);}
         }
 
-        function ejecutar_intervalo8(socket,alm){
-            // const intervalo=setInterval(almprincipal,2000,socket,alm);
+        async function ejecutar_intervalo8(socket,alm){
+            const cargador=await contador_balas();
+            console.log(cargador);
+            const observador=await zonas_limpiador();
+            console.log(observador);
+            const grupo=await nueva_zone("MYM");
+            console.log(grupo);
             disparo=setInterval(almmym,2000,socket,alm);
-            setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el mym")},30000);
+            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el mym")},30000);
         }
-        ejecutar_intervalo8(socket,alm);
+        if(disparo!=null){
+            clearInterval(disparo);
+            disparo=null;
+            ejecutar_intervalo8(socket,alm);
+        }
+        else{ ejecutar_intervalo8(socket,alm);}
         
-        // try{
-        //     conexion = new Connection(config);
-        //     conexion.connect();
-        //     conexion.on('connect',(err)=>{
-        //         if(err){console.log("ERROR: ",err);}
-        //         else{ local_provincia_registrosmm1(socket,alm,primero) }
-        //     });
-        //     disparo=setInterval(nuevos_documentos_dinamicosmm,2000,socket,alm,primero);
-        // }
-        // catch(err){console.log(err)}
     })
 
-    // socket.on('despacho',()=>{
-    //     socket.join("ZONA DESPACHO");
-    //     try{
-    //         conexion = new Connection(config);
-    //         conexion.connect();
-    //         conexion.on('connect',(err)=>{
-    //             if(err){console.log("ERROR: ",err);}
-    //             else{ despacho_registros(socket) }
-    //         });
-    //     }
-    //     catch(err){console.log(err)}
-    // })
+    socket.on('despacho',()=>{
+        socket.join("ZONA DESPACHO");
+        try{
+            conexion = new Connection(config);
+            conexion.connect();
+            conexion.on('connect',(err)=>{
+                if(err){console.log("ERROR: ",err);}
+                else{ despacho_registros(socket) }
+            });
+        }
+        catch(err){console.log(err)}
+    })
     //////////////NO TE OLVIDES VALIDAR LA ZONAS Y EL CAMBIO ENTRE OPCIONES PORQE PODRIA ROMPER LA CONEXION
 
     socket.on('cambio zona',(zona)=>{
-        console.log(`entrando ala zona ${zona}`)
+       
+        function revolver_disparador(bala){
+            return new Promise((resolve,reject)=>{
+                if(bala!=null){
+                    // clearInterval(disparo)
+                    clearInterval(bala)
+                    // disparo=null;
+                    bala=null;
+                    resolve("SI TENIA DISPARO");
+                }
+                else{
+                    resolve("NO TENIA DISPARO");
+                }
+            });
+        }
 
-        socket.join(`ZONA ${zona}`);
-        console.log(socket.rooms);
+        function contador_balas(){
+            return new Promise((resolve)=>{
+                console.log("esto es lo que tiene el intervalo al cambiar de zona en zona")
+                console.log(disparo)
+                resolve("resuelto con exito el conocer el valor del intervalo actual");
+            })
+        }
 
-        if(disparo!=null){
-            console.log("la zona tenia un intervalo activo");
-            clearInterval(disparo);
-            disparo=null;
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
         }
 
         async function zonas(socket,zona){
             try{
+                // const pistola=await revolver_disparador(disparo);
                 const primera_llamada=await obtenerpromesa_zona(socket,zona);
-                // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
+                // console.log(primera_llamada);
+                const segunda_llamada=await obtenerpromesa_zona_consulta(socket,zona);
+                // console.log(segunda_llamada);
             }
             catch(error){ console.log(error);}
         }
 
-        function ejecutar_intervalo_zona(socket,zona){
-            // const intervalo=setInterval(almprincipal,2000,socket,alm);
+        async function ejecutar_intervalo_zona(socket,zona){
+            const cargador=await contador_balas();
+            console.log(cargador);
+            const observador=await zonas_limpiador();
+            console.log(observador);
+            const grupo=await nueva_zone(zona);
+            console.log(grupo);
+            // const pistola=await revolver_disparador(disparo);
+            // console.log(pistola);tener cuidado de usar esta funcion cuando posible redundancia
             disparo=setInterval(zonas,2000,socket,zona);
-            setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el zona")},30000);
+            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar la zona")},30000);
         }
-        ejecutar_intervalo_zona(socket,zona);
 
-
-            // try{
-            //     conexion = new Connection(config);
-            //     conexion.connect();
-            //     conexion.on('connect',(err)=>{
-            //         if(err){console.log("ERROR: ",err);}
-            //         else{ identificar_zona(socket,zona) }
-            //     });
-            //     // disparo=setInterval(mostrar_mensaje,2000,socket,zona);
-            // }
-            // catch(err){console.log(err)}
-        
+        if(disparo!=null){
+            clearInterval(disparo);
+            disparo=null;
+            ejecutar_intervalo_zona(socket,zona);
+        }
+        else{ ejecutar_intervalo_zona(socket,zona); }
     })
 
     socket.on('pedir informacion',(ndoc)=>{

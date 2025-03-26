@@ -35,12 +35,13 @@
               <div class="hidden sm:ml-6 sm:block">
                 <div class="flex space-x-4">
                   <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                  <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">ALMACEN</a>
+                  <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">CDK</a>
                   <a href="#" id="ventanilla" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Ventanilla</a>
                   <!-- <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a> -->
+                  <!--SOLO ALMACEN PRINCIPAL DEBE SER MODIFICADO Y MOSTRAR SUS COMPONENTES-->
                   <div class="relative">
-                    <a href="#" id="lp" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Local/Provincia</a>
-                    <div id="almacenes" class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 hidden">
+                    <a href="#" id="almprincipal" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">PRINCIPAL</a>
+                    <div id="almprincipal-opc" class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 hidden">
                       <div class="p-4">
                         <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
                           <div class="flex-auto">
@@ -48,26 +49,105 @@
                               Almacen Principal
                               <span class="absolute inset-0"></span>
                             </a>
-                            <p class="mt-1 text-gray-600">el almacen favorito de todos.</p>
+                            <p class="mt-1 text-gray-600">permite ver el tablero de control del almacen.</p>
                           </div>
                         </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="Z1" href="#" class="block font-semibold text-gray-900">
+                              ZONA 1
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">zona de tintas.</p>
+                          </div>
+                        </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="Z2" href="#" class="block font-semibold text-gray-900">
+                              ZONA 2
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">zona de impresoras.</p>
+                          </div>
+                        </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="Z3" href="#" class="block font-semibold text-gray-900">
+                              ZONA 3
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">zona de productos tecnologicos.</p>
+                          </div>
+                        </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="desconocido" href="#" class="block font-semibold text-gray-900">
+                              DESCONOCIDO
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">zona de productos no asignados.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--SOLO ALMACEN MYM DEBE SER MODIFICADO Y MOSTRAR SUS COMPONENTES-->
+                  <div class="relative">
+                    <a href="#" id="almmym" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">MYM</a>
+                    <div id="almmym-opc" class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 hidden">
+                      <div class="p-4">
                         <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
                           <div class="flex-auto">
                             <a id="alm8" href="#" class="block font-semibold text-gray-900">
                               Almacen M&M
                               <span class="absolute inset-0"></span>
                             </a>
-                            <p class="mt-1 text-gray-600">el almacen externo que se tiene que pagar</p>
+                            <p class="mt-1 text-gray-600">permite ver el tablero de control del almacen</p>
+                          </div>
+                        </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a href="#" class="block font-semibold text-gray-900">
+                              ZONA UNICA
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">unica zona para mym</p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <a href="#" id="despacho" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Despacho</a>
-                  <a href="#" id="Z1" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 1</a>
+                  <!--SOLO DESPACHO DEBE SER MODIFICADO Y MOSTRAR SUS COMPONENTES-->
+                  <!-- <a href="#" id="despacho" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Despacho</a> -->
+                  <div class="relative">
+                    <a href="#" id="despacho" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">DESPACHO</a>
+                    <div id="despacho-opc" class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 hidden">
+                      <div class="p-4">
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="" href="#" class="block font-semibold text-gray-900">
+                              D. Principal
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">permite ver el tablero de control</p>
+                          </div>
+                        </div>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                          <div class="flex-auto">
+                            <a id="" href="#" class="block font-semibold text-gray-900">
+                              D. MYM
+                              <span class="absolute inset-0"></span>
+                            </a>
+                            <p class="mt-1 text-gray-600">permite ver el tablero de control</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <a href="#" id="Z1" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 1</a>
                   <a href="#" id="Z2" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 2</a>
                   <a href="#" id="Z3" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">ZONA 3</a>
-                  <a href="#" id="desconocido" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">DESCONOCIDO</a>
+                  <a href="#" id="desconocido" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">DESCONOCIDO</a> -->
                 </div>
               </div>
             </div>
