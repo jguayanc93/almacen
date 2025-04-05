@@ -8,7 +8,7 @@ const {mostrar_mensaje} = require('./documentos_atender')
 const {documento_estado_piking} = require('./documento_estado_piking')
 const {documento_estado_checking} = require('./documento_estado_checking')
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta} = require('./zona_documentos')
-const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
+const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
 const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
@@ -310,25 +310,22 @@ io.on('connection',(socket)=>{
                 // console.log(quinta_llamada);
                 ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
                 const sexta_llamada=await obtenerpromesa_factura_datos_consulta(ndoc,tercera_llamada);
-                // console.log(sexta_llamada);
+                ////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
+                await obtenerpromesa_factura_datos()
+                const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(ndoc,sexta_llamada);
                 ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
-                const setima_llamada=await generatepdf2(sexta_llamada,'prueba2.pdf',socket,ndoc);
+                const setima_llamada=await generatepdf2(terminar_consulta2,'prueba.pdf');
+                // await generatepdf2(sexta_llamada,'prueba.pdf')
                 // console.log(setima_llamada);
-                // const octava_llamada=await mandar_archivo();
+                const octava_llamada=await mandar_archivo();
+                // await mandar_archivo(socket,ndoc);
                 // console.log(octava_llamada);
                 // const novena_llamada=await emitir_documento(socket,octava_llamada,ndoc);
-                // console.log(novena_llamada);
-
+                await emitir_documento(socket,octava_llamada,ndoc);
             }
             catch(error){ console.log(error);}
         }
         pedir_pdf(ndoc,zona,user);
-        // conexion = new Connection(config);
-        // conexion.connect();
-        // conexion.on('connect',(err)=>{
-        //     if(err){console.log("ERROR: ",err);}
-        //     else{ documento_estado_impreso(io,socket,ndoc,zona,user) }
-        // });
     })
     ////////test de peticion de descarga multiple
     // socket.on('descargar archivo',(doc)=>{

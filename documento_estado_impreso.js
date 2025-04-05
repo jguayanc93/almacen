@@ -241,6 +241,7 @@ function nuevos_registros(resolve,reject,ndoc,texto){
             reject(err)
         }
         else{
+            conexion.close();
             if(rows.length==0){
                 console.log("VACIO ENCONTRADO FALLO");
                 reject("no existe data de este documento");
@@ -296,13 +297,20 @@ function nuevos_registros(resolve,reject,ndoc,texto){
                 if(respuesta[0][26]=="1"){nuevo1=nuevo1.replace("{{tipdespacho}}","(V)")}
                 else if(respuesta[0][26]=="3"){nuevo1=nuevo1.replace("{{tipdespacho}}","(L)")}
                 else if(respuesta[0][26]=="4"){nuevo1=nuevo1.replace("{{tipdespacho}}","(P)")}
-                // resolve(nuevo1);
-                nuevos_registros2(resolve,reject,ndoc,nuevo1);
+                resolve(nuevo1);
+                /////CAMBIANDO ESTO A 2 PETICIONES DE CONSULTAS
+                // nuevos_registros2(resolve,reject,ndoc,nuevo1);
             }
         }
     })
     consulta.addParameter('doc',TYPES.VarChar,ndoc);
     conexion.execSql(consulta);
+}
+
+function obtenerpromesa_factura_datos_consulta2(ndoc,texto){
+    return new Promise((resolve,reject)=>{
+        nuevos_registros2(resolve,reject,ndoc,texto)
+    })
 }
 
 function nuevos_registros2(resolve,reject,ndoc,texto){
@@ -347,7 +355,6 @@ function nuevos_registros2(resolve,reject,ndoc,texto){
                     tablita_temp=tablita_temp+html_tmp;
                 }
                 let nuevo2=texto.replace("{{tablabody}}",tablita_temp)
-                // console.log(nuevo2)
                 resolve(nuevo2);
                 // generatepdf2(nuevo2,ndoc,socket,'prueba.pdf')
                 // .then(()=>console.log("PDF generado satisfactoriamente"))
@@ -359,7 +366,7 @@ function nuevos_registros2(resolve,reject,ndoc,texto){
     conexion.execSql(consulta);
 }
 
-async function generatepdf2(htmlcontent,outputpath,socket,ndoc){
+async function generatepdf2(htmlcontent,outputpath){
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -372,25 +379,24 @@ async function generatepdf2(htmlcontent,outputpath,socket,ndoc){
         printBackground:true
     });
     await browser.close();
-    // await new Promise(resolve=>setTimeout(resolve,1000))
+    console.log("PDF CREADO CON EXITO");
     // return "PDF CREADO CON EXITO";
-    mandar_archivo(socket,ndoc);
 }
 
-function mandar_archivo(socket,ndoc){
-    const camino=path.join(__dirname,'/','prueba.pdf');
+function mandar_archivo(){
+    return new Promise((resolve,reject)=>{
+        const camino=path.join(__dirname,'/','prueba.pdf');
 
         if(fs.existsSync(camino)){
-            fs.readFile(camino,'utf8',(err,data)=>{
+            fs.readFile(camino,(err,data)=>{
                 if(err){
                     console.log("ocurrio un error con la lectura del archivo")
-                    console.log(err)
-                    // reject(err)
+                    // console.log(err)
+                    reject(err)
                 }
-                else{                    
-                    socket.emit('enviando archivo',data,ndoc)
-                    console.log("exitoso")
-                    // resolve(data)
+                else{
+                    // socket.emit('enviando archivo',data,ndoc)
+                    resolve(data)
                     // resolve("exitoso")
                 }
             })
@@ -398,15 +404,13 @@ function mandar_archivo(socket,ndoc){
         else{
             reject("ruta de archivo no existe")
         }
-    // return new Promise((resolve,reject)=>{
-        
-    // })
+    })
 }
 
 function emitir_documento(socket,pdf_raw,ndoc){
     return new Promise((resolve,reject)=>{
         socket.emit('enviando archivo',pdf_raw,ndoc)
-        resolve("emite el documento");
+        resolve("emiti el documento");
     })
 }
 
@@ -418,6 +422,7 @@ module.exports={
     br_generador,
     obtenerpromesa_factura_datos,
     obtenerpromesa_factura_datos_consulta,
+    obtenerpromesa_factura_datos_consulta2,
     generatepdf2,
     mandar_archivo,
     emitir_documento
