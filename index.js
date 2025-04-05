@@ -8,7 +8,7 @@ const {mostrar_mensaje} = require('./documentos_atender')
 const {documento_estado_piking} = require('./documento_estado_piking')
 const {documento_estado_checking} = require('./documento_estado_checking')
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta} = require('./zona_documentos')
-const {documento_estado_impreso} = require('./documento_estado_impreso')
+const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
 const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
@@ -33,24 +33,21 @@ app.use('/',express.static(path.join(__dirname,"cuerpo")))
 
 io.on('connection',(socket)=>{
     let disparo=null;
+    console.log(socket.rooms);
+    console.log(disparo);
     /////DESCONECCION O INTERRUPCION
-    socket.on('disconnect',()=>{
-        socket.leave("ZONA Z1");
-        socket.leave("ZONA Z2");
-        socket.leave("ZONA Z3");
-        socket.leave("ZONA desconocido");
-        socket.leave("ZONA VENTANILLA");
-        // socket.leave("ZONA LOCAL");
-        socket.leave("ZONA PRINCIPAL");
-        socket.leave("ZONA MYM");
-        if(disparo){
-            clearInterval(disparo);
-            disparo=null;
-        }
+    socket.on('disconnect',(razon)=>{
+        // socket.leave("ZONA Z1");
+        // socket.leave("ZONA Z2");
+        // socket.leave("ZONA Z3");
+        // socket.leave("ZONA desconocido");
+        // socket.leave("ZONA VENTANILLA");
+        // socket.leave("ZONA PRINCIPAL");
+        // socket.leave("ZONA MYM");
+        if(disparo!=null){ clearInterval(disparo);disparo=null;}
     })
     ////MASTER DE VENTANILLA
     socket.on('ventanilla',(user)=>{
-        // socket.leave("ZONA LOCAL");
         // socket.leave("ZONA Z1");
         // socket.leave("ZONA Z2");
         // socket.leave("ZONA Z3");
@@ -104,7 +101,7 @@ io.on('connection',(socket)=>{
 
         async function almprincipal(socket,alm){
             try{
-                const primera_llamada=await obtenerpromesa_principal(socket,alm);
+                const primera_llamada=await obtenerpromesa_principal();
                 console.log(primera_llamada);
                 /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
                 const segunda_llamada=await obtenerpromesa_principal_consulta(socket,alm);
@@ -162,8 +159,8 @@ io.on('connection',(socket)=>{
 
         async function almmym(socket,alm){
             try{
-                const primera_llamada=await obtenerpromesa_mym(socket,alm);
-                console.log(primera_llamada);
+                const primera_llamada=await obtenerpromesa_mym();
+                // console.log(primera_llamada);
                 const segunda_llamada=await obtenerpromesa_mym_consulta(socket,alm);
                 console.log(segunda_llamada);
                 // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
@@ -250,7 +247,7 @@ io.on('connection',(socket)=>{
         async function zonas(socket,zona){
             try{
                 // const pistola=await revolver_disparador(disparo);
-                const primera_llamada=await obtenerpromesa_zona(socket,zona);
+                const primera_llamada=await obtenerpromesa_zona();
                 // console.log(primera_llamada);
                 const segunda_llamada=await obtenerpromesa_zona_consulta(socket,zona);
                 // console.log(segunda_llamada);
@@ -296,15 +293,42 @@ io.on('connection',(socket)=>{
         console.log(ndoc);
         console.log(zona);
         console.log(user);
-        // try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ documento_estado_impreso(io,socket,ndoc,zona,user) }
-            });
-        // }
-        // catch(err){console.log(err)}
+        async function pedir_pdf(ndoc,zona,user){
+            try{
+                const primera_llamada=await obtenerpromesa_impresion();
+                console.log(primera_llamada);
+                const segunda_llamada=await obtenerpromesa_impresion_consulta(io,socket,ndoc,zona,user);
+                console.log(segunda_llamada);
+                //////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
+                const tercera_llamada=await leer_file();
+                // console.log(tercera_llamada)
+                ////CREACION DEL CANVAS Y PASAR UN DOCUMENTO PARA SU CREACION
+                const cuarta_llamada=await br_generador(ndoc);
+                console.log(cuarta_llamada)
+                ////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
+                const quinta_llamada=await obtenerpromesa_factura_datos();
+                // console.log(quinta_llamada);
+                ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
+                const sexta_llamada=await obtenerpromesa_factura_datos_consulta(ndoc,tercera_llamada);
+                // console.log(sexta_llamada);
+                ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
+                const setima_llamada=await generatepdf2(sexta_llamada,'prueba2.pdf',socket,ndoc);
+                // console.log(setima_llamada);
+                // const octava_llamada=await mandar_archivo();
+                // console.log(octava_llamada);
+                // const novena_llamada=await emitir_documento(socket,octava_llamada,ndoc);
+                // console.log(novena_llamada);
+
+            }
+            catch(error){ console.log(error);}
+        }
+        pedir_pdf(ndoc,zona,user);
+        // conexion = new Connection(config);
+        // conexion.connect();
+        // conexion.on('connect',(err)=>{
+        //     if(err){console.log("ERROR: ",err);}
+        //     else{ documento_estado_impreso(io,socket,ndoc,zona,user) }
+        // });
     })
     ////////test de peticion de descarga multiple
     // socket.on('descargar archivo',(doc)=>{

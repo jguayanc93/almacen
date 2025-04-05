@@ -1,12 +1,12 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
-function obtenerpromesa_zona(socket,alm){
+function obtenerpromesa_zona(){
     return new Promise((resolve,reject)=>{
-        nuevos_documentos_zona(resolve,reject,socket,alm)
+        nuevos_documentos_zona(resolve,reject)
     });
 }
 
-function nuevos_documentos_zona(resolve,reject,socket,alm){
+function nuevos_documentos_zona(resolve,reject){
     conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{

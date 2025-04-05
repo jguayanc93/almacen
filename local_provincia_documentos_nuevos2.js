@@ -1,12 +1,12 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
-function obtenerpromesa_mym(socket,alm){
+function obtenerpromesa_mym(){
     return new Promise((resolve,reject)=>{
-        nuevos_documentos_mym(resolve,reject,socket,alm)
+        nuevos_documentos_mym(resolve,reject)
     });
 }
 
-function nuevos_documentos_mym(resolve,reject,socket,alm){
+function nuevos_documentos_mym(resolve,reject){
     conexion = new Connection(config);
     conexion.connect();
     // conexion.on('connect',(err)=>err ? console.log(err) : local_provincia_registros1(socket,alm));

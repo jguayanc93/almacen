@@ -8,13 +8,43 @@ const path = require('path')
 // Crear un canvas para generar el código de barras
 const canvas=createCanvas();
 
+function obtenerpromesa_impresion(){
+    return new Promise((resolve,reject)=>{
+        nuevas_impresiones(resolve,reject);
+    })
+}
+
+function nuevas_impresiones(resolve,reject){
+    conexion = new Connection(config);
+    conexion.connect();
+    conexion.on('connect',(err)=>{
+        if(err){
+            console.log("ERROR: ",err);
+            reject(err);
+        }
+        else{
+            resolve("exitoso la promesa de conexion para impresion");
+            // documento_estado_impreso(io,socket,ndoc,zona,user);
+        }
+    });
+}
+
+function obtenerpromesa_impresion_consulta(io,socket,ndoc,zona,user){
+    return new Promise((resolve,reject)=>{
+        documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user);
+    })
+}
+
 /////INSERTAR EL DOCUMENTO EN LA LISTA DE IMPRESOS
-function documento_estado_impreso(io,socket,ndoc,zona,user){
+function documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user){
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){console.log(err);}
+        if(err){
+            console.log(err);
+            reject(err);
+        }
         else{
-            document_lista_actualisado(io,socket,ndoc,zona,user);
+            document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user);
         }
     })
     // consulta.addParameter('user',TYPES.VarChar,user);
@@ -28,7 +58,7 @@ function documento_estado_impreso(io,socket,ndoc,zona,user){
     conexion.callProcedure(consulta);
 }
 ////LISTAR LOS DOCUMENTOS RESTANTES REGISTRADOS Y SIN IMPRIMIR
-function document_lista_actualisado(io,socket,ndoc,zona,user){
+function document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user){
     let sp_sql;
     // let sp_sql="select programada.documento,programada.despacho,programada.cliente,programada.destino,programada.nomdep,programada.nompro,programada.nomtra,programada.nom_ejecutivo,programada.tip_zona,programada.cant_zone from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
     // let texto="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1";
@@ -42,11 +72,12 @@ function document_lista_actualisado(io,socket,ndoc,zona,user){
         if(err){
             console.log("error 1")
             console.log(err);
+            reject(err);
         }
         else{
             if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('lista documentos',{},zona);
-                documento_lista_impreso(io,socket,ndoc,zona,user);
+                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user);
             }
             else{
                 let respuesta=[];
@@ -64,14 +95,14 @@ function document_lista_actualisado(io,socket,ndoc,zona,user){
                 Object.assign(respuesta2,respuesta);                
                 io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);                
                 // documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
-                documento_lista_impreso(io,socket,ndoc,zona,user)
+                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user)
             }
         }
     })
     conexion.execSql(consulta);
 }
 //// LISTAR LOS DOCUMENTOS IMPRESOS ACTUALISADOS Y SIN PICKING
-function documento_lista_impreso(io,socket,ndoc,zona,user){
+function documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user){
     let texto="select documento,comodin_imp,comodin_usr,cantidad from tbl01_api_almacen_documento_impreso where comodin_imp=1";
     let sp_sql;
     if(zona=='desconocido'){sp_sql=texto.replaceAll("comodin","desconocido")}
@@ -83,11 +114,14 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
         if(err){
             console.log("error 2");
             console.log(err);
+            reject(err);
         }
         else{
+            ////revivir luego la cerrada de conexion
             conexion.close();
             if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('impresos',{},zona);
+                resolve("exitoso la impresion")
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
@@ -116,6 +150,8 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
                 });
                 Object.assign(respuesta2,respuesta);
                 io.to(`ZONA ${zona}`).emit('impresos',respuesta2,zona);
+                resolve("exitoso la impresion")
+                ////////////TERMINA LA SALIDA DEL PDF
 
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
@@ -135,45 +171,80 @@ function documento_lista_impreso(io,socket,ndoc,zona,user){
     conexion.execSql(consulta);
 }
 
-////variables de insercion
-function leer_file(ndoc,socket){
-    const html=path.join(__dirname,'plantilla_factura.html');
-    const archivo_contenido=fs.readFileSync(html,'utf8');
-    // return archivo_contenido;
-    br_generador(ndoc,socket,archivo_contenido);
+////LECTURA DE ARCHIVO PLANO EN TEXTO
+function leer_file(){
+    return new Promise((resolve,reject)=>{
+        const html=path.join(__dirname,'plantilla_factura.html');
+        // const archivo_contenido=fs.readFileSync(html,'utf8');
+        fs.readFile(html,'utf-8',(err,data)=>{
+            if(err){
+                reject(err);
+            }
+            resolve(data);
+        });
+    })
+    // br_generador(ndoc,socket,archivo_contenido);
 }
 
 function br_generador(ndoc,socket,archivo_contenido){
-    JsBarcode(canvas,ndoc,{
-        format:'CODE128',
-        width:1,
-        height:40,
-        displayValue:false,
+    return new Promise((resolve,reject)=>{
+        ////LLAMADA DE LA FUNCION PARA INSERTAR EL CODIGO DE BARRAS EN EL CANVAS CREADO
+        JsBarcode(canvas,ndoc,{format:'CODE128',width:1,height:40,displayValue:false})
+
+        const salida = fs.createWriteStream('factura-barras.png');
+        salida.on('finish',()=>{
+            console.log('archivo de imagen codigo barras generado');
+            ////CREAR UNA BUSQUEDA SOLA PARA ESTO APARTE
+            // iniciar_conexion(ndoc,socket,archivo_contenido)
+        });
+
+        /////CONSTRUCCION DEL CANVAS
+        const stream = canvas.createPNGStream();
+        stream.pipe(salida);////VALOR GUARDADO POR SIACASO DE LA FORMA ANTIGUA
+        stream.on('end',resolve("termine de crear el canvas"))
+        stream.on('error',reject("algo paso con el canvas"))
     })
-    const salida = fs.createWriteStream('factura-barras.png');
-    const stream = canvas.createPNGStream();
-    stream.pipe(salida);
-    salida.on('finish',()=>{
-        console.log('Codigo de barras generado');
-        iniciar_conexion(ndoc,socket,archivo_contenido)
+}
+
+function obtenerpromesa_factura_datos(){
+    return new Promise((resolve,reject)=>{
+        iniciar_conexion(resolve,reject);
+    })
+}
+
+function iniciar_conexion(resolve,reject){
+    conexion = new Connection(config);
+    conexion.connect();
+    conexion.on('connect',(err)=>{
+        if(err){
+            reject(err);
+        }
+        else{
+            resolve("exitoso la promesa de conexion para la data de la factura")
+        }
+        // nuevos_registros(ndoc,socket,texto)
     });
 }
 
-function iniciar_conexion(ndoc,socket,texto){
-    try{
-        conexion = new Connection(config);
-        conexion.connect();
-        conexion.on('connect',(err)=>err ? console.log(err) : nuevos_registros(ndoc,socket,texto));
-    }catch(err){console.log(err)}
+function obtenerpromesa_factura_datos_consulta(ndoc,texto){
+    return new Promise((resolve,reject)=>{
+        nuevos_registros(resolve,reject,ndoc,texto)
+    })
 }
 
-function nuevos_registros(ndoc,socket,texto){
+function nuevos_registros(resolve,reject,ndoc,texto){
     // let sp_sql="select a.ndocu,a.nomcli,a.dirent,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha' from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) where a.ndocu='F009-0533502'";
     let sp_sql="select a.ndocu,a.nomcli,d.dircli,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha',a.tota,a.toti,a.totn,a.dirpar,'150113' as 'ubigeopp',a.dirent,'' as 'ubigeopll',a.Consig,convert(varchar, a.fecha ,103)as 'fecha_traslado',a.ruccli,a.nomcli,a.codtra,e.nomtra,0 as 'peso',CONCAT('(',a.codven_usu,')',TRIM(f.nomven),'/',CONVERT(varchar,a.FecReg,8),'/ALMACEN:',a.CodAlm,'/T.CAMBIO:',a.tcam,'/TIPODESPACHO:',TRIM(g.despacho),'/',TRIM(a.Consig),'/',a.observ) as 'observacion',a.TipEnt from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) join mst01cli d on (d.codcli=a.codcli) join tbl01tra e on (e.codtra=a.codtra) join tbl01ven f on (f.codven=a.codven_usu) join tbl_tipo_despacho g on (g.IDdespacho=a.TipEnt) where a.ndocu=@doc";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){console.log(err);}
+        if(err){
+            // console.log(err);
+            reject(err)
+        }
         else{
-            if(rows.length==0){ console.log(`VACIO ENCONTRADO FALLO`) }
+            if(rows.length==0){
+                console.log("VACIO ENCONTRADO FALLO");
+                reject("no existe data de este documento");
+            }
             else{
                 let respuesta=[];
                 // let respuesta2={};
@@ -225,7 +296,8 @@ function nuevos_registros(ndoc,socket,texto){
                 if(respuesta[0][26]=="1"){nuevo1=nuevo1.replace("{{tipdespacho}}","(V)")}
                 else if(respuesta[0][26]=="3"){nuevo1=nuevo1.replace("{{tipdespacho}}","(L)")}
                 else if(respuesta[0][26]=="4"){nuevo1=nuevo1.replace("{{tipdespacho}}","(P)")}
-                nuevos_registros2(ndoc,socket,nuevo1);
+                // resolve(nuevo1);
+                nuevos_registros2(resolve,reject,ndoc,nuevo1);
             }
         }
     })
@@ -233,13 +305,19 @@ function nuevos_registros(ndoc,socket,texto){
     conexion.execSql(consulta);
 }
 
-function nuevos_registros2(ndoc,socket,texto){
+function nuevos_registros2(resolve,reject,ndoc,texto){
     let sp_sql="select a.codf,a.cant,a.umed,a.descr,b.Usr_001,a.preu as 'v_unitario',a.preu as 'p_unitario',a.tota from dtl01fac a join prd0101 b on (a.codi=b.codi) where a.ndocu=@doc order by a.item";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){console.log(err);}
+        if(err){
+            // console.log(err);
+            reject(err);
+        }
         else{
             conexion.close();
-            if(rows.length==0){ console.log(`VACIO ENCONTRADO FALLO`) }
+            if(rows.length==0){
+                console.log('VACIO ENCONTRADO FALLO')
+                reject("no existe data en el detallado de la factura");
+            }
             else{
                 let respuesta=[];
                 let respuesta2={};
@@ -270,7 +348,10 @@ function nuevos_registros2(ndoc,socket,texto){
                 }
                 let nuevo2=texto.replace("{{tablabody}}",tablita_temp)
                 // console.log(nuevo2)
-                generatepdf2(nuevo2,ndoc,socket,'prueba.pdf').then(()=>console.log("PDF generado satisfactoriamente")).catch(err => console.error('error generando el PDF',err))
+                resolve(nuevo2);
+                // generatepdf2(nuevo2,ndoc,socket,'prueba.pdf')
+                // .then(()=>console.log("PDF generado satisfactoriamente"))
+                // .catch(err => console.error('error generando el PDF',err))
             }
         }
     })
@@ -278,7 +359,7 @@ function nuevos_registros2(ndoc,socket,texto){
     conexion.execSql(consulta);
 }
 
-async function generatepdf2(htmlcontent,ndoc,socket,outputpath){
+async function generatepdf2(htmlcontent,outputpath,socket,ndoc){
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -291,25 +372,53 @@ async function generatepdf2(htmlcontent,ndoc,socket,outputpath){
         printBackground:true
     });
     await browser.close();
-    mandar_archivo(ndoc,socket)
+    // await new Promise(resolve=>setTimeout(resolve,1000))
+    // return "PDF CREADO CON EXITO";
+    mandar_archivo(socket,ndoc);
 }
 
-function mandar_archivo(ndoc,socket){
+function mandar_archivo(socket,ndoc){
     const camino=path.join(__dirname,'/','prueba.pdf');
-    if(fs.existsSync(camino)){
-        fs.readFile(camino,(err,data)=>{
-            if(err){
-                console.log("ocurrio un error con la lectura del archivo")
-                console.log(err)
-            }
-            else{
-                socket.emit('enviando archivo',data,ndoc)
-            }
-        })
-    }
-    else{
-        console.log("archivo faltante")
-    }
+
+        if(fs.existsSync(camino)){
+            fs.readFile(camino,'utf8',(err,data)=>{
+                if(err){
+                    console.log("ocurrio un error con la lectura del archivo")
+                    console.log(err)
+                    // reject(err)
+                }
+                else{                    
+                    socket.emit('enviando archivo',data,ndoc)
+                    console.log("exitoso")
+                    // resolve(data)
+                    // resolve("exitoso")
+                }
+            })
+        }
+        else{
+            reject("ruta de archivo no existe")
+        }
+    // return new Promise((resolve,reject)=>{
+        
+    // })
 }
 
-module.exports={documento_estado_impreso}
+function emitir_documento(socket,pdf_raw,ndoc){
+    return new Promise((resolve,reject)=>{
+        socket.emit('enviando archivo',pdf_raw,ndoc)
+        resolve("emite el documento");
+    })
+}
+
+module.exports={
+    obtenerpromesa_impresion,
+    obtenerpromesa_impresion_consulta,
+    documento_estado_impreso,
+    leer_file,
+    br_generador,
+    obtenerpromesa_factura_datos,
+    obtenerpromesa_factura_datos_consulta,
+    generatepdf2,
+    mandar_archivo,
+    emitir_documento
+}

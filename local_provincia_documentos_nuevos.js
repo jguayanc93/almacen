@@ -1,12 +1,12 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
-function obtenerpromesa_principal(socket,alm){
+function obtenerpromesa_principal(){
     return new Promise((resolve,reject)=>{
-        nuevos_documentos_principal(resolve,reject,socket,alm)
+        nuevos_documentos_principal(resolve,reject)
     });
 }
 
-function nuevos_documentos_principal(resolve,reject,socket,alm){
+function nuevos_documentos_principal(resolve,reject){
     conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{
@@ -108,6 +108,7 @@ function local_provincia_registros3(resolve,reject,socket,alm){
         if(err){
             console.log("error de consulta general para tabla maestro")
             console.log(err);
+            reject(err);
         }
         else{
             conexion.close();
