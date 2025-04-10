@@ -36,7 +36,8 @@ function identificar_zona(resolve,reject,socket,zona){
         else{
             if(rows.length==0){
                 socket.emit('lista documentos',{},zona)
-                listar_impresos(resolve,reject,socket,zona);
+                resolve("exitoso la promesa de zona de consulta");
+                // listar_impresos(resolve,reject,socket,zona);
             }
             else{
                 let respuesta=[];
@@ -54,13 +55,20 @@ function identificar_zona(resolve,reject,socket,zona){
                 Object.assign(respuesta2,respuesta);
                 socket.emit('lista documentos',respuesta2,zona);
                 // io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);
-                listar_impresos(resolve,reject,socket,zona);
+                resolve("exitoso la promesa de zona de consulta");
+                // listar_impresos(resolve,reject,socket,zona);
             }
         }
     })
     consulta.addParameter('zona', TYPES.VarChar,zona);
     consulta.addParameter('nivel', TYPES.VarChar,'nuevos');
     conexion.callProcedure(consulta);
+}
+
+function obtenerpromesa_zona_consulta2(socket,alm){
+    return new Promise((resolve,reject)=>{
+        listar_impresos(resolve,reject,socket,alm);
+    })
 }
 
 function listar_impresos(resolve,reject,socket,zona){
@@ -73,7 +81,8 @@ function listar_impresos(resolve,reject,socket,zona){
         else{
             if(rows.length==0){
                 socket.emit('impresos',{},zona)
-                listar_picking(resolve,reject,socket,zona);
+                // listar_picking(resolve,reject,socket,zona);
+                resolve("exitoso la promesa de zona de consulta2");
             }
             else{
                 let respuesta=[];
@@ -90,7 +99,8 @@ function listar_impresos(resolve,reject,socket,zona){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('impresos',respuesta2,zona);
-                listar_picking(resolve,reject,socket,zona);
+                // listar_picking(resolve,reject,socket,zona);
+                resolve("exitoso la promesa de zona de consulta2");
             }
         }
     })
@@ -98,6 +108,12 @@ function listar_impresos(resolve,reject,socket,zona){
     consulta.addParameter('nivel', TYPES.VarChar,'impresos');
     // conexion.execSql(consulta);
     conexion.callProcedure(consulta);
+}
+
+function obtenerpromesa_zona_consulta3(socket,alm){
+    return new Promise((resolve,reject)=>{
+        listar_picking(resolve,reject,socket,alm);
+    })
 }
 
 function listar_picking(resolve,reject,socket,zona){
@@ -111,7 +127,7 @@ function listar_picking(resolve,reject,socket,zona){
             conexion.close();
             if(rows.length==0){
                 socket.emit('lista picking',{},zona);
-                resolve("exitoso la promesa de zona de consulta");
+                resolve("exitoso la promesa de zona de consulta3");
             }
             else{
                 let respuesta=[];
@@ -128,7 +144,7 @@ function listar_picking(resolve,reject,socket,zona){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('lista picking',respuesta2,zona);
-                resolve("exitoso la promesa de zona de consulta");
+                resolve("exitoso la promesa de zona de consulta3");
             }
         }
     })
@@ -138,4 +154,4 @@ function listar_picking(resolve,reject,socket,zona){
 }
 
 // module.exports={identificar_zona}
-module.exports={obtenerpromesa_zona,obtenerpromesa_zona_consulta}
+module.exports={obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3}

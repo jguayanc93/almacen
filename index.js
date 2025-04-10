@@ -7,14 +7,14 @@ const {Server} = require('socket.io')
 const {mostrar_mensaje} = require('./documentos_atender')
 const {documento_estado_piking} = require('./documento_estado_piking')
 const {documento_estado_checking} = require('./documento_estado_checking')
-const {obtenerpromesa_zona,obtenerpromesa_zona_consulta} = require('./zona_documentos')
+const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3} = require('./zona_documentos')
 const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
 const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
 const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')
 const {data} = require('./documento_informacion')
-const {ventanilla_registros} = require('./ventanilla_documentos_nuevos')
+const {ventanilla_registros,obtenerpromesa_ventanilla,obtenerpromesa_ventanilla_consulta} = require('./ventanilla_documentos_nuevos')
 //const {local_provincia_registros1} = require('./local_provincia_documentos_nuevos')
 const {obtenerpromesa_principal,obtenerpromesa_principal_consulta} = require('./local_provincia_documentos_nuevos')
 const {obtenerpromesa_mym,obtenerpromesa_mym_consulta} = require('./local_provincia_documentos_nuevos2')
@@ -48,27 +48,76 @@ io.on('connection',(socket)=>{
     })
     ////MASTER DE VENTANILLA
     socket.on('ventanilla',(user)=>{
-        // socket.leave("ZONA Z1");
-        // socket.leave("ZONA Z2");
-        // socket.leave("ZONA Z3");
-        // socket.leave("ZONA desconocido");
-        // socket.leave("ZONA PRINCIPAL");
-        // socket.leave("ZONA MYM");
-        socket.join("ZONA VENTANILLA");
-        if(disparo !=null){
+
+        function contador_balas(){
+            return new Promise((resolve)=>{
+                console.log(disparo)
+                resolve("resuelto con exito el conocer el valor del intervalo actual");
+            })
+        }
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
+        }
+
+        async function almventanilla(socket,alm){
+            try{
+                const primera_llamada=await obtenerpromesa_ventanilla();
+                // console.log(primera_llamada);
+                /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
+                const segunda_llamada=await obtenerpromesa_ventanilla_consulta(socket,alm);
+                console.log(segunda_llamada);
+            }
+            catch(error){ console.log(error);}
+        }
+
+        async function ejecutar_intervalov(socket,alm){
+            const cargador=await contador_balas();
+            console.log(cargador);
+            const observador=await zonas_limpiador();
+            console.log(observador);
+            const grupo=await nueva_zone("VENTANILLA");
+            console.log(grupo);
+            disparo=setInterval(almventanilla,2000,socket,alm);
+            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
+        }
+
+        if(disparo!=null){
             clearInterval(disparo);
             disparo=null;
+            ejecutar_intervalov(socket,user);
         }
-        try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ ventanilla_registros(socket,user) }
-            });
-            disparo=setInterval(nuevos_documentos,2000,socket);
-        }
-        catch(err){console.log(err)}
+        else{ ejecutar_intervalov(socket,user);}
+        ////////PARTE ANTIGUA QUE YA NO SIRVE
+        // socket.join("ZONA VENTANILLA");
+        // if(disparo !=null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        // }
+        // try{
+        //     conexion = new Connection(config);
+        //     conexion.connect();
+        //     conexion.on('connect',(err)=>{
+        //         if(err){console.log("ERROR: ",err);}
+        //         else{ ventanilla_registros(socket,user) }
+        //     });
+        //     disparo=setInterval(nuevos_documentos,2000,socket);
+        // }
+        // catch(err){console.log(err)}
     })
     /////MASTER DE LOCAL-PROVINCIA
     socket.on('almacen principal',(alm)=>{
@@ -83,7 +132,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -102,7 +151,7 @@ io.on('connection',(socket)=>{
         async function almprincipal(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_principal();
-                console.log(primera_llamada);
+                // console.log(primera_llamada);
                 /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
                 const segunda_llamada=await obtenerpromesa_principal_consulta(socket,alm);
                 console.log(segunda_llamada);
@@ -142,7 +191,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -202,25 +251,9 @@ io.on('connection',(socket)=>{
     //////////////NO TE OLVIDES VALIDAR LA ZONAS Y EL CAMBIO ENTRE OPCIONES PORQE PODRIA ROMPER LA CONEXION
 
     socket.on('cambio zona',(zona)=>{
-       
-        function revolver_disparador(bala){
-            return new Promise((resolve,reject)=>{
-                if(bala!=null){
-                    // clearInterval(disparo)
-                    clearInterval(bala)
-                    // disparo=null;
-                    bala=null;
-                    resolve("SI TENIA DISPARO");
-                }
-                else{
-                    resolve("NO TENIA DISPARO");
-                }
-            });
-        }
 
         function contador_balas(){
             return new Promise((resolve)=>{
-                console.log("esto es lo que tiene el intervalo al cambiar de zona en zona")
                 console.log(disparo)
                 resolve("resuelto con exito el conocer el valor del intervalo actual");
             })
@@ -229,7 +262,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA VENTANILLA','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -250,7 +283,14 @@ io.on('connection',(socket)=>{
                 const primera_llamada=await obtenerpromesa_zona();
                 // console.log(primera_llamada);
                 const segunda_llamada=await obtenerpromesa_zona_consulta(socket,zona);
-                // console.log(segunda_llamada);
+                console.log(segunda_llamada);
+                ///////EN TESTEO LAS MULTIPLES CONEXIONES PERO SOLO 1 PETICION POR CADA UNA
+                await obtenerpromesa_zona();
+                const tercera_llamada=await obtenerpromesa_zona_consulta2(socket,zona);
+                console.log(tercera_llamada);
+                await obtenerpromesa_zona();
+                const cuarta_llamada=await obtenerpromesa_zona_consulta3(socket,zona);
+                console.log(cuarta_llamada);
             }
             catch(error){ console.log(error);}
         }
@@ -289,10 +329,6 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('estado impreso',(ndoc,zona,user)=>{
-        console.log(`esto me esta llegando del cliente`)
-        console.log(ndoc);
-        console.log(zona);
-        console.log(user);
         async function pedir_pdf(ndoc,zona,user){
             try{
                 const primera_llamada=await obtenerpromesa_impresion();

@@ -47,9 +47,6 @@ function documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user){
             document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user);
         }
     })
-    // consulta.addParameter('user',TYPES.VarChar,user);
-    // consulta.addParameter('documento',TYPES.VarChar,ndoc);
-    //conexion.execSql(consulta);
     ////para el nuevo procedimiento    
     consulta.addParameter('documento',TYPES.VarChar,ndoc);
     consulta.addParameter('zona',TYPES.VarChar,zona);
@@ -237,7 +234,7 @@ function nuevos_registros(resolve,reject,ndoc,texto){
     let sp_sql="select a.ndocu,a.nomcli,d.dircli,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha',a.tota,a.toti,a.totn,a.dirpar,'150113' as 'ubigeopp',a.dirent,'' as 'ubigeopll',a.Consig,convert(varchar, a.fecha ,103)as 'fecha_traslado',a.ruccli,a.nomcli,a.codtra,e.nomtra,0 as 'peso',CONCAT('(',a.codven_usu,')',TRIM(f.nomven),'/',CONVERT(varchar,a.FecReg,8),'/ALMACEN:',a.CodAlm,'/T.CAMBIO:',a.tcam,'/TIPODESPACHO:',TRIM(g.despacho),'/',TRIM(a.Consig),'/',a.observ) as 'observacion',a.TipEnt from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) join mst01cli d on (d.codcli=a.codcli) join tbl01tra e on (e.codtra=a.codtra) join tbl01ven f on (f.codven=a.codven_usu) join tbl_tipo_despacho g on (g.IDdespacho=a.TipEnt) where a.ndocu=@doc";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
-            // console.log(err);
+            conexion.close();
             reject(err)
         }
         else{
@@ -317,7 +314,7 @@ function nuevos_registros2(resolve,reject,ndoc,texto){
     let sp_sql="select a.codf,a.cant,a.umed,a.descr,b.Usr_001,a.preu as 'v_unitario',a.preu as 'p_unitario',a.tota from dtl01fac a join prd0101 b on (a.codi=b.codi) where a.ndocu=@doc order by a.item";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
-            // console.log(err);
+            conexion.close();
             reject(err);
         }
         else{
