@@ -5,6 +5,7 @@ const puppeteer = require('puppeteer')
 const JsBarcode = require('jsbarcode')
 const {createCanvas} = require('canvas')
 const path = require('path')
+const html_pdf = require('html-pdf-node');
 // Crear un canvas para generar el código de barras
 const canvas=createCanvas();
 
@@ -44,7 +45,30 @@ function documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user){
             reject(err);
         }
         else{
-            document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user);
+            if(rows.length==0){
+                io.to(`ZONA ${zona}`).emit('lista documentos',{},zona);
+                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user);
+            }
+            else{
+                let respuesta=[];
+                let respuesta2={};
+                let contador=0;
+                rows.forEach(fila=>{
+                    let tmp={};
+                    fila.map(data=>{
+                        if(contador>=fila.length) contador=0;
+                        typeof data.value=='string' ? tmp[contador]=data.value.trim() : tmp[contador]=data.value;
+                        contador++;
+                    })
+                    respuesta.push(tmp);
+                });
+                Object.assign(respuesta2,respuesta);                
+                io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);                
+                // documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
+                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user)
+            }
+            /////CORREGIR ESTA FUNCION
+            // document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user);
         }
     })
     ////para el nuevo procedimiento    
@@ -183,23 +207,24 @@ function leer_file(){
     // br_generador(ndoc,socket,archivo_contenido);
 }
 
-function br_generador(ndoc,socket,archivo_contenido){
+function br_generador(ndoc){
     return new Promise((resolve,reject)=>{
         ////LLAMADA DE LA FUNCION PARA INSERTAR EL CODIGO DE BARRAS EN EL CANVAS CREADO
         JsBarcode(canvas,ndoc,{format:'CODE128',width:1,height:40,displayValue:false})
+        const brcodebuff=canvas.toBuffer('image/png').toString('base64');
+        resolve(brcodebuff);
+        // const salida = fs.createWriteStream('factura-barras.png');
+        // salida.on('finish',()=>{
+        //     console.log('archivo de imagen codigo barras generado');
+        //     ////CREAR UNA BUSQUEDA SOLA PARA ESTO APARTE
+        //     // iniciar_conexion(ndoc,socket,archivo_contenido)
+        // });
 
-        const salida = fs.createWriteStream('factura-barras.png');
-        salida.on('finish',()=>{
-            console.log('archivo de imagen codigo barras generado');
-            ////CREAR UNA BUSQUEDA SOLA PARA ESTO APARTE
-            // iniciar_conexion(ndoc,socket,archivo_contenido)
-        });
-
-        /////CONSTRUCCION DEL CANVAS
-        const stream = canvas.createPNGStream();
-        stream.pipe(salida);////VALOR GUARDADO POR SIACASO DE LA FORMA ANTIGUA
-        stream.on('end',resolve("termine de crear el canvas"))
-        stream.on('error',reject("algo paso con el canvas"))
+        // /////CONSTRUCCION DEL CANVAS
+        // const stream = canvas.createPNGStream();
+        // stream.pipe(salida);////VALOR GUARDADO POR SIACASO DE LA FORMA ANTIGUA
+        // stream.on('end',resolve("termine de crear el canvas"))
+        // stream.on('error',reject("algo paso con el canvas"))
     })
 }
 
@@ -223,13 +248,13 @@ function iniciar_conexion(resolve,reject){
     });
 }
 
-function obtenerpromesa_factura_datos_consulta(ndoc,texto){
+function obtenerpromesa_factura_datos_consulta(ndoc,texto,buff){
     return new Promise((resolve,reject)=>{
-        nuevos_registros(resolve,reject,ndoc,texto)
+        nuevos_registros(resolve,reject,ndoc,texto,buff)
     })
 }
 
-function nuevos_registros(resolve,reject,ndoc,texto){
+function nuevos_registros(resolve,reject,ndoc,texto,buff){
     // let sp_sql="select a.ndocu,a.nomcli,a.dirent,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha' from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) where a.ndocu='F009-0533502'";
     let sp_sql="select a.ndocu,a.nomcli,d.dircli,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha',a.tota,a.toti,a.totn,a.dirpar,'150113' as 'ubigeopp',a.dirent,'' as 'ubigeopll',a.Consig,convert(varchar, a.fecha ,103)as 'fecha_traslado',a.ruccli,a.nomcli,a.codtra,e.nomtra,0 as 'peso',CONCAT('(',a.codven_usu,')',TRIM(f.nomven),'/',CONVERT(varchar,a.FecReg,8),'/ALMACEN:',a.CodAlm,'/T.CAMBIO:',a.tcam,'/TIPODESPACHO:',TRIM(g.despacho),'/',TRIM(a.Consig),'/',a.observ) as 'observacion',a.TipEnt from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) join mst01cli d on (d.codcli=a.codcli) join tbl01tra e on (e.codtra=a.codtra) join tbl01ven f on (f.codven=a.codven_usu) join tbl_tipo_despacho g on (g.IDdespacho=a.TipEnt) where a.ndocu=@doc";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
@@ -294,6 +319,8 @@ function nuevos_registros(resolve,reject,ndoc,texto){
                 if(respuesta[0][26]=="1"){nuevo1=nuevo1.replace("{{tipdespacho}}","(V)")}
                 else if(respuesta[0][26]=="3"){nuevo1=nuevo1.replace("{{tipdespacho}}","(L)")}
                 else if(respuesta[0][26]=="4"){nuevo1=nuevo1.replace("{{tipdespacho}}","(P)")}
+                //////NUEVA MANERA DE REEMPLAZAR EL TEXTO
+                nuevo1=nuevo1.replace("{imagenbiencolocada}",buff);
                 resolve(nuevo1);
                 /////CAMBIANDO ESTO A 2 PETICIONES DE CONSULTAS
                 // nuevos_registros2(resolve,reject,ndoc,nuevo1);
@@ -363,6 +390,26 @@ function nuevos_registros2(resolve,reject,ndoc,texto){
     conexion.execSql(consulta);
 }
 
+/////OTRA MANERA DE GENERAR MULTIPLES ARCHIVOS ALA VES
+function generarpdfnuevo(htmlcontent){
+    return new Promise((resolve,reject)=>{
+        html_pdf.generatePdf({content:htmlcontent},{format:'A4'},(err,pdfbuf)=>{
+            if(err) reject(err);
+            resolve(pdfbuf);
+            // resolve("deveria haberme resuelto");
+        })
+    })
+    // let archivo={content:htmlcontent};
+    // html_pdf.generatePdf({content:htmlcontent},{format:'A4'},(err,pdfbuf)=>{
+    //     if(err) console.log(err);
+    //     console.log(pdfbuf);
+    // })
+    // .then((pdfBuffer)=>{
+    //     console.log("PDF Buffer:",pdfBuffer);
+    // });
+}
+///////////////
+
 async function generatepdf2(htmlcontent,outputpath){
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -420,6 +467,7 @@ module.exports={
     obtenerpromesa_factura_datos,
     obtenerpromesa_factura_datos_consulta,
     obtenerpromesa_factura_datos_consulta2,
+    generarpdfnuevo,
     generatepdf2,
     mandar_archivo,
     emitir_documento

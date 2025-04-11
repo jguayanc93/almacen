@@ -8,7 +8,7 @@ const {mostrar_mensaje} = require('./documentos_atender')
 const {documento_estado_piking} = require('./documento_estado_piking')
 const {documento_estado_checking} = require('./documento_estado_checking')
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3} = require('./zona_documentos')
-const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
+const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,br_generador2,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
 const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
@@ -18,7 +18,7 @@ const {ventanilla_registros,obtenerpromesa_ventanilla,obtenerpromesa_ventanilla_
 //const {local_provincia_registros1} = require('./local_provincia_documentos_nuevos')
 const {obtenerpromesa_principal,obtenerpromesa_principal_consulta} = require('./local_provincia_documentos_nuevos')
 const {obtenerpromesa_mym,obtenerpromesa_mym_consulta} = require('./local_provincia_documentos_nuevos2')
-const {despacho_registros} = require('./despacho_documentos_nuevos')
+const {despacho_registros,obtenerpromesa_despacho,obtenerpromesa_despacho_consulta,obtenerpromesa_despacho_consulta2,obtenerpromesa_despacho_consulta3} = require('./despacho_documentos_nuevos')
 // const {ejecutar_intervalo_zona} = require('./manejador')
 
 const app=express();
@@ -33,8 +33,6 @@ app.use('/',express.static(path.join(__dirname,"cuerpo")))
 
 io.on('connection',(socket)=>{
     let disparo=null;
-    console.log(socket.rooms);
-    console.log(disparo);
     /////DESCONECCION O INTERRUPCION
     socket.on('disconnect',(razon)=>{
         // socket.leave("ZONA Z1");
@@ -59,7 +57,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -132,7 +130,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -191,7 +189,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -236,17 +234,71 @@ io.on('connection',(socket)=>{
         
     })
 
-    socket.on('despacho',()=>{
-        socket.join("ZONA DESPACHO");
-        try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ despacho_registros(socket) }
-            });
+    socket.on('despacho',(alm)=>{
+        // socket.join("ZONA DESPACHO");
+        // try{
+        //     conexion = new Connection(config);
+        //     conexion.connect();
+        //     conexion.on('connect',(err)=>{
+        //         if(err){console.log("ERROR: ",err);}
+        //         else{ despacho_registros(socket) }
+        //     });
+        // }
+        // catch(err){console.log(err)}
+        function contador_balas(){
+            return new Promise((resolve)=>{
+                console.log(disparo)
+                resolve("resuelto con exito el conocer el valor del intervalo actual");
+            })
         }
-        catch(err){console.log(err)}
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+            })
+        }
+
+        async function despachop(socket,alm){
+            try{
+                const primera_llamada=await obtenerpromesa_despacho();
+                console.log(primera_llamada);
+                const segunda_llamada=await obtenerpromesa_despacho_consulta(socket,alm);
+                console.log(segunda_llamada);
+                await obtenerpromesa_despacho();
+                await obtenerpromesa_despacho_consulta2(socket,alm);
+                await obtenerpromesa_despacho();
+                await obtenerpromesa_despacho_consulta3(socket,alm);
+            }
+            catch(error){ console.log(error);}
+        }
+
+        async function ejecutar_intervalo_despacho(socket,alm){
+            const cargador=await contador_balas();
+            console.log(cargador);
+            const observador=await zonas_limpiador();
+            console.log(observador);
+            const grupo=await nueva_zone("DESPACHO");
+            console.log(grupo);
+            disparo=setInterval(despachop,2000,socket,alm);
+        }
+
+        if(disparo!=null){
+            clearInterval(disparo);
+            disparo=null;
+            ejecutar_intervalo_despacho(socket,alm);
+        }
+        else{ ejecutar_intervalo_despacho(socket,alm);}
     })
     //////////////NO TE OLVIDES VALIDAR LA ZONAS Y EL CAMBIO ENTRE OPCIONES PORQE PODRIA ROMPER LA CONEXION
 
@@ -283,14 +335,14 @@ io.on('connection',(socket)=>{
                 const primera_llamada=await obtenerpromesa_zona();
                 // console.log(primera_llamada);
                 const segunda_llamada=await obtenerpromesa_zona_consulta(socket,zona);
-                console.log(segunda_llamada);
+                // console.log(segunda_llamada);
                 ///////EN TESTEO LAS MULTIPLES CONEXIONES PERO SOLO 1 PETICION POR CADA UNA
                 await obtenerpromesa_zona();
                 const tercera_llamada=await obtenerpromesa_zona_consulta2(socket,zona);
-                console.log(tercera_llamada);
+                // console.log(tercera_llamada);
                 await obtenerpromesa_zona();
                 const cuarta_llamada=await obtenerpromesa_zona_consulta3(socket,zona);
-                console.log(cuarta_llamada);
+                // console.log(cuarta_llamada);
             }
             catch(error){ console.log(error);}
         }
@@ -332,54 +384,35 @@ io.on('connection',(socket)=>{
         async function pedir_pdf(ndoc,zona,user){
             try{
                 const primera_llamada=await obtenerpromesa_impresion();
-                console.log(primera_llamada);
                 const segunda_llamada=await obtenerpromesa_impresion_consulta(io,socket,ndoc,zona,user);
-                console.log(segunda_llamada);
                 //////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
                 const tercera_llamada=await leer_file();
                 // console.log(tercera_llamada)
                 ////CREACION DEL CANVAS Y PASAR UN DOCUMENTO PARA SU CREACION
                 const cuarta_llamada=await br_generador(ndoc);
-                console.log(cuarta_llamada)
+                // console.log(cuarta_llamada)
                 ////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
                 const quinta_llamada=await obtenerpromesa_factura_datos();
-                // console.log(quinta_llamada);
                 ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
-                const sexta_llamada=await obtenerpromesa_factura_datos_consulta(ndoc,tercera_llamada);
+                const sexta_llamada=await obtenerpromesa_factura_datos_consulta(ndoc,tercera_llamada,cuarta_llamada);
                 ////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
                 await obtenerpromesa_factura_datos()
                 const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(ndoc,sexta_llamada);
                 ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
-                const setima_llamada=await generatepdf2(terminar_consulta2,'prueba.pdf');
+                // const setima_llamada=await generatepdf2(terminar_consulta2,'prueba.pdf');
+                ///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
+                const setima_llamada=await generarpdfnuevo(terminar_consulta2);
                 // await generatepdf2(sexta_llamada,'prueba.pdf')
-                // console.log(setima_llamada);
-                const octava_llamada=await mandar_archivo();
+                //const octava_llamada=await mandar_archivo();
                 // await mandar_archivo(socket,ndoc);
-                // console.log(octava_llamada);
                 // const novena_llamada=await emitir_documento(socket,octava_llamada,ndoc);
-                await emitir_documento(socket,octava_llamada,ndoc);
+                // await emitir_documento(socket,octava_llamada,ndoc);
+                await emitir_documento(socket,setima_llamada,ndoc);
             }
             catch(error){ console.log(error);}
         }
         pedir_pdf(ndoc,zona,user);
     })
-    ////////test de peticion de descarga multiple
-    // socket.on('descargar archivo',(doc)=>{
-    //     const camino=path.join(__dirname,'/','prueba.pdf');
-    //     if(fs.existsSync(camino)){
-    //         fs.readFile(camino,(err,data)=>{
-    //             if(err){
-    //                 console.log("ocurrio un error con la lectura del archivo")
-    //                 console.log(err)
-    //             }
-    //             else{
-    //                 socket.emit('enviando archivo',data,doc);
-    //             }
-    //         })
-    //     }
-    //     else{ console.log("no existe el archivo");  }
-    // })
-    ////////test de peticion de descarga multiple
 
     socket.on('estado pick',(ndoc,cantidad,zona,user)=>{
         try{

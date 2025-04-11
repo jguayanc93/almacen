@@ -1,16 +1,17 @@
-document.getElementById("despacho").addEventListener("click",()=>despacho())
+document.getElementById("despachop").addEventListener("click",()=>despacho())
+document.getElementById("despachom").addEventListener("click",()=>despacho())
 
 function despacho(){
-    document.getElementById("tabla-despacho-venideros").innerHTML="";
-    document.getElementById("tabla-despacho-recolectados").innerHTML="";
-    document.getElementById("tabla-despacho-embalados").innerHTML="";
-    socket.emit('despacho');
+    socket.emit('despacho','principal');
 }
+function desapacho2(){}
 
 
 socket.on('despacho venideros',(impresos)=>{
-    // document.getElementById("tabla-despacho-venideros").innerHTML="";
-    console.log("documentos venideros")
+    document.getElementById("tabla1titulo").textContent="Nuevos Documentos";
+    document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados que vendran";
+    document.getElementById("tablero-maestro-control-inicio").innerHTML="";
+    /////////TERMINA DE REEMPLAZAR A DONDE DEBE INSERTARSE ESTAS DATA EN SUS RESPECTIVOS ELEMENTOS
     console.log(impresos);
 
     for(let documento in impresos){
@@ -34,7 +35,9 @@ socket.on('despacho venideros',(impresos)=>{
 })
 
 socket.on('despacho recolectados',(impresos)=>{
-    // document.getElementById("tabla-despacho-venideros").innerHTML="";
+    document.getElementById("tabla2titulo").textContent="Control Checking";
+    document.getElementById("tabla2descripcion").textContent="Permite observar los documentos terminados de almacen que pasaron a Despacho";
+    document.getElementById("tablero-maestro-control-medio").innerHTML="";
     console.log("documentos que pasaron el cheking")
     console.log(impresos);
 
@@ -64,7 +67,9 @@ socket.on('despacho recolectados',(impresos)=>{
     }
 })
 socket.on('despacho embalados',(impresos)=>{
-    // document.getElementById("tabla-despacho-venideros").innerHTML="";
+    document.getElementById("tabla3titulo").textContent="Embalar";
+    document.getElementById("tabla3descripcion").textContent="Control de documentos Embalados";
+    document.getElementById("tablero-maestro-control-fin").innerHTML="";
     console.log("documentos embalados")
     console.log(impresos);
 
