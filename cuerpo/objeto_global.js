@@ -11,3 +11,7 @@ const socket=io({
 //     retries:3,
 //     auth:{serverOffset:0}
 // });
+
+var pedidor=null;
+
+function detener(){clearInterval(pedidor);}

@@ -45,14 +45,16 @@ io.on('connection',(socket)=>{
         if(disparo!=null){ clearInterval(disparo);disparo=null;}
     })
     ////MASTER DE VENTANILLA
-    socket.on('ventanilla',(user)=>{
+    socket.on('ventanilla',async (user)=>{
 
-        function contador_balas(){
-            return new Promise((resolve)=>{
-                console.log(disparo)
-                resolve("resuelto con exito el conocer el valor del intervalo actual");
-            })
+        try{
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("VENTANILLA");
+            console.log(grupo);
+            // disparo=setInterval(almventanilla,2000,socket,alm);
+            almventanilla(socket,alm);
         }
+        catch(err){console.log(err)}
 
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
@@ -75,57 +77,39 @@ io.on('connection',(socket)=>{
         async function almventanilla(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_ventanilla();
-                // console.log(primera_llamada);
-                /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
-                const segunda_llamada=await obtenerpromesa_ventanilla_consulta(socket,alm);
+                const segunda_llamada=await obtenerpromesa_ventanilla_consulta(primera_llamada,socket,alm);
                 console.log(segunda_llamada);
             }
             catch(error){ console.log(error);}
         }
 
-        async function ejecutar_intervalov(socket,alm){
-            const cargador=await contador_balas();
-            console.log(cargador);
-            const observador=await zonas_limpiador();
-            console.log(observador);
-            const grupo=await nueva_zone("VENTANILLA");
-            console.log(grupo);
-            disparo=setInterval(almventanilla,2000,socket,alm);
-            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
-        }
+        // async function ejecutar_intervalov(socket,alm){
+        //     const observador=await zonas_limpiador();
+        //     console.log(observador);
+        //     const grupo=await nueva_zone("VENTANILLA");
+        //     console.log(grupo);
+        //     disparo=setInterval(almventanilla,2000,socket,alm);
+        //     // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
+        // }
 
-        if(disparo!=null){
-            clearInterval(disparo);
-            disparo=null;
-            ejecutar_intervalov(socket,user);
-        }
-        else{ ejecutar_intervalov(socket,user);}
-        ////////PARTE ANTIGUA QUE YA NO SIRVE
-        // socket.join("ZONA VENTANILLA");
-        // if(disparo !=null){
+        // if(disparo!=null){
         //     clearInterval(disparo);
         //     disparo=null;
+        //     ejecutar_intervalov(socket,user);
         // }
-        // try{
-        //     conexion = new Connection(config);
-        //     conexion.connect();
-        //     conexion.on('connect',(err)=>{
-        //         if(err){console.log("ERROR: ",err);}
-        //         else{ ventanilla_registros(socket,user) }
-        //     });
-        //     disparo=setInterval(nuevos_documentos,2000,socket);
-        // }
-        // catch(err){console.log(err)}
+        // else{ ejecutar_intervalov(socket,user);}
     })
     /////MASTER DE LOCAL-PROVINCIA
-    socket.on('almacen principal',(alm)=>{
+    socket.on('almacen principal',async (alm)=>{
         // socket.join("ZONA PRINCIPAL");
-        function contador_balas(){
-            return new Promise((resolve)=>{
-                console.log(disparo)
-                resolve("resuelto con exito el conocer el valor del intervalo actual");
-            })
+        try{
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("PRINCIPAL");
+            console.log(grupo);
+            // disparo=setInterval(almprincipal,2000,socket,alm);
+            await almprincipal(socket,alm);
         }
+        catch(err){console.log(err)};
 
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
@@ -144,47 +128,45 @@ io.on('connection',(socket)=>{
                 // resolve(socket.rooms);
             })
         }
-        
 
         async function almprincipal(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_principal();
-                // console.log(primera_llamada);
+                // console.log(primera_llamada)
                 /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
-                const segunda_llamada=await obtenerpromesa_principal_consulta(socket,alm);
+                const segunda_llamada=await obtenerpromesa_principal_consulta(primera_llamada,socket,alm);
                 console.log(segunda_llamada);
             }
             catch(error){ console.log(error);}
         }
 
-        async function ejecutar_intervalo1(socket,alm){
-            const cargador=await contador_balas();
-            console.log(cargador);
-            const observador=await zonas_limpiador();
-            console.log(observador);
-            const grupo=await nueva_zone("PRINCIPAL");
-            console.log(grupo);
-            disparo=setInterval(almprincipal,2000,socket,alm);
-            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
-        }
+        // async function ejecutar_intervalo1(socket,alm){
+        //     const observador=await zonas_limpiador();
+        //     console.log(observador);
+        //     const grupo=await nueva_zone("PRINCIPAL");
+        //     console.log(grupo);
+        //     // disparo=setInterval(almprincipal,2000,socket,alm);
+        //     await almprincipal(socket,alm);
+        // }
 
-        if(disparo!=null){
-            clearInterval(disparo);
-            disparo=null;
-            ejecutar_intervalo1(socket,alm);
-        }
-        else{ ejecutar_intervalo1(socket,alm);}
+        // if(disparo!=null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        //     ejecutar_intervalo1(socket,alm);
+        // }
+        // else{ ejecutar_intervalo1(socket,alm);}
     })
 
-    socket.on('almacen mym',(alm)=>{
-        // socket.join("ZONA MYM");
-        function contador_balas(){
-            return new Promise((resolve)=>{
-                console.log("esto es lo que tiene el intervalo al cambiar de zona en zona")
-                console.log(disparo)
-                resolve("resuelto con exito el conocer el valor del intervalo actual");
-            })
+    socket.on('almacen mym',async (alm)=>{
+        
+        try{
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("MYM");
+            console.log(grupo);
+            // disparo=setInterval(almmym,2000,socket,alm);
+            await almmym(socket,alm);
         }
+        catch(err){console.log(err)}
 
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
@@ -208,49 +190,40 @@ io.on('connection',(socket)=>{
             try{
                 const primera_llamada=await obtenerpromesa_mym();
                 // console.log(primera_llamada);
-                const segunda_llamada=await obtenerpromesa_mym_consulta(socket,alm);
+                const segunda_llamada=await obtenerpromesa_mym_consulta(primera_llamada,socket,alm);
                 console.log(segunda_llamada);
                 // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
             }
             catch(error){ console.log(error);}
         }
 
-        async function ejecutar_intervalo8(socket,alm){
-            const cargador=await contador_balas();
-            console.log(cargador);
-            const observador=await zonas_limpiador();
-            console.log(observador);
-            const grupo=await nueva_zone("MYM");
-            console.log(grupo);
-            disparo=setInterval(almmym,2000,socket,alm);
-            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el mym")},30000);
-        }
-        if(disparo!=null){
-            clearInterval(disparo);
-            disparo=null;
-            ejecutar_intervalo8(socket,alm);
-        }
-        else{ ejecutar_intervalo8(socket,alm);}
+        // async function ejecutar_intervalo8(socket,alm){
+        //     const observador=await zonas_limpiador();
+        //     console.log(observador);
+        //     const grupo=await nueva_zone("MYM");
+        //     console.log(grupo);
+        //     disparo=setInterval(almmym,2000,socket,alm);
+        //     // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el mym")},30000);
+        // }
+        // if(disparo!=null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        //     ejecutar_intervalo8(socket,alm);
+        // }
+        // else{ ejecutar_intervalo8(socket,alm);}
         
     })
 
-    socket.on('despacho',(alm)=>{
+    socket.on('despacho',async (alm)=>{
         // socket.join("ZONA DESPACHO");
-        // try{
-        //     conexion = new Connection(config);
-        //     conexion.connect();
-        //     conexion.on('connect',(err)=>{
-        //         if(err){console.log("ERROR: ",err);}
-        //         else{ despacho_registros(socket) }
-        //     });
-        // }
-        // catch(err){console.log(err)}
-        function contador_balas(){
-            return new Promise((resolve)=>{
-                console.log(disparo)
-                resolve("resuelto con exito el conocer el valor del intervalo actual");
-            })
+        try{
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("DESPACHO");
+            console.log(grupo);
+            // disparo=setInterval(despachop,2000,socket,alm);
+            await despachop(socket,alm);
         }
+        catch(err){console.log(err)}
 
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
@@ -272,55 +245,54 @@ io.on('connection',(socket)=>{
         async function despachop(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_despacho();
-                console.log(primera_llamada);
-                const segunda_llamada=await obtenerpromesa_despacho_consulta(socket,alm);
+                const segunda_llamada=await obtenerpromesa_despacho_consulta(primera_llamada,socket,alm);
                 console.log(segunda_llamada);
-                await obtenerpromesa_despacho();
-                await obtenerpromesa_despacho_consulta2(socket,alm);
-                await obtenerpromesa_despacho();
-                await obtenerpromesa_despacho_consulta3(socket,alm);
+                const tercera_llamada=await obtenerpromesa_despacho();
+                const cuarta_llamada=await obtenerpromesa_despacho_consulta2(tercera_llamada,socket,alm);
+                const quinta_llamada=await obtenerpromesa_despacho();
+                const sexta_llamada=await obtenerpromesa_despacho_consulta3(quinta_llamada,socket,alm);
             }
             catch(error){ console.log(error);}
         }
 
-        async function ejecutar_intervalo_despacho(socket,alm){
-            const cargador=await contador_balas();
-            console.log(cargador);
-            const observador=await zonas_limpiador();
-            console.log(observador);
-            const grupo=await nueva_zone("DESPACHO");
-            console.log(grupo);
-            disparo=setInterval(despachop,2000,socket,alm);
-        }
+        // async function ejecutar_intervalo_despacho(socket,alm){
+        //     const observador=await zonas_limpiador();
+        //     console.log(observador);
+        //     const grupo=await nueva_zone("DESPACHO");
+        //     console.log(grupo);
+        //     disparo=setInterval(despachop,2000,socket,alm);
+        // }
 
-        if(disparo!=null){
-            clearInterval(disparo);
-            disparo=null;
-            ejecutar_intervalo_despacho(socket,alm);
-        }
-        else{ ejecutar_intervalo_despacho(socket,alm);}
+        // if(disparo!=null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        //     ejecutar_intervalo_despacho(socket,alm);
+        // }
+        // else{ ejecutar_intervalo_despacho(socket,alm);}
     })
     //////////////NO TE OLVIDES VALIDAR LA ZONAS Y EL CAMBIO ENTRE OPCIONES PORQE PODRIA ROMPER LA CONEXION
 
-    socket.on('cambio zona',(zona)=>{
+    socket.on('cambio zona',async (zona)=>{
 
-        function contador_balas(){
-            return new Promise((resolve)=>{
-                console.log(disparo)
-                resolve("resuelto con exito el conocer el valor del intervalo actual");
-            })
+        try{
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone(zona);
+            // disparo=setInterval(zonas,3000,socket,zona);
+            await zonas(socket,zona);
+        }
+        catch(err){
+            console.log("fui disparado por un reject");console.log(err);
         }
 
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA VENTANILLA','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM'];
+                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA VENTANILLA','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
             })
         }
-
         function nueva_zone(zone){
             return new Promise((resolve,reject)=>{
                 socket.join(`ZONA ${zone}`);
@@ -328,46 +300,36 @@ io.on('connection',(socket)=>{
                 // resolve(socket.rooms);
             })
         }
-
         async function zonas(socket,zona){
             try{
-                // const pistola=await revolver_disparador(disparo);
                 const primera_llamada=await obtenerpromesa_zona();
-                // console.log(primera_llamada);
-                const segunda_llamada=await obtenerpromesa_zona_consulta(socket,zona);
-                // console.log(segunda_llamada);
-                ///////EN TESTEO LAS MULTIPLES CONEXIONES PERO SOLO 1 PETICION POR CADA UNA
-                await obtenerpromesa_zona();
-                const tercera_llamada=await obtenerpromesa_zona_consulta2(socket,zona);
-                // console.log(tercera_llamada);
-                await obtenerpromesa_zona();
-                const cuarta_llamada=await obtenerpromesa_zona_consulta3(socket,zona);
-                // console.log(cuarta_llamada);
+                const segunda_llamada=await obtenerpromesa_zona_consulta(primera_llamada,socket,zona);
+                const tercera_llamada=await obtenerpromesa_zona();///////EN TESTEO LAS MULTIPLES CONEXIONES PERO SOLO 1 PETICION POR CADA UNA
+                const cuarta_llamada=await obtenerpromesa_zona_consulta2(tercera_llamada,socket,zona);
+                const quinta_llamada=await obtenerpromesa_zona();
+                const sexta_llamada=await obtenerpromesa_zona_consulta3(quinta_llamada,socket,zona);
             }
             catch(error){ console.log(error);}
-        }
+        }        
 
-        async function ejecutar_intervalo_zona(socket,zona){
-            const cargador=await contador_balas();
-            console.log(cargador);
-            const observador=await zonas_limpiador();
-            console.log(observador);
-            const grupo=await nueva_zone(zona);
-            console.log(grupo);
-            // const pistola=await revolver_disparador(disparo);
-            // console.log(pistola);tener cuidado de usar esta funcion cuando posible redundancia
-            disparo=setInterval(zonas,2000,socket,zona);
-            // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar la zona")},30000);
-        }
-
-        if(disparo!=null){
-            clearInterval(disparo);
-            disparo=null;
-            ejecutar_intervalo_zona(socket,zona);
-        }
-        else{ ejecutar_intervalo_zona(socket,zona); }
+        // async function ejecutar_intervalo_zona(socket,zona){
+        //     const observador=await zonas_limpiador();
+        //     console.log(observador);
+        //     const grupo=await nueva_zone(zona);
+        //     console.log(grupo);
+        //     // const pistola=await revolver_disparador(disparo);
+        //     disparo=setInterval(zonas,2000,socket,zona);
+        //     // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar la zona")},30000);
+        // }
+        ///CONVERTIR ESTO EN UNA FUNCION ASINRONA PARA MANEJAR LOS INTERVALOS RESTANTES
+        // if(disparo!=null){
+        //     clearInterval(disparo);
+        //     disparo=null;
+        //     ejecutar_intervalo_zona(socket,zona);
+        // }
+        // else{ ejecutar_intervalo_zona(socket,zona); }
     })
-
+    ////RECUPERAR INFORMACION SEGUN EL ESTADO DEL DOCUMENTO Y PODRIA MOSTRAR DIFERENTE INFORMACION SEGUN AVANSE
     socket.on('pedir informacion',(ndoc)=>{
         try{
             conexion = new Connection(config);
@@ -380,38 +342,29 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
 
-    socket.on('estado impreso',(ndoc,zona,user)=>{
-        async function pedir_pdf(ndoc,zona,user){
+    socket.on('estado impreso',async (ndoc,zona,user)=>{
+        // async function pedir_pdf(ndoc,zona,user){
             try{
                 const primera_llamada=await obtenerpromesa_impresion();
-                const segunda_llamada=await obtenerpromesa_impresion_consulta(io,socket,ndoc,zona,user);
-                //////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
-                const tercera_llamada=await leer_file();
-                // console.log(tercera_llamada)
-                ////CREACION DEL CANVAS Y PASAR UN DOCUMENTO PARA SU CREACION
-                const cuarta_llamada=await br_generador(ndoc);
-                // console.log(cuarta_llamada)
-                ////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
-                const quinta_llamada=await obtenerpromesa_factura_datos();
+                const segunda_llamada=await obtenerpromesa_impresion_consulta(primera_llamada,io,socket,ndoc,zona,user);
+                const tercera_llamada=await leer_file();//////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
+                const cuarta_llamada=await br_generador(ndoc);///GENERAR EL CODIGO BARRAS
+                const quinta_llamada=await obtenerpromesa_factura_datos();////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
                 ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
-                const sexta_llamada=await obtenerpromesa_factura_datos_consulta(ndoc,tercera_llamada,cuarta_llamada);
-                ////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
-                await obtenerpromesa_factura_datos()
-                const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(ndoc,sexta_llamada);
+                const sexta_llamada=await obtenerpromesa_factura_datos_consulta(quinta_llamada,ndoc,tercera_llamada,cuarta_llamada);
+                const setima_llamada=await obtenerpromesa_factura_datos()////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
+                const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(setima_llamada,ndoc,sexta_llamada);
                 ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
                 // const setima_llamada=await generatepdf2(terminar_consulta2,'prueba.pdf');
-                ///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
-                const setima_llamada=await generarpdfnuevo(terminar_consulta2);
+                const octava_llamada=await generarpdfnuevo(terminar_consulta2);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
                 // await generatepdf2(sexta_llamada,'prueba.pdf')
                 //const octava_llamada=await mandar_archivo();
                 // await mandar_archivo(socket,ndoc);
                 // const novena_llamada=await emitir_documento(socket,octava_llamada,ndoc);
-                // await emitir_documento(socket,octava_llamada,ndoc);
-                await emitir_documento(socket,setima_llamada,ndoc);
+                await emitir_documento(socket,octava_llamada,ndoc);
             }
             catch(error){ console.log(error);}
-        }
-        pedir_pdf(ndoc,zona,user);
+        //}
     })
 
     socket.on('estado pick',(ndoc,cantidad,zona,user)=>{

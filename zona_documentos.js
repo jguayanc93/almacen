@@ -7,26 +7,24 @@ function obtenerpromesa_zona(){
 }
 
 function nuevos_documentos_zona(resolve,reject){
-    conexion = new Connection(config);
+    let conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{
-        if(err){
-            reject(err);
-        }
+        if(err) reject(err);
         else{
-            resolve("exitoso la promesa de zona de conexion")
-            // identificar_zona(resolve,reject,socket,alm);
+            // resolve("exitoso la promesa de zona de conexion");
+            resolve(conexion);
         }
     });
 }
 
-function obtenerpromesa_zona_consulta(socket,alm){
+function obtenerpromesa_zona_consulta(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        identificar_zona(resolve,reject,socket,alm);
+        identificar_zona(resolve,reject,conexion,socket,alm);
     })
 }
 
-function identificar_zona(resolve,reject,socket,zona){
+function identificar_zona(resolve,reject,conexion,socket,zona){
     let sp_sql="jc_documentos_zonas";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -34,6 +32,7 @@ function identificar_zona(resolve,reject,socket,zona){
             reject(err);
         }
         else{
+            conexion.close();
             if(rows.length==0){
                 socket.emit('lista documentos',{},zona)
                 resolve("exitoso la promesa de zona de consulta");
@@ -56,7 +55,6 @@ function identificar_zona(resolve,reject,socket,zona){
                 socket.emit('lista documentos',respuesta2,zona);
                 // io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);
                 resolve("exitoso la promesa de zona de consulta");
-                // listar_impresos(resolve,reject,socket,zona);
             }
         }
     })
@@ -65,13 +63,13 @@ function identificar_zona(resolve,reject,socket,zona){
     conexion.callProcedure(consulta);
 }
 
-function obtenerpromesa_zona_consulta2(socket,alm){
+function obtenerpromesa_zona_consulta2(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        listar_impresos(resolve,reject,socket,alm);
+        listar_impresos(resolve,reject,conexion,socket,alm);
     })
 }
 
-function listar_impresos(resolve,reject,socket,zona){
+function listar_impresos(resolve,reject,conexion,socket,zona){
     let sp_sql="jc_documentos_zonas";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -79,6 +77,7 @@ function listar_impresos(resolve,reject,socket,zona){
             reject(err);
         }
         else{
+            conexion.close();
             if(rows.length==0){
                 socket.emit('impresos',{},zona)
                 // listar_picking(resolve,reject,socket,zona);
@@ -106,17 +105,16 @@ function listar_impresos(resolve,reject,socket,zona){
     })
     consulta.addParameter('zona', TYPES.VarChar,zona);
     consulta.addParameter('nivel', TYPES.VarChar,'impresos');
-    // conexion.execSql(consulta);
     conexion.callProcedure(consulta);
 }
 
-function obtenerpromesa_zona_consulta3(socket,alm){
+function obtenerpromesa_zona_consulta3(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        listar_picking(resolve,reject,socket,alm);
+        listar_picking(resolve,reject,conexion,socket,alm);
     })
 }
 
-function listar_picking(resolve,reject,socket,zona){
+function listar_picking(resolve,reject,conexion,socket,zona){
     let sp_sql="jc_documentos_zonas";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){

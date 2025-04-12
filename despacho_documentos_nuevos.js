@@ -7,29 +7,30 @@ function obtenerpromesa_despacho(){
 }
 
 function nuevos_documentos_despacho(resolve,reject){
-    conexion = new Connection(config);
+    let conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{
         if(err){
             reject(err);
         }
-        else{
-            // despacho_registros(socket);
-            resolve("exitoso la promesa desapacho de conexion");
+        else{            
+            resolve(conexion);
         }
     });
 }
 
-function obtenerpromesa_despacho_consulta(socket,alm){
+function obtenerpromesa_despacho_consulta(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        despacho_registros(resolve,reject,socket,alm)
+        despacho_registros(resolve,reject,conexion,socket,alm)
     })
 }
 
-function despacho_registros(resolve,reject,socket,user){
-    let sp_sql="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND z1_imp=0 AND z2_imp=0 AND z3_imp=0 AND desconocido_imp=0) where programada.piking=0 AND despacho<>1";
+function despacho_registros(resolve,reject,conexion,socket,alm){
+    // let sp_sql="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND z1_imp=0 AND z2_imp=0 AND z3_imp=0 AND desconocido_imp=0) where programada.piking=0 AND despacho<>1";
+    let sp_sql="jc_documentos_despacho_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            conexion.close();
             reject(err);
         }
         else{
@@ -60,20 +61,25 @@ function despacho_registros(resolve,reject,socket,user){
             }
         }
     })
-    conexion.execSql(consulta);
+    // conexion.execSql(consulta);
+    consulta.addParameter('alm',TYPES.Int,alm);
+    consulta.addParameter('mostrar',TYPES.VarChar,'nuevos');
+    conexion.callProcedure(consulta);
 }
 
-function obtenerpromesa_despacho_consulta2(socket,alm){
+function obtenerpromesa_despacho_consulta2(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        despacho_recolectados(resolve,reject,socket,alm)
+        despacho_recolectados(resolve,reject,conexion,socket,alm)
     })
 }
 
-function despacho_recolectados(resolve,reject,socket,user){
-    // let sp_sql="select documento,despacho,cliente from tbl01_api_programar where cheking=1";
-    let sp_sql="select despacho.documento,almacen.cliente from tbl01_api_programar almacen join tbl01_api_despacho_embalados despacho on (despacho.documento=almacen.documento) where almacen.cheking=1 AND despacho.embalado=0";
+function despacho_recolectados(resolve,reject,conexion,socket,alm){
+    // let sp_sql="select despacho.documento,almacen.cliente from tbl01_api_programar almacen join tbl01_api_despacho_embalados despacho on (despacho.documento=almacen.documento) where almacen.cheking=1 AND despacho.embalado=0";
+    // let sp_sql="select a.documento,CASE b.despacho when 3 then 'LIMA' when 4 then 'PROVINCIA' end,b.cliente,b.nomtra,b.nomdep,b.nompro,b.destino,c.observ from tbl01_api_despacho_checking a inner join tbl01_api_programar b on (b.documento=a.documento AND b.cheking=1) inner join mst01fac c on (c.ndocu=a.documento) where a.checkeado=0 AND b.despacho<>1 AND b.almacen='01'";
+    let sp_sql="jc_documentos_despacho_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            conexion.close();
             console.log("error de ventanilla de registro sin pickings")
             reject(err)
         }
@@ -107,19 +113,24 @@ function despacho_recolectados(resolve,reject,socket,user){
             }
         }
     })
-    conexion.execSql(consulta);
+    // conexion.execSql(consulta);
+    consulta.addParameter('alm',TYPES.Int,alm);
+    consulta.addParameter('mostrar',TYPES.VarChar,'check');
+    conexion.callProcedure(consulta);
 }
 
-function obtenerpromesa_despacho_consulta3(socket,alm){
+function obtenerpromesa_despacho_consulta3(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        despacho_embalados(resolve,reject,socket,alm)
+        despacho_embalados(resolve,reject,conexion,socket,alm)
     })
 }
 
-function despacho_embalados(resolve,reject,socket,user){
-    let sp_sql="select * from tbl01_api_despacho_embalados where embalado=1";
+function despacho_embalados(resolve,reject,conexion,socket,alm){
+    // let sp_sql="select * from tbl01_api_despacho_embalados where embalado=1";
+    let sp_sql="jc_documentos_despacho_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
+            conexion.close();
             reject(err);
         }
         else{
@@ -149,7 +160,10 @@ function despacho_embalados(resolve,reject,socket,user){
             }
         }
     })
-    conexion.execSql(consulta);
+    // conexion.execSql(consulta);
+    consulta.addParameter('alm',TYPES.Int,alm);
+    consulta.addParameter('mostrar',TYPES.VarChar,'embalados');
+    conexion.callProcedure(consulta);
 }
 
 module.exports={

@@ -16,28 +16,24 @@ function obtenerpromesa_impresion(){
 }
 
 function nuevas_impresiones(resolve,reject){
-    conexion = new Connection(config);
+    let conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{
-        if(err){
-            console.log("ERROR: ",err);
-            reject(err);
-        }
+        if(err) reject(err);
         else{
-            resolve("exitoso la promesa de conexion para impresion");
-            // documento_estado_impreso(io,socket,ndoc,zona,user);
+            resolve(conexion);
         }
     });
 }
 
-function obtenerpromesa_impresion_consulta(io,socket,ndoc,zona,user){
+function obtenerpromesa_impresion_consulta(conexion,io,socket,ndoc,zona,user){
     return new Promise((resolve,reject)=>{
-        documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user);
+        documento_estado_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user);
     })
 }
 
 /////INSERTAR EL DOCUMENTO EN LA LISTA DE IMPRESOS
-function documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user){
+function documento_estado_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user){
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -47,7 +43,7 @@ function documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user){
         else{
             if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('lista documentos',{},zona);
-                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user);
+                documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user);
             }
             else{
                 let respuesta=[];
@@ -65,7 +61,7 @@ function documento_estado_impreso(resolve,reject,io,socket,ndoc,zona,user){
                 Object.assign(respuesta2,respuesta);                
                 io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);                
                 // documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
-                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user)
+                documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user)
             }
             /////CORREGIR ESTA FUNCION
             // document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user);
@@ -123,7 +119,7 @@ function document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user){
     conexion.execSql(consulta);
 }
 //// LISTAR LOS DOCUMENTOS IMPRESOS ACTUALISADOS Y SIN PICKING
-function documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user){
+function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user){
     let texto="select documento,comodin_imp,comodin_usr,cantidad from tbl01_api_almacen_documento_impreso where comodin_imp=1";
     let sp_sql;
     if(zona=='desconocido'){sp_sql=texto.replaceAll("comodin","desconocido")}
@@ -134,7 +130,7 @@ function documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user){
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
             console.log("error 2");
-            console.log(err);
+            conexion.close();
             reject(err);
         }
         else{
@@ -235,26 +231,25 @@ function obtenerpromesa_factura_datos(){
 }
 
 function iniciar_conexion(resolve,reject){
-    conexion = new Connection(config);
+    let conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{
         if(err){
             reject(err);
         }
         else{
-            resolve("exitoso la promesa de conexion para la data de la factura")
+            resolve(conexion)
         }
-        // nuevos_registros(ndoc,socket,texto)
     });
 }
 
-function obtenerpromesa_factura_datos_consulta(ndoc,texto,buff){
+function obtenerpromesa_factura_datos_consulta(conexion,ndoc,texto,buff){
     return new Promise((resolve,reject)=>{
-        nuevos_registros(resolve,reject,ndoc,texto,buff)
+        nuevos_registros(resolve,reject,conexion,ndoc,texto,buff)
     })
 }
 
-function nuevos_registros(resolve,reject,ndoc,texto,buff){
+function nuevos_registros(resolve,reject,conexion,ndoc,texto,buff){
     // let sp_sql="select a.ndocu,a.nomcli,a.dirent,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha' from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) where a.ndocu='F009-0533502'";
     let sp_sql="select a.ndocu,a.nomcli,d.dircli,a.ruccli,b.Nomvta,a.ndge,a.mone,a.orde,c.nomcdv,convert(varchar,a.fven,103)as 'fven',convert(varchar, a.fecha ,103)as 'fecha',a.tota,a.toti,a.totn,a.dirpar,'150113' as 'ubigeopp',a.dirent,'' as 'ubigeopll',a.Consig,convert(varchar, a.fecha ,103)as 'fecha_traslado',a.ruccli,a.nomcli,a.codtra,e.nomtra,0 as 'peso',CONCAT('(',a.codven_usu,')',TRIM(f.nomven),'/',CONVERT(varchar,a.FecReg,8),'/ALMACEN:',a.CodAlm,'/T.CAMBIO:',a.tcam,'/TIPODESPACHO:',TRIM(g.despacho),'/',TRIM(a.Consig),'/',a.observ) as 'observacion',a.TipEnt from mst01fac a join tbl01vta b on (b.codvta=a.codvta) join tbl01cdv c on (c.codcdv=a.Codcdv) join mst01cli d on (d.codcli=a.codcli) join tbl01tra e on (e.codtra=a.codtra) join tbl01ven f on (f.codven=a.codven_usu) join tbl_tipo_despacho g on (g.IDdespacho=a.TipEnt) where a.ndocu=@doc";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
@@ -331,13 +326,13 @@ function nuevos_registros(resolve,reject,ndoc,texto,buff){
     conexion.execSql(consulta);
 }
 
-function obtenerpromesa_factura_datos_consulta2(ndoc,texto){
+function obtenerpromesa_factura_datos_consulta2(conexion,ndoc,texto){
     return new Promise((resolve,reject)=>{
-        nuevos_registros2(resolve,reject,ndoc,texto)
+        nuevos_registros2(resolve,reject,conexion,ndoc,texto)
     })
 }
 
-function nuevos_registros2(resolve,reject,ndoc,texto){
+function nuevos_registros2(resolve,reject,conexion,ndoc,texto){
     let sp_sql="select a.codf,a.cant,a.umed,a.descr,b.Usr_001,a.preu as 'v_unitario',a.preu as 'p_unitario',a.tota from dtl01fac a join prd0101 b on (a.codi=b.codi) where a.ndocu=@doc order by a.item";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){

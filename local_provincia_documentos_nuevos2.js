@@ -7,27 +7,25 @@ function obtenerpromesa_mym(){
 }
 
 function nuevos_documentos_mym(resolve,reject){
-    conexion = new Connection(config);
+    let conexion = new Connection(config);
     conexion.connect();
     // conexion.on('connect',(err)=>err ? console.log(err) : local_provincia_registros1(socket,alm));
     conexion.on('connect',(err)=>{
-        if(err){
-            reject(err);
-        }
+        if(err) reject(err);
         else{
-            resolve("exitoso la promesa mym de conexion");
+            resolve(conexion);
             // local_provincia_registrosmm1(resolve,reject,socket,alm);
         }
     });
 }
 
-function obtenerpromesa_mym_consulta(socket,alm){
+function obtenerpromesa_mym_consulta(conexion,socket,alm){
     return new Promise((resolve,reject)=>{
-        local_provincia_registrosmm1(resolve,reject,socket,alm)
+        local_provincia_registrosmm1(resolve,reject,conexion,socket,alm)
     })
 }
 
-function local_provincia_registrosmm1(resolve,reject,socket,alm){
+function local_provincia_registrosmm1(resolve,reject,conexion,socket,alm){
     let sp_sql="jc_documentos_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -37,7 +35,7 @@ function local_provincia_registrosmm1(resolve,reject,socket,alm){
         else{
             if(rows.length==0){
                 socket.emit('ventanilla mestro nuevos',{});
-                local_provincia_registrosmm2(resolve,reject,socket,alm)
+                local_provincia_registrosmm2(resolve,reject,conexion,socket,alm)
             }
             else{
                 let respuesta=[];
@@ -54,7 +52,7 @@ function local_provincia_registrosmm1(resolve,reject,socket,alm){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('ventanilla mestro nuevos',respuesta2);
-                local_provincia_registrosmm2(resolve,reject,socket,alm)
+                local_provincia_registrosmm2(resolve,reject,conexion,socket,alm)
             }
         }
     })
@@ -63,7 +61,7 @@ function local_provincia_registrosmm1(resolve,reject,socket,alm){
     conexion.callProcedure(consulta);
 }
 
-function local_provincia_registrosmm2(resolve,reject,socket,alm){
+function local_provincia_registrosmm2(resolve,reject,conexion,socket,alm){
     let sp_sql="jc_documentos_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -73,7 +71,7 @@ function local_provincia_registrosmm2(resolve,reject,socket,alm){
         else{
             if(rows.length==0){
                 socket.emit('ventanilla mestro estados',{});
-                local_provincia_registrosmm3(resolve,reject,socket,alm)
+                local_provincia_registrosmm3(resolve,reject,conexion,socket,alm)
             }
             else{
                 let respuesta=[];
@@ -90,7 +88,7 @@ function local_provincia_registrosmm2(resolve,reject,socket,alm){
                 });
                 Object.assign(respuesta2,respuesta);
                 socket.emit('ventanilla mestro estados',respuesta2);
-                local_provincia_registrosmm3(resolve,reject,socket,alm)
+                local_provincia_registrosmm3(resolve,reject,conexion,socket,alm)
             }
         }
     })
@@ -100,7 +98,7 @@ function local_provincia_registrosmm2(resolve,reject,socket,alm){
     conexion.callProcedure(consulta);
 }
 
-function local_provincia_registrosmm3(resolve,reject,socket,alm){
+function local_provincia_registrosmm3(resolve,reject,conexion,socket,alm){
     let sp_sql="jc_documentos_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
