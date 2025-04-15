@@ -1,12 +1,11 @@
-document.getElementById("despachop").addEventListener("click",()=>despachop())
-document.getElementById("despachom").addEventListener("click",()=>despachom())
-
-function despachop(){socket.emit('despacho',1);
+document.getElementById("despachop").addEventListener("click",()=>{
+    emitir_eventos('despacho',1);
     document.getElementById("despacho-opc").classList.toggle('hidden');
-}
-function despachom(){socket.emit('despacho',8);
+})
+document.getElementById("despachom").addEventListener("click",()=>{
+    emitir_eventos('despacho',8);
     document.getElementById("despacho-opc").classList.toggle('hidden');
-}
+})
 
 
 socket.on('despacho venideros',(programados)=>{
@@ -14,6 +13,7 @@ socket.on('despacho venideros',(programados)=>{
     document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados que vendran";
     document.getElementById("tablero-maestro-control-inicio").innerHTML="";
     /////////TERMINA DE REEMPLAZAR A DONDE DEBE INSERTARSE ESTAS DATA EN SUS RESPECTIVOS ELEMENTOS
+    console.log("despacho los que vienen")
     console.log(programados);
 
     const cuerpo=document.createElement('tbody');
@@ -45,19 +45,19 @@ socket.on('despacho recolectados',(programados)=>{
     document.getElementById("tabla2descripcion").textContent="Permite observar los documentos terminados de almacen que pasaron a Despacho";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
     console.log("documentos que pasaron el cheking")
-    console.log(impresos);
+    console.log(programados);
 
     const cuerpo=document.createElement('tbody');
     for(let doc in programados){
         const item1=document.createElement('td');
-        item1.textContent=impresos[doc][0];
+        item1.textContent=programados[doc][0];
         // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
 
         const item2=document.createElement('td');
-        item2.textContent=impresos[doc][1];
+        item2.textContent=programados[doc][1];
 
         const boton=document.createElement("button");
-        boton.setAttribute("id","emb"+impresos[doc][0]);
+        boton.setAttribute("id","emb"+programados[doc][0]);
         boton.textContent="embalado";
         // boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3]));
 
@@ -69,28 +69,29 @@ socket.on('despacho recolectados',(programados)=>{
 
         cuerpo.appendChild(armason);
     }
-    document.getElementById("tabla-despacho-recolectados").appendChild(cuerpo);
+    document.getElementById("tablero-maestro-control-medio").appendChild(cuerpo);
 })
 socket.on('despacho embalados',(programados)=>{
     document.getElementById("tabla3titulo").textContent="Embalar";
     document.getElementById("tabla3descripcion").textContent="Control de documentos Embalados";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
-    console.log("documentos embalados")
-    console.log(impresos);
+    console.log("documentos para embalar")
+    console.log(programados)
 
+    const cuerpo=document.createElement('tbody');
     for(let doc in programados){
         const item1=document.createElement('td');
-        item1.textContent=impresos[doc][0];
+        item1.textContent=programados[doc][0];
         // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
 
         const item2=document.createElement('td');
-        item2.textContent=impresos[doc][1];
+        item2.textContent=programados[doc][1];
 
         const item3=document.createElement('td');
-        item3.textContent=impresos[doc][2];
+        item3.textContent=programados[doc][2];
 
         const boton=document.createElement("button");
-        boton.setAttribute("id","gui"+impresos[doc][0]);
+        boton.setAttribute("id","gui"+programados[doc][0]);
         boton.textContent="GUIA";
         // boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3]));
 
@@ -99,8 +100,10 @@ socket.on('despacho embalados',(programados)=>{
         armason.appendChild(item2)
         armason.appendChild(item3)
         armason.appendChild(boton)
-        document.getElementById("tabla-despacho-embalados").appendChild(armason);
+
+        cuerpo.appendChild(armason);
     }
+    document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo);
 })
 // function estado_cambiado_piking(ndoc,cantidad,zone){
 //     let user=window.prompt(`quien va a comensar el picking de ${ndoc}`,"aqui digitar numero de trabajador");

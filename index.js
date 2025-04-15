@@ -5,11 +5,12 @@ const path = require('node:path');
 const fs = require('fs')
 const {Server} = require('socket.io')
 const {mostrar_mensaje} = require('./documentos_atender')
-const {documento_estado_piking} = require('./documento_estado_piking')
-const {documento_estado_checking} = require('./documento_estado_checking')
+const {obtenerpromesa_contador,obtenerpromesa_contador_consulta} = require('./documentos_nuevos');
+const {documento_estado_piking,obtenerpromesa_pick,obtenerpromesa_pick_consulta} = require('./documento_estado_piking')
+const {documento_estado_checking,obtenerpromesa_check,obtenerpromesa_check_consulta,obtenerpromesa_check_consulta2,obtenerpromesa_check_consulta3,obtenerpromesa_check_consulta4,obtenerpromesa_check_consulta5} = require('./documento_estado_checking')
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3} = require('./zona_documentos')
 const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,br_generador2,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
-const {documento_estado_confirmado} = require('./documento_estado_confirmado')
+const {documento_estado_confirmado,obtenerpromesa_confirmar,obtenerpromesa_confirmar_consulta} = require('./documento_estado_confirmado')
 const {nuevos_documentos} = require('./documentos_receptor')
 const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
 const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')
@@ -44,15 +45,31 @@ io.on('connection',(socket)=>{
         // socket.leave("ZONA MYM");
         if(disparo!=null){ clearInterval(disparo);disparo=null;}
     })
+    ////CONTADOR DE REGISTROS
+    socket.on('registros fecha',async (msg)=>{
+        try{
+            await registros(socket,msg);
+        }
+        catch(err){console.log(err)}
+
+        async function registros(socket,registros){
+            try{
+                const primera_llamada=await obtenerpromesa_contador();
+                const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,registros);
+                console.log(segunda_llamada);
+            }
+            catch(error){ console.log(error);}
+        }
+    })
     ////MASTER DE VENTANILLA
     socket.on('ventanilla',async (user)=>{
-
+        //////FALTA AGREGAR LA VALIDES DEL USUARIO AL RECIBIR SUS PARAMETROS
         try{
             const observador=await zonas_limpiador();
             const grupo=await nueva_zone("VENTANILLA");
             console.log(grupo);
             // disparo=setInterval(almventanilla,2000,socket,alm);
-            almventanilla(socket,alm);
+            await almventanilla(socket,alm);
         }
         catch(err){console.log(err)}
 
@@ -132,7 +149,6 @@ io.on('connection',(socket)=>{
         async function almprincipal(socket,alm){
             try{
                 const primera_llamada=await obtenerpromesa_principal();
-                // console.log(primera_llamada)
                 /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
                 const segunda_llamada=await obtenerpromesa_principal_consulta(primera_llamada,socket,alm);
                 console.log(segunda_llamada);
@@ -196,21 +212,6 @@ io.on('connection',(socket)=>{
             }
             catch(error){ console.log(error);}
         }
-
-        // async function ejecutar_intervalo8(socket,alm){
-        //     const observador=await zonas_limpiador();
-        //     console.log(observador);
-        //     const grupo=await nueva_zone("MYM");
-        //     console.log(grupo);
-        //     disparo=setInterval(almmym,2000,socket,alm);
-        //     // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el mym")},30000);
-        // }
-        // if(disparo!=null){
-        //     clearInterval(disparo);
-        //     disparo=null;
-        //     ejecutar_intervalo8(socket,alm);
-        // }
-        // else{ ejecutar_intervalo8(socket,alm);}
         
     })
 
@@ -262,13 +263,6 @@ io.on('connection',(socket)=>{
         //     console.log(grupo);
         //     disparo=setInterval(despachop,2000,socket,alm);
         // }
-
-        // if(disparo!=null){
-        //     clearInterval(disparo);
-        //     disparo=null;
-        //     ejecutar_intervalo_despacho(socket,alm);
-        // }
-        // else{ ejecutar_intervalo_despacho(socket,alm);}
     })
     //////////////NO TE OLVIDES VALIDAR LA ZONAS Y EL CAMBIO ENTRE OPCIONES PORQE PODRIA ROMPER LA CONEXION
 
@@ -357,7 +351,6 @@ io.on('connection',(socket)=>{
                 ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
                 // const setima_llamada=await generatepdf2(terminar_consulta2,'prueba.pdf');
                 const octava_llamada=await generarpdfnuevo(terminar_consulta2);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
-                // await generatepdf2(sexta_llamada,'prueba.pdf')
                 //const octava_llamada=await mandar_archivo();
                 // await mandar_archivo(socket,ndoc);
                 // const novena_llamada=await emitir_documento(socket,octava_llamada,ndoc);
@@ -367,38 +360,64 @@ io.on('connection',(socket)=>{
         //}
     })
 
-    socket.on('estado pick',(ndoc,cantidad,zona,user)=>{
+    socket.on('estado pick',async (ndoc,cantidad,zona,user)=>{
         try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ documento_estado_piking(io,ndoc,cantidad,zona,user) }
-            });
+            const primera_llamada=await obtenerpromesa_pick();
+            const segunda_llamada=await obtenerpromesa_pick_consulta(primera_llamada,io,ndoc,cantidad,zona,user);
+            // conexion = new Connection(config);
+            // conexion.connect();
+            // conexion.on('connect',(err)=>{
+            //     if(err){console.log("ERROR: ",err);}
+            //     else{ documento_estado_piking(io,ndoc,cantidad,zona,user) }
+            // });
         }
         catch(err){console.log(err)}
     })
 
-    socket.on('estado confirmado',(ndoc,cantidad,zona)=>{
+    socket.on('estado confirmado',async (ndoc,cantidad,zona)=>{
         try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ documento_estado_confirmado(io,socket,ndoc,cantidad,zona) }
-            });
+            const primera_llamada=await obtenerpromesa_confirmar();
+            const segunda_llamada=await obtenerpromesa_confirmar_consulta(primera_llamada,io,socket,ndoc,cantidad,zona);
+            console.log(segunda_llamada);
+            // conexion = new Connection(config);
+            // conexion.connect();
+            // conexion.on('connect',(err)=>{
+            //     if(err){console.log("ERROR: ",err);}
+            //     else{ documento_estado_confirmado(io,socket,ndoc,cantidad,zona) }
+            // });
         }
         catch(err){console.log(err)}
     })
 
-    socket.on('estado checking',(ndoc,zonas,despacho,user)=>{
+    socket.on('estado checking',async (ndoc,zonas,despacho,user)=>{
         try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ documento_estado_checking(io,socket,ndoc,zonas,despacho,user) }
-            });
+            /////CONSULTA PARA PASAR EL PICKING A ESTADO 2 EN TODAS SUS ZONAS POSIBLES
+            const primera_llamada=await obtenerpromesa_check();///ABRIR CONEXION
+            const segunda_llamada=await obtenerpromesa_check_consulta(primera_llamada,io,socket,ndoc,zonas,despacho,user);
+            console.log(segunda_llamada);
+            /////CONSULTA PARA CONFIRMAR EL CHECK EN SU RESPECTIVA TABLA
+            const tercera_llamada=await obtenerpromesa_check();///ABRIR CONEXION
+            const cuarta_llamada=await obtenerpromesa_check_consulta2(tercera_llamada);
+            console.log(cuarta_llamada);
+            /////CONSULTA PARA CONFIRMAR EL CHECK EN LA TABLA MAESTRO GENERAL
+            const quinta_llamada=await obtenerpromesa_check();
+            const sexta_llamada=await obtenerpromesa_check_consulta3(quinta_llamada);
+            console.log(sexta_llamada);
+            /////CONSULTA REFRESCAR LOS PICKING Y KITAR LOS NUEVOS CHEKING
+            const setima_llamada=await obtenerpromesa_check();
+            const octava_llamada=await obtenerpromesa_check_consulta4(setima_llamada);
+            console.log(octava_llamada);
+            /////CONSULTA PARA MANDAR A DESPACHO LUEGO DE TERMINAR SU COMPLETO PROCESO
+            const novena_llamada=await obtenerpromesa_check();
+            const decima_llamada=await obtenerpromesa_check_consulta5(novena_llamada);
+            console.log(decima_llamada);
+
+            // conexion = new Connection(config);
+            // conexion.connect();
+            // conexion.on('connect',(err)=>{
+            //     if(err){console.log("ERROR: ",err);}
+            //     else{ documento_estado_checking(io,socket,ndoc,zonas,despacho,user) }
+            // });
         }
         catch(err){console.log(err)}
     })

@@ -1,9 +1,3 @@
-function emitir_eventos(evento,enviar){
-    detener();
-    pedidor=setInterval(()=>socket.emit(evento,enviar),2000);
-}
-
-
 /////////EXTRACCION DE ZONAS SEGUN ALMACEN EVENTOS DISCRIMINATORIOS
 ////////ALMACEN PRINCIPAL
 document.getElementById("almprincipal").addEventListener("click",()=>{
@@ -53,8 +47,3 @@ document.getElementById("alm8").addEventListener("click",()=>{
 document.getElementById("despacho").addEventListener("click",()=>{
     document.getElementById("despacho-opc").classList.toggle('hidden');
 })
-
-// document.getElementById("").addEventListener("click",()=>{
-//     socket.emit('almacen principal',1);
-//     document.getElementById("despacho-opc").classList.toggle('hidden');
-// })

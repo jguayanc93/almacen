@@ -1,6 +1,27 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
-function documento_estado_piking(io,ndoc,cantidad,zona,user){
+function obtenerpromesa_pick(){
+    return new Promise((resolve,reject)=>{documento_pick(resolve,reject)})
+}
+
+function documento_pick(resolve,reject){
+    let conexion = new Connection(config);
+    conexion.connect();
+    conexion.on('connect',(err)=>{
+        if(err) reject(err);
+        else{
+            resolve(conexion);
+        }
+    });
+}
+
+function obtenerpromesa_pick_consulta(conexion,io,ndoc,cantidad,zona,user){
+    return new Promise((resolve,reject)=>{
+        documento_estado_piking(resolve,reject,conexion,io,ndoc,cantidad,zona,user)
+    })
+}
+
+function documento_estado_piking(resolve,reject,conexion,io,ndoc,cantidad,zona,user){
     // let sp_sql;
     // let texto="update tbl01_api_almacen_documento_impreso set comodin_imp=2 where documento=@doc";
     // if(zona=='desconocido'){sp_sql=texto.replaceAll("comodin","desconocido")}
@@ -9,10 +30,13 @@ function documento_estado_piking(io,ndoc,cantidad,zona,user){
     // else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){console.log(err);}
+        if(err){
+            conexion.close();
+            reject(err);
+        }
         else{
             // documento_estado_piking2(io,ndoc,cantidad,zona,user)
-            document_lista_impreso(io,ndoc,cantidad,zona,user)
+            document_lista_impreso(resolve,reject,conexion,io,ndoc,cantidad,zona,user)
         }
     })
     // consulta.addParameter('doc',TYPES.VarChar,ndoc);
@@ -40,7 +64,7 @@ function documento_estado_piking2(io,ndoc,cantidad,zona,user){
     conexion.execSql(consulta);
 }
 
-function document_lista_impreso(io,ndoc,cantidad,zona,user){
+function document_lista_impreso(resolve,reject,conexion,io,ndoc,cantidad,zona,user){
     let sp_sql;
     let texto="select documento,comodin_imp,comodin_usr,cantidad from tbl01_api_almacen_documento_impreso where comodin_imp=1";
     if(zona=='desconocido'){sp_sql=texto.replaceAll("comodin","desconocido")}
@@ -49,11 +73,14 @@ function document_lista_impreso(io,ndoc,cantidad,zona,user){
     else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
 
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){console.log(err);}
+        if(err){
+            conexion.close();
+            reject(err);
+        }
         else{
             if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('impresos',{},zona);
-                document_lista_picking(io,ndoc,cantidad,zona,user);
+                document_lista_picking(resolve,reject,conexion,io,ndoc,cantidad,zona,user);
             }
             else{
                 let respuesta=[];
@@ -70,14 +97,14 @@ function document_lista_impreso(io,ndoc,cantidad,zona,user){
                 });
                 Object.assign(respuesta2,respuesta);
                 io.to(`ZONA ${zona}`).emit('impresos',respuesta2,zona);
-                document_lista_picking(io,ndoc,cantidad,zona,user);
+                document_lista_picking(resolve,reject,conexion,io,ndoc,cantidad,zona,user);
             }
         }
     })
     conexion.execSql(consulta);
 }
 
-function document_lista_picking(io,ndoc,cantidad,zona,user){
+function document_lista_picking(resolve,reject,conexion,io,ndoc,cantidad,zona,user){
     let sp_sql;
     // let texto="select documento,comodin_pick,cantidad_pick,comodin_conf,cantidad_conf,comodin_usr from tbl01_api_almacen_documento_piking where comodin_pick=1";
     // revisar la consulta para no mostrar en ventanilla
@@ -88,7 +115,10 @@ function document_lista_picking(io,ndoc,cantidad,zona,user){
     else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
     
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){console.log(err);}
+        if(err){
+            conexion.close();
+            reject(err);
+        }
         else{
             conexion.close();
             if(rows.length==0){
@@ -101,6 +131,7 @@ function document_lista_picking(io,ndoc,cantidad,zona,user){
                 io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
                 io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                resolve("exitoso la transmision del pick")
             }
             else{
                 let respuesta=[];
@@ -124,10 +155,11 @@ function document_lista_picking(io,ndoc,cantidad,zona,user){
                 io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
                 io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                resolve("exitoso la transmision del pick")
             }
         }
     })
     conexion.execSql(consulta);
 }
 
-module.exports={documento_estado_piking}
+module.exports={documento_estado_piking,obtenerpromesa_pick,obtenerpromesa_pick_consulta}

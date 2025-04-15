@@ -1,6 +1,28 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
+
+function obtenerpromesa_confirmar(){
+    return new Promise((resolve,reject)=>{documento_confirmado(resolve,reject);})
+}
+
+function documento_confirmado(resolve,reject){
+    let conexion = new Connection(config);
+    conexion.connect();
+    conexion.on('connect',(err)=>{
+        if(err) reject(err);
+        else{
+            // documento_estado_confirmado(io,socket,ndoc,cantidad,zona)
+            resolve(conexion);
+        }
+    });
+}
 ////////////SU ESTADO PASA A SER CONFIRMADO DEL PICKING EN SU ZONA
-function documento_estado_confirmado(io,socket,ndoc,cantidad,zona){
+function obtenerpromesa_confirmar_consulta(conexion,io,socket,ndoc,cantidad,zona){
+    return new Promise((resolve,reject)=>{
+        documento_estado_confirmado(resolve,reject,conexion,io,socket,ndoc,cantidad,zona)
+    })
+}
+
+function documento_estado_confirmado(resolve,reject,conexion,io,socket,ndoc,cantidad,zona){
     // let sp_sql;
     // let texto="update tbl01_api_almacen_documento_piking set comodin_conf=1 where documento=@doc";
     // if(zona=='desconocido'){sp_sql=texto.replace("comodin","desconocido")}
@@ -10,13 +32,12 @@ function documento_estado_confirmado(io,socket,ndoc,cantidad,zona){
     let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
-            console.log("no deberia saltar este error")
-            console.log(err);
-            // conexion.close();
+            conexion.close();
+            reject(err);
         }
         else{
             // documento_cantidad_confirmada(io,socket,ndoc,cantidad,zona);
-            document_lista_picking(io,socket,ndoc,cantidad,zona);
+            document_lista_picking(resolve,reject,conexion,io,socket,ndoc,cantidad,zona);
         }
     })
     // consulta.addParameter('doc',TYPES.VarChar,ndoc);
@@ -71,7 +92,7 @@ function cantidad_confirmada(io,socket,ndoc,cantidad,zona,cantidad_momentanea){
     conexion.execSql(consulta);
 }
 ////////VUELVO A ENVIAR LA LISTA DE DOCUMENTOS EN PICKING SOLO ESO PICKING PERO DE LA ZONA SOLICITADA
-function document_lista_picking(io,socket,ndoc,cantidad,zona){
+function document_lista_picking(resolve,reject,conexion,io,socket,ndoc,cantidad,zona){
     let sp_sql;
     let texto="select a.documento,a.comodin_pick,a.cantidad_pick,a.comodin_conf,a.cantidad_conf,a.comodin_usr from tbl01_api_almacen_documento_piking a join tbl01_api_programar b on (a.documento=b.documento AND b.cheking=0) where comodin_pick=1";
     
@@ -81,7 +102,10 @@ function document_lista_picking(io,socket,ndoc,cantidad,zona){
     else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
     // let sp_sql="jc_documentos_estados";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){ console.log(err); }
+        if(err){
+            conexion.close();
+            reject(err);
+        }
         else{
             if(rows.length==0){
                 conexion.close();
@@ -126,7 +150,7 @@ function document_lista_picking(io,socket,ndoc,cantidad,zona){
                     console.log("me estoi replicando porqe ya termine en todas las zonas")
                     let enviar={}
                     Object.assign(enviar,documentos_incompletos)
-                    pickings_terminados(io,socket,documentos_terminados,contador2,zona,enviar);
+                    pickings_terminados(resolve,reject,conexion,io,socket,documentos_terminados,contador2,zona,enviar);
                 }
             }
         }
@@ -134,26 +158,31 @@ function document_lista_picking(io,socket,ndoc,cantidad,zona){
     conexion.execSql(consulta);
 }
 
-function pickings_terminados(io,socket,documentos_terminados,contador,zona,documentos_incompletos){
+function pickings_terminados(resolve,reject,conexion,io,socket,documentos_terminados,contador,zona,documentos_incompletos){
     if(documentos_terminados.length<=contador){
         console.log("ya termine el bucle de picking en api_programar")
         let contador3=0;
         let zonas_replicar=["Z1","Z2","Z3","desconocido"];
         // socket.leave(`ZONA ${zona}`)
-        resto_zonas(io,socket,documentos_incompletos,zona,zonas_replicar,contador3)
+        resto_zonas(resolve,reject,conexion,io,socket,documentos_incompletos,zona,zonas_replicar,contador3)
     }
     else{
         let sp_sql="update tbl01_api_programar set piking=1 where documento=@doc";
         let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-            if(err){ console.log(err); }
-            else{ pickings_terminados(io,socket,documentos_terminados,contador+1,zona,documentos_incompletos) }
+            if(err){
+                conexion.close();
+                reject(err);
+            }
+            else{
+                pickings_terminados(resolve,reject,conexion,io,socket,documentos_terminados,contador+1,zona,documentos_incompletos)
+            }
         })
         consulta.addParameter('doc',TYPES.VarChar,documentos_terminados[contador]);
         conexion.execSql(consulta);
     }
 }
 // io.to(`ZONA ${zona}`).emit('lista picking',enviar,zona);//conexion.close();
-function resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,contador3){
+function resto_zonas(resolve,reject,conexion,io,socket,documentos_incompletos,zona,zonas_aledañas,contador3){
     if(4<=contador3){
         conexion.close();
         //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
@@ -164,6 +193,7 @@ function resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,conta
         io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
         io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
         // socket.join(`ZONA ${zona}`)
+        resolve("termine alfin el picking completo");
     }
     else{
         console.log(zonas_aledañas[contador3]);
@@ -173,14 +203,14 @@ function resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,conta
         let sp_sql=texto.replaceAll("comodin",zonas_aledañas[contador3]);
         let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
             if(err){
-                console.log("error de bucle2");
-                console.log(err);
+                conexion.close();
+                reject(err);
             }
             else{
                 if(rows.length==0){
                     console.log("aqui estaba el problema anterior")
                     io.to(`ZONA ${zonas_aledañas[contador3]}`).emit('lista picking',{},zonas_aledañas[contador3]);
-                    resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,contador3+1)
+                    resto_zonas(resolve,reject,conexion,io,socket,documentos_incompletos,zona,zonas_aledañas,contador3+1)
                 }
                 else{
                     let respuesta=[];
@@ -198,7 +228,7 @@ function resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,conta
                     Object.assign(respuesta2,respuesta);
                     io.to(`ZONA ${zonas_aledañas[contador3]}`).emit('lista picking',respuesta2,zonas_aledañas[contador3]);
                     // socket.leave(`ZONA ${zonas_aledañas[contador3]}`)
-                    resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,contador3+1) 
+                    resto_zonas(resolve,reject,conexion,io,socket,documentos_incompletos,zona,zonas_aledañas,contador3+1) 
                 }
             }
         })
@@ -207,4 +237,4 @@ function resto_zonas(io,socket,documentos_incompletos,zona,zonas_aledañas,conta
 }
 
 
-module.exports={documento_estado_confirmado}
+module.exports={documento_estado_confirmado,obtenerpromesa_confirmar,obtenerpromesa_confirmar_consulta}

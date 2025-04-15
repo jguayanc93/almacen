@@ -99,3 +99,14 @@ socket.on('ventanilla mestro terminados',(registros)=>{
     }
     document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo)
 })
+
+socket.on('registros nuevos',(registros)=>{
+    if(registros[0]>contadorxglobalxcliente){
+        contadorxglobalxcliente=registros[0];
+        emitir_eventos(nombre_ev_actual,valor_ev_actual);////DEBO DE EMITIR A TODOS LOS CANALES
+        // socket.emit(nombre_ev_actual,valor_ev_actual);
+    }
+    else{
+        console.log("no pasa nada")
+    }
+})
