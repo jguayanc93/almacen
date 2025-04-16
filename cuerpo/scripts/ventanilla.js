@@ -73,6 +73,7 @@ socket.on('ventanilla mestro terminados',(registros)=>{
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
     const cuerpo=document.createElement('tbody');
+    console.log(registros);
     for(let doc in registros){
         const documento=document.createElement('td')
         documento.textContent=registros[doc][0];
@@ -87,7 +88,7 @@ socket.on('ventanilla mestro terminados',(registros)=>{
             boton.setAttribute("id","chk"+registros[doc][0]);
             boton.textContent="CHECKING";
             // boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][4],registros[doc][22]));
-            boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2]));
+            boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2],registros[doc][4]));
         }   
 
         const fila=document.createElement('tr');

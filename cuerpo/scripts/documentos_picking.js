@@ -109,11 +109,11 @@ function estado_cambio_confirmado(documento,cantidad,zona){
 }
 
 // function estado_cambio_checking(documento,cantidad,zona){
-function estado_cambio_checking(documento,zonas,despacho){
+function estado_cambio_checking(documento,zonas,despacho,identificador_maestro){
     let user=window.prompt(`quien va a confirmar el checking de ${documento}`,"aqui digitar numero de trabajador");
     if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
     else{
-        socket.emit('estado checking',documento,zonas,despacho,user);
+        socket.emit('estado checking',documento,zonas,despacho,user,identificador_maestro);
         // continuar con el desencadenador para q tambien arroje a despacho
         // socket.emit('estado checking',documento,zonas,despacho,user);
     }

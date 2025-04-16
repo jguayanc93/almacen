@@ -34,10 +34,10 @@ function obtenerpromesa_impresion_consulta(conexion,io,socket,ndoc,zona,user){
 
 /////INSERTAR EL DOCUMENTO EN LA LISTA DE IMPRESOS
 function documento_estado_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user){
-    let sp_sql="jc_documentos_estados";
+    let sp_sql="jc_documentos_estado_impreso";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
-            console.log(err);
+            conexion.close();
             reject(err);
         }
         else{
@@ -120,16 +120,9 @@ function document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user){
 }
 //// LISTAR LOS DOCUMENTOS IMPRESOS ACTUALISADOS Y SIN PICKING
 function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user){
-    let texto="select documento,comodin_imp,comodin_usr,cantidad from tbl01_api_almacen_documento_impreso where comodin_imp=1";
-    let sp_sql;
-    if(zona=='desconocido'){sp_sql=texto.replaceAll("comodin","desconocido")}
-    else if(zona=='Z1'){sp_sql=texto.replaceAll("comodin","z1")}
-    else if(zona=='Z2'){sp_sql=texto.replaceAll("comodin","z2")}
-    else if(zona=='Z3'){sp_sql=texto.replaceAll("comodin","z3")}
-    
+    let sp_sql="jc_documentos_estado_impreso";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
-            console.log("error 2");
             conexion.close();
             reject(err);
         }
@@ -149,7 +142,6 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
                 //////////////////
                 // io.emit("ZONA MYM").emit('f5 a8',"actualisa maestro");
                 // socket.emit('f5 maestros',"actualisa maestro");
-                // leer_file(ndoc,socket)
                 /////////////
             }
             else{
@@ -179,13 +171,15 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
                 // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
                 /////////////
                 // socket.emit('f5 maestros',"actualisa maestro");
-                //////REVIVIR LUEGO PARA COMPLETAR LA IMPRESION EN SU PROCESO DE CLICK
-                // leer_file(ndoc,socket)
-                /////////////
             }
         }
     })
-    conexion.execSql(consulta);
+    // conexion.execSql(consulta);
+    consulta.addParameter('documento',TYPES.VarChar,ndoc);
+    consulta.addParameter('zona',TYPES.VarChar,zona);
+    consulta.addParameter('nivel',TYPES.Int,2);
+    consulta.addParameter('user',TYPES.VarChar,user);
+    conexion.callProcedure(consulta);
 }
 
 ////LECTURA DE ARCHIVO PLANO EN TEXTO

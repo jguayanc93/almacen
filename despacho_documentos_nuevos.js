@@ -113,7 +113,6 @@ function despacho_recolectados(resolve,reject,conexion,socket,alm){
             }
         }
     })
-    // conexion.execSql(consulta);
     consulta.addParameter('alm',TYPES.Int,alm);
     consulta.addParameter('mostrar',TYPES.VarChar,'check');
     conexion.callProcedure(consulta);
