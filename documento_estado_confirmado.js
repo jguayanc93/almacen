@@ -38,52 +38,11 @@ function documento_estado_confirmado(resolve,reject,conexion,ndoc,zona){
     consulta.addParameter('documento',TYPES.VarChar,ndoc);
     consulta.addParameter('zona',TYPES.VarChar,zona);
     consulta.addParameter('nivel',TYPES.Int,1);
-    consulta.addParameter('user',TYPES.VarChar,'nadie');
+    consulta.addParameter('user',TYPES.VarChar,'no necesario');
     conexion.callProcedure(consulta);
 }
 ////////CALCULO SU CANTIDAD DE CONFIRMACIONES PARA SABER SI YA LLEGO A COMPLETAR TOTALMENTE EL PICKING
-function documento_cantidad_confirmada(io,socket,ndoc,cantidad,zona){
-    // let sp_sql="select cantidad_pick,cantidad_conf,z1_conf,z2_conf,z3_conf,desconocido_conf from tbl01_api_almacen_documento_piking where documento=@doc";
-    let sp_sql="select cantidad_pick,cantidad_conf,(z1_conf+z2_conf+z3_conf+desconocido_conf) as 'confirmaciones' from tbl01_api_almacen_documento_piking where documento=@doc";
-    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){ console.log(err);}
-        else{
-            if(rows.length==0){  console.log("vacio encontrado") }
-            else{
-                let respuesta=[];
-                let contador=0;
-                rows.forEach(fila=>{
-                    let tmp={};
-                    fila.map(data=>{
-                        if(contador>=fila.length) contador=0;
-                        typeof data.value=='string' ? tmp[contador]=data.value.trim() : tmp[contador]=data.value;
-                        contador++;
-                    })
-                    respuesta.push(tmp);
-                });
-                // cantidad_confirmada(io,socket,ndoc,cantidad,zona,cantidad_momentanea);
-                // cantidad_confirmada(io,socket,ndoc,cantidad,zona,respuesta[0][2]);
-            }
-        }
-    })
-    consulta.addParameter('doc',TYPES.VarChar,ndoc);
-    conexion.execSql(consulta);
-}
 ////////ACTUALISO SU CANTIDAD DE CONFIRMACIONES PARA ESTAR AL DIA DE CUANTAS CONFIRMACIONES VAN
-function cantidad_confirmada(io,socket,ndoc,cantidad,zona,cantidad_momentanea){
-    let sp_sql="update tbl01_api_almacen_documento_piking set cantidad_conf=@confirmado where documento=@doc";
-    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){
-            console.log(err);
-        }
-        else{
-            document_lista_picking(io,socket,ndoc,cantidad,zona)
-        }
-    })
-    consulta.addParameter('confirmado',TYPES.Int,cantidad_momentanea);
-    consulta.addParameter('doc',TYPES.VarChar,ndoc);
-    conexion.execSql(consulta);
-}
 ////////VUELVO A ENVIAR LA LISTA DE DOCUMENTOS EN PICKING SOLO ESO PICKING PERO DE LA ZONA SOLICITADA
 function obtenerpromesa_confirmar_consulta_nivel2(conexion,io,socket,ndoc,cantidad,zona){
     return new Promise((resolve,reject)=>{
@@ -101,15 +60,9 @@ function document_lista_picking(resolve,reject,conexion,io,socket,ndoc,cantidad,
         else{
             if(rows.length==0){
                 conexion.close();
-                console.log("OTRO VACIO ENCONTRADO");
                 io.to(`ZONA ${zona}`).emit('lista picking',{},zona);
-                //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                /////////////
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
+                resolve("termine revisar los documentos confirmados pero habia 0 documentos");
             }
             else{
                 let respuesta=[];
@@ -127,7 +80,7 @@ function document_lista_picking(resolve,reject,conexion,io,socket,ndoc,cantidad,
                 Object.assign(respuesta2,respuesta);
                 /////////separar las confirmaciones completas de las q faltan confirmar en la lista de picking
                 io.to(`ZONA ${zona}`).emit('lista picking',respuesta2,zona);
-
+                /////LOGICA EXTRA PARA SEPARAR LOS DOCUMENTOS CON PICKINS TERMINADOS
                 let documentos_terminados=[];
                 let documentos_incompletos=[];
                 let contador2=0;
@@ -147,11 +100,10 @@ function document_lista_picking(resolve,reject,conexion,io,socket,ndoc,cantidad,
             }
         }
     })
-    // conexion.execSql(consulta);
     consulta.addParameter('documento',TYPES.VarChar,ndoc);
     consulta.addParameter('zona',TYPES.VarChar,zona);
     consulta.addParameter('nivel',TYPES.Int,2);
-    consulta.addParameter('user',TYPES.VarChar,'nadie');
+    consulta.addParameter('user',TYPES.VarChar,'no necesario');
     conexion.callProcedure(consulta);
 }
 
@@ -176,21 +128,18 @@ function pickings_terminados(resolve,reject,conexion,io,socket,documentos_termin
             }
         })
         // consulta.addParameter('doc',TYPES.VarChar,documentos_terminados[contador]);
-        // conexion.execSql(consulta);
         consulta.addParameter('documento',TYPES.VarChar,documentos_terminados[contador]);
         consulta.addParameter('zona',TYPES.VarChar,'no necesario');
         consulta.addParameter('nivel',TYPES.Int,3);
-        consulta.addParameter('user',TYPES.VarChar,'nadie');
+        consulta.addParameter('user',TYPES.VarChar,'no necesario');
         conexion.callProcedure(consulta);
     }
 }
-// io.to(`ZONA ${zona}`).emit('lista picking',enviar,zona);//conexion.close();
+
 function resto_zonas(resolve,reject,conexion,io,socket,documentos_incompletos,zona,zonas_aledañas,contador3){
     if(4<=contador3){
         conexion.close();
-        io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-        io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-        io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+        io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
         // socket.join(`ZONA ${zona}`)
         resolve("termine alfin el picking completo");
     }
@@ -229,7 +178,6 @@ function resto_zonas(resolve,reject,conexion,io,socket,documentos_incompletos,zo
                 }
             }
         })
-        // conexion.execSql(consulta);
         consulta.addParameter('documento',TYPES.VarChar,'no necesario');
         consulta.addParameter('zona',TYPES.VarChar,zonas_aledañas[contador3]);
         consulta.addParameter('nivel',TYPES.Int,4);

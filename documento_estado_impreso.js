@@ -63,8 +63,6 @@ function documento_estado_impreso(resolve,reject,conexion,io,socket,ndoc,zona,us
                 // documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
                 documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user)
             }
-            /////CORREGIR ESTA FUNCION
-            // document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user);
         }
     })
     ////para el nuevo procedimiento    
@@ -74,50 +72,7 @@ function documento_estado_impreso(resolve,reject,conexion,io,socket,ndoc,zona,us
     consulta.addParameter('user',TYPES.VarChar,user);
     conexion.callProcedure(consulta);
 }
-////LISTAR LOS DOCUMENTOS RESTANTES REGISTRADOS Y SIN IMPRIMIR
-function document_lista_actualisado(resolve,reject,io,socket,ndoc,zona,user){
-    let sp_sql;
-    // let sp_sql="select programada.documento,programada.despacho,programada.cliente,programada.destino,programada.nomdep,programada.nompro,programada.nomtra,programada.nom_ejecutivo,programada.tip_zona,programada.cant_zone from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
-    // let texto="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1";
-    let texto="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora',programada.almacen from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND imprimido.comodin2_imp=0) where programada.comodin1=1"
-    if(zona=='Z1'){ sp_sql=texto.replace("comodin1","zone1");sp_sql=sp_sql.replace("comodin2","z1") }
-    else if(zona=='Z2'){sp_sql=texto.replace("comodin1","zone2");sp_sql=sp_sql.replace("comodin2","z2")}
-    else if(zona=='Z3'){sp_sql=texto.replace("comodin1","zone3");sp_sql=sp_sql.replace("comodin2","z3")}
-    else if(zona=='desconocido'){sp_sql=texto.replace("comodin1","desconocido");sp_sql=sp_sql.replace("comodin2","desconocido")}
 
-    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
-        if(err){
-            console.log("error 1")
-            console.log(err);
-            reject(err);
-        }
-        else{
-            if(rows.length==0){
-                io.to(`ZONA ${zona}`).emit('lista documentos',{},zona);
-                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user);
-            }
-            else{
-                let respuesta=[];
-                let respuesta2={};
-                let contador=0;
-                rows.forEach(fila=>{
-                    let tmp={};
-                    fila.map(data=>{
-                        if(contador>=fila.length) contador=0;
-                        typeof data.value=='string' ? tmp[contador]=data.value.trim() : tmp[contador]=data.value;
-                        contador++;
-                    })
-                    respuesta.push(tmp);
-                });
-                Object.assign(respuesta2,respuesta);                
-                io.to(`ZONA ${zona}`).emit('lista documentos',respuesta2,zona);                
-                // documento_lista_impreso(io,socket,ndoc,zona,user,respuesta2)
-                documento_lista_impreso(resolve,reject,io,socket,ndoc,zona,user)
-            }
-        }
-    })
-    conexion.execSql(consulta);
-}
 //// LISTAR LOS DOCUMENTOS IMPRESOS ACTUALISADOS Y SIN PICKING
 function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,user){
     let sp_sql="jc_documentos_estado_impreso";
@@ -131,18 +86,19 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
             conexion.close();
             if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('impresos',{},zona);
-                resolve("exitoso la impresion")
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 //////////
-                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
-                // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro ventanilla");
+                // io.to("ZONA PRINCIPAL").emit('f5 a1',"almacen principal",1);
+                // io.to("ZONA MYM").emit('f5 a8',"almacen mym",8);
                 //////////////////
                 // io.emit("ZONA MYM").emit('f5 a8',"actualisa maestro");
                 // socket.emit('f5 maestros',"actualisa maestro");
                 /////////////
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
+                resolve("exitoso la impresion")
             }
             else{
                 let respuesta=[];
@@ -159,18 +115,16 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
                 });
                 Object.assign(respuesta2,respuesta);
                 io.to(`ZONA ${zona}`).emit('impresos',respuesta2,zona);
-                resolve("exitoso la impresion")
-                ////////////TERMINA LA SALIDA DEL PDF
-
                 //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
                 // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 ///////////////
-                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro 1");
-                // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro 8");
+                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro ventanilla");
+                // io.to("ZONA PRINCIPAL").emit('f5 a1',"almacen principal",1);
+                // io.to("ZONA MYM").emit('f5 a8',"almacen mym",8);
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
                 /////////////
-                // socket.emit('f5 maestros',"actualisa maestro");
+                resolve("exitoso la impresion")
             }
         }
     })

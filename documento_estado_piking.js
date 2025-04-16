@@ -107,13 +107,10 @@ function document_lista_picking(resolve,reject,conexion,io,ndoc,zona,user){
             if(rows.length==0){
                 console.log("REVISAR VACIO PARA EL PICKING");
                 io.to(`ZONA ${zona}`).emit('lista picking',{},zona);
-                //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                /////////////
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                // io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
                 resolve("MOSTRANDO DOCUMENTOS SOLO PIKADOS")
             }
             else{
@@ -131,21 +128,18 @@ function document_lista_picking(resolve,reject,conexion,io,ndoc,zona,user){
                 });
                 Object.assign(respuesta2,respuesta);
                 io.to(`ZONA ${zona}`).emit('lista picking',respuesta2,zona);
-                //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-                /////////////
-                io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-                io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                // io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+                // io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
                 resolve("MOSTRANDO DOCUMENTOS SOLO PIKADOS")
             }
         }
     })
-    consulta.addParameter('documento',TYPES.VarChar,ndoc);
+    consulta.addParameter('documento',TYPES.VarChar,'no necesario');
     consulta.addParameter('zona',TYPES.VarChar,zona);
     consulta.addParameter('nivel',TYPES.Int,3);
-    consulta.addParameter('user',TYPES.VarChar,user);
+    consulta.addParameter('user',TYPES.VarChar,'no necesario');
     conexion.callProcedure(consulta);
 }
 

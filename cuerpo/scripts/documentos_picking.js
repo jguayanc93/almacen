@@ -67,32 +67,23 @@ socket.on('lista picking',(pikings,zona)=>{
 
         const boton=document.createElement("button");
         boton.setAttribute("id","pick"+pikings[documento][0]);
+        ///SI EL DOCUMENTO TIENE SOLO 1 ZONA
         if(pikings[documento][2]==1){
-            // boton.addEventListener("click",()=>estado_cambio_checking(pikings[documento][0],pikings[documento][2],zona));
-            /////para q puse este activador?
-            // boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
-            if(pikings[documento][3]==1){
-                boton.textContent="ESPERANDO CHECKING";
-                // boton.addEventListener("click",()=>estado_cambio_checking(pikings[documento][0],pikings[documento][2],zona));
-            }
+            if(pikings[documento][3]==1){boton.textContent="ESPERANDO CHECKING";}
             else{
                 boton.textContent="CONFIRMAR PICKING";
                 boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             }
         }
+        ////SI EL DOCUMENTO TIENE VARIAS ZONAS
         else{
             if(pikings[documento][3]==0){
                 boton.textContent="CONFIRMAR PICKING";
                 boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             }
             else if(pikings[documento][3]==1){
-                if(pikings[documento][4]<pikings[documento][2]){
-                    boton.textContent="ESPERANDO OTRAS ZONAS";
-                }
-                else{
-                    boton.textContent="ESPERANDO CHECKING";
-                    // boton.addEventListener("click",()=>estado_cambio_checking(pikings[documento][0],pikings[documento][2],zona));
-                }
+                if(pikings[documento][4]<pikings[documento][2]){boton.textContent="ESPERANDO OTRAS ZONAS";}
+                else{ boton.textContent="ESPERANDO CHECKING";}
             }
         }
         const armason=document.createElement("tr");

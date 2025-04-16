@@ -7,7 +7,8 @@ document.getElementById("despachom").addEventListener("click",()=>{
     document.getElementById("despacho-opc").classList.toggle('hidden');
 })
 
-
+socket.on('a despacho',()=>refresco());///para mostrar los nuevos pasados a despacho pero sin chekeado2
+///////FALTA CREAR SUS RESPECTIVOS EVENTOS PARA EL CHECK2 Y EL EMBALADO Y OTRA FUNCION
 socket.on('despacho venideros',(programados)=>{
     document.getElementById("tabla1titulo").textContent="Nuevos Documentos";
     document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados que vendran";
@@ -29,11 +30,15 @@ socket.on('despacho venideros',(programados)=>{
         const cliente=document.createElement('td');
         cliente.textContent=programados[doc][2];
 
+        const destino=document.createElement('td');
+        destino.textContent=programados[doc][3];
+
         const armason=document.createElement("tr");
         
-        armason.appendChild(fecha)
-        armason.appendChild(item2)
-        armason.appendChild(cliente)
+        armason.appendChild(fecha);
+        armason.appendChild(item2);
+        armason.appendChild(cliente);
+        armason.appendChild(destino);
 
         cuerpo.appendChild(armason);
     }
@@ -58,8 +63,8 @@ socket.on('despacho recolectados',(programados)=>{
 
         const boton=document.createElement("button");
         boton.setAttribute("id","emb"+programados[doc][0]);
-        boton.textContent="embalado";
-        // boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3]));
+        boton.textContent="CHECK DESPACHO";
+        boton.addEventListener("click",()=>estado_despacho_check(impresos[documento][0]));
 
         const armason=document.createElement("tr");
         armason.appendChild(item1)

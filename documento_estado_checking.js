@@ -80,6 +80,7 @@ function document_lista_actualisado(resolve,reject,conexion,ndoc,zonas,despacho,
             reject(err);
         }
         else{
+            conexion.close();
             // document_lista_picking(io,ndoc,cantidad,zona,user);
             // document_lista_actualisado_programada(resolve,reject,conexion,io,socket,ndoc,array_temporal,despacho,user);
             resolve("resuelto el paso de checking a 1 en su tabla");
@@ -138,18 +139,17 @@ function document_lista_picking(resolve,reject,conexion,io,socket,despacho,ndoc)
 
 function resto_zonas(resolve,reject,conexion,io,socket,despacho,ndoc,contador2,zonas_aledañas){
     if(zonas_aledañas.length<=contador2){
-        // conexion.close();
-        if(despacho=="1"){
-            io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");                
-        }
-        else{
-            // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
-            io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
-            io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
-        }
+        conexion.close();
+        io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
+        // if(despacho=="1"){
+        //     io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");          
+        // }
+        // else{
+        //     // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
+        //     io.to("ZONA PRINCIPAL").emit('f5 a1',"actualisa maestro");
+        //     io.to("ZONA MYM").emit('f5 a8',"actualisa maestro");
+        // }
         console.log("deberia estar ok todo")
-        ////llamando ala funcion para ser trabajado por despacho
-        // new_despacho_registro(io,socket,ndoc)
         resolve("resuelto el paso de refrescar las consultas de solo picking y no mostrar las que tiene checking")
     }
     else{
@@ -191,8 +191,7 @@ function resto_zonas(resolve,reject,conexion,io,socket,despacho,ndoc,contador2,z
                 }
             }
         })
-        // conexion.execSql(consulta);
-        consulta.addParameter('documento',TYPES.VarChar,ndoc);
+        consulta.addParameter('documento',TYPES.VarChar,'no necesario');
         consulta.addParameter('zona',TYPES.VarChar,zonas_aledañas[contador2]);
         consulta.addParameter('nivel',TYPES.Int,4);
         consulta.addParameter('user',TYPES.VarChar,'no necesario');
@@ -218,8 +217,10 @@ function new_despacho_registro(resolve,reject,conexion,io,socket,ndoc){
         }
         else{
             conexion.close();
-            io.to(`ZONA DESPACHO`).emit('lista recolectados');
-            resolve("TERMINADO EL LANSAR EL DOCUMENTO A DESPACHO TERMIANR DE CORREGIR")
+            // io.to(`ZONA DESPACHO`).emit('lista recolectados');//?PORQE LE PUSE ESE EVENTOY ADONDE VA
+            ///ESTE NUEVO EVENTO DEBE REFRESCAR Y MOSTRAR LOS NUEVOS DOCUMENTOS AORA EN DESPACHO
+            io.to(`ZONA DESPACHO`).emit('a despacho');
+            resolve("TERMINADO EL LANSAR EL DOCUMENTO A DESPACHO TERMIANAR DE CORREGIR")
             // document_lista_picking(io,socket,despacho);
             //mandar ala tabla de registros embalados
             

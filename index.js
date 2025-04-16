@@ -45,6 +45,18 @@ io.on('connection',(socket)=>{
         // socket.leave("ZONA MYM");
         if(disparo!=null){ clearInterval(disparo);disparo=null;}
     })
+    // socket.on('trae zone',async()=>{
+    //     try{
+    //         console.log(socket.rooms);
+    //         let paquete="";
+    //         socket.rooms.forEach((zone)=>{
+    //             let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+    //             if(cuartos.includes(zone)) paquete=zone;
+    //         })
+    //         socket.emit('zone traido',paquete);
+    //     }
+    //     catch(err){console.log(err)}
+    // })
     ////CONTADOR DE REGISTROS
     socket.on('registros fecha',async (msg)=>{
         try{
@@ -329,7 +341,6 @@ io.on('connection',(socket)=>{
         try{
             const primera_llamada=await obtenerpromesa_confirmar();
             const segunda_llamada=await obtenerpromesa_confirmar_consulta(primera_llamada,ndoc,zona);
-            console.log(segunda_llamada);
             const tercera_llamada=await obtenerpromesa_confirmar();
             const cuarta_llamada=await obtenerpromesa_confirmar_consulta_nivel2(tercera_llamada,io,socket,ndoc,cantidad,zona);
             console.log(cuarta_llamada);
@@ -356,6 +367,7 @@ io.on('connection',(socket)=>{
             const sexta_llamada=await obtenerpromesa_check_consulta3(quinta_llamada,ndoc);
             console.log(sexta_llamada);
             /////CONSULTA REFRESCAR LOS PICKING Y KITAR LOS NUEVOS CHEKING
+            /////DESDE AQUI SE MALOGRA CORREGIR EL ENVIO A LOS MASTERS DE PROCEDENCIA
             const setima_llamada=await obtenerpromesa_check();
             const octava_llamada=await obtenerpromesa_check_consulta4(setima_llamada,io,socket,ndoc,zonas,despacho,user);
             console.log(octava_llamada);
@@ -373,9 +385,7 @@ io.on('connection',(socket)=>{
             conexion.connect();
             conexion.on('connect',(err)=>{
                 if(err){console.log("ERROR: ",err);}
-                else{
-                    documento_estado_checking(io,socket,ndoc,zonas,despacho,user)
-                }
+                else{}
             });
         }
         catch(err){console.log(err)}

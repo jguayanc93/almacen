@@ -16,6 +16,8 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados para ser trabajados";
     document.getElementById("tablero-maestro-control-inicio").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
+    console.log("ESTOS REGISTROS SON UNICOS PARA EL LLAMADO DE CIERTAS ZONAS REVISAR SI SE REPITE")
+    console.log(registros);
     const cuerpo=document.createElement('tbody');
     for(let doc in registros){
         const fecha=document.createElement('td')
@@ -106,8 +108,5 @@ socket.on('registros nuevos',(registros)=>{
         contadorxglobalxcliente=registros[0];
         emitir_eventos(nombre_ev_actual,valor_ev_actual);////DEBO DE EMITIR A TODOS LOS CANALES
         // socket.emit(nombre_ev_actual,valor_ev_actual);
-    }
-    else{
-        console.log("no pasa nada")
     }
 })
