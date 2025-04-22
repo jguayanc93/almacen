@@ -86,9 +86,7 @@ function despacho_recolectados(resolve,reject,conexion,socket,alm){
         else{
             conexion.close();
             if(rows.length==0){
-                // socket.emit('despacho embalados',{});
-                socket.emit('despacho recolectados',{});
-                // ventanilla_registros3(socket,user);
+                socket.emit('despacho recolectados',{},alm);
                 resolve("exitoso la promesa de zona de consulta 2 despacho");
                 // despacho_embalados(socket,user);
             }
@@ -106,8 +104,7 @@ function despacho_recolectados(resolve,reject,conexion,socket,alm){
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                // socket.emit('despacho embalados',respuesta2);
-                socket.emit('despacho recolectados',respuesta2);
+                socket.emit('despacho recolectados',respuesta2,alm);
                 resolve("exitoso la promesa de zona de consulta 2 despacho");
                 // despacho_embalados(socket,user);
             }
@@ -135,7 +132,7 @@ function despacho_embalados(resolve,reject,conexion,socket,alm){
         else{
             conexion.close();
             if(rows.length==0){
-                socket.emit('despacho embalados',{});
+                socket.emit('despacho embalados',{},alm);
                 resolve("exitoso la promesa de zona de consulta 3 despacho");
                 // ventanilla_registros3(socket,user);
             }
@@ -153,7 +150,7 @@ function despacho_embalados(resolve,reject,conexion,socket,alm){
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                socket.emit('despacho embalados',respuesta2);
+                socket.emit('despacho embalados',respuesta2,alm);
                 resolve("exitoso la promesa de zona de consulta 3 despacho");
                 // ventanilla_registros3(socket,user);
             }

@@ -1,10 +1,10 @@
 const {config,Connection,Request,TYPES} = require('./conexion/cadena')
 
-function obtenerpromesa_items(){
-    return new Promise((resolve,reject)=>{ fac_items(resolve,reject); })
+function obtenerpromesa_destino(){
+    return new Promise((resolve,reject)=>{ destino_fac(resolve,reject); })
 }
 
-function fac_items(resolve,reject){
+function destino_fac(resolve,reject){
     let conexion = new Connection(config);
     conexion.connect();
     conexion.on('connect',(err)=>{
@@ -15,14 +15,15 @@ function fac_items(resolve,reject){
     });
 }
 
-function obtenerpromesa_items_consulta(conexion,socket,ndoc){
+function obtenerpromesa_destino_consulta(conexion,socket,ndoc){
     return new Promise((resolve,reject)=>{
-        documento_detallado(resolve,reject,conexion,socket,ndoc);
+        documento_destino(resolve,reject,conexion,socket,ndoc);
     })
 }
 
-function documento_detallado(resolve,reject,conexion,socket,ndoc){
-    let sp_sql="select marc,descr,cant from dtl01fac where ndocu=@doc AND LEFT(codi,4)<>'0303' order by item";
+function documento_destino(resolve,reject,conexion,socket,ndoc){
+    ///FIJARTE BIEN LA DIRECCION DE ENTREGA EN TODAS SUS POSIBILIDADES
+    let sp_sql="";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
             conexion.close();
@@ -31,8 +32,8 @@ function documento_detallado(resolve,reject,conexion,socket,ndoc){
         else{
             conexion.close();
             if(rows.length==0){
-                socket.emit('enviar informacion',{});
-                resolve("consultado los items");
+                socket.emit('comprobar destino',{});
+                resolve("consultado el destino");
             }
             else{
                 let respuesta=[];
@@ -48,8 +49,8 @@ function documento_detallado(resolve,reject,conexion,socket,ndoc){
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                socket.emit('enviar informacion',respuesta2);
-                resolve("consultado los items");
+                socket.emit('comprobar destino',respuesta2);
+                resolve("consultado el destino");
             }
         }
     })
@@ -57,4 +58,4 @@ function documento_detallado(resolve,reject,conexion,socket,ndoc){
     conexion.execSql(consulta);
 }
 
-module.exports={obtenerpromesa_items,obtenerpromesa_items_consulta}
+module.exports={obtenerpromesa_destino,obtenerpromesa_destino_consulta}

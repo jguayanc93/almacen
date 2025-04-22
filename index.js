@@ -9,18 +9,19 @@ const {obtenerpromesa_contador,obtenerpromesa_contador_consulta} = require('./do
 const {documento_estado_piking,obtenerpromesa_pick,obtenerpromesa_pick_consulta,obtenerpromesa_pick_consulta_nivel2,obtenerpromesa_pick_consulta_nivel3} = require('./documento_estado_piking')
 const {documento_estado_checking,obtenerpromesa_check,obtenerpromesa_check_consulta,obtenerpromesa_check_consulta2,obtenerpromesa_check_consulta3,obtenerpromesa_check_consulta4,obtenerpromesa_check_consulta5} = require('./documento_estado_checking')
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3} = require('./zona_documentos')
-const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,br_generador2,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
+const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado,obtenerpromesa_confirmar,obtenerpromesa_confirmar_consulta,obtenerpromesa_confirmar_consulta_nivel2} = require('./documento_estado_confirmado')
-const {nuevos_documentos} = require('./documentos_receptor')
-const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')
-const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')
-const {data} = require('./documento_informacion')
+const {nuevos_documentos} = require('./documentos_receptor')////YA NO VALE
+const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')////YA NO VALE
+const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')////YA NO VALE
+const {obtenerpromesa_items, obtenerpromesa_items_consulta} = require('./documento_informacion')
+const {obtenerpromesa_destino,obtenerpromesa_destino_consulta} = require('./documento_destino')
 const {ventanilla_registros,obtenerpromesa_ventanilla,obtenerpromesa_ventanilla_consulta} = require('./ventanilla_documentos_nuevos')
-//const {local_provincia_registros1} = require('./local_provincia_documentos_nuevos')
 const {obtenerpromesa_principal,obtenerpromesa_principal_consulta} = require('./local_provincia_documentos_nuevos')
 const {obtenerpromesa_mym,obtenerpromesa_mym_consulta} = require('./local_provincia_documentos_nuevos2')
 const {despacho_registros,obtenerpromesa_despacho,obtenerpromesa_despacho_consulta,obtenerpromesa_despacho_consulta2,obtenerpromesa_despacho_consulta3} = require('./despacho_documentos_nuevos')
-// const {ejecutar_intervalo_zona} = require('./manejador')
+const {obtenerpromesa_check2,obtenerpromesa_check2_consulta,obtenerpromesa_check2_consulta2} = require('./documento_estado_check2');
+const {obtenerpromesa_embalado,obtenerpromesa_embalado_consulta} = require('./documento_estado_embalado');
 
 const app=express();
 const server=createServer(app);
@@ -34,7 +35,6 @@ app.use('/',express.static(path.join(__dirname,"cuerpo")))
 
 io.on('connection',(socket)=>{
     let disparo=null;
-    /////DESCONECCION O INTERRUPCION
     socket.on('disconnect',(razon)=>{
         // socket.leave("ZONA Z1");
         // socket.leave("ZONA Z2");
@@ -119,13 +119,6 @@ io.on('connection',(socket)=>{
         //     disparo=setInterval(almventanilla,2000,socket,alm);
         //     // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
         // }
-
-        // if(disparo!=null){
-        //     clearInterval(disparo);
-        //     disparo=null;
-        //     ejecutar_intervalov(socket,user);
-        // }
-        // else{ ejecutar_intervalov(socket,user);}
     })
     /////MASTER DE LOCAL-PROVINCIA
     socket.on('almacen principal',async (alm)=>{
@@ -292,15 +285,18 @@ io.on('connection',(socket)=>{
         }
     })
     ////RECUPERAR INFORMACION SEGUN EL ESTADO DEL DOCUMENTO Y PODRIA MOSTRAR DIFERENTE INFORMACION SEGUN AVANSE
-    socket.on('pedir informacion',(ndoc)=>{
-        ///////FALTA CORREGIR ESTO SEGUN LA DISPOSICION DEL ALMACEN
+    socket.on('pedir items',async (ndoc)=>{
         try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{ data(socket,ndoc) }
-            });
+            const primera_llamada=await obtenerpromesa_items();
+            const segunda_llamada=await obtenerpromesa_items_consulta(primera_llamada,socket,ndoc);
+        }
+        catch(err){console.log(err)}
+    })
+
+    socket.on('pedir destinos',async (ndoc)=>{
+        try{
+            const primera_llamada=await obtenerpromesa_destino();
+            const segunda_llamada=await obtenerpromesa_destino_consulta(primera_llamada,socket,ndoc);
         }
         catch(err){console.log(err)}
     })
@@ -349,10 +345,6 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('estado checking',async (ndoc,zonas,despacho,user,identificador_maestro)=>{
-        console.log(ndoc)
-        console.log(zonas)
-        console.log(despacho)
-        console.log(user)
         try{
             /////CONSULTA PARA PASAR EL PICKING A ESTADO 2 EN TODAS SUS ZONAS POSIBLES
             const primera_llamada=await obtenerpromesa_check();///ABRIR CONEXION
@@ -379,26 +371,20 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
 
-    socket.on('despacho check',(ndoc,zonas,despacho,user)=>{
+    socket.on('despacho check',async (ndoc,alm,user)=>{
         try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{}
-            });
+            const primera_llamada=await obtenerpromesa_check2();
+            const segunda_llamada=await obtenerpromesa_check2_consulta(primera_llamada,io,ndoc,alm,user);
+            const tercera_llamada=await obtenerpromesa_check2();
+            const cuarta_llamada=await obtenerpromesa_check2_consulta2(tercera_llamada,io,ndoc,alm,user);
         }
         catch(err){console.log(err)}
     })
 
-    socket.on('despacho embalar',(ndoc,zonas,despacho,user)=>{
+    socket.on('despacho embalar',async (ndoc,alm,user)=>{
         try{
-            conexion = new Connection(config);
-            conexion.connect();
-            conexion.on('connect',(err)=>{
-                if(err){console.log("ERROR: ",err);}
-                else{}
-            });
+            const primera_llamada=await obtenerpromesa_embalado();
+            const segunda_llamada=await obtenerpromesa_embalado_consulta(primera_llamada,io,ndoc,alm,user);
         }
         catch(err){console.log(err)}
     })
