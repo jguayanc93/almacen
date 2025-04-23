@@ -47,3 +47,17 @@ document.getElementById("alm8").addEventListener("click",()=>{
 document.getElementById("despacho").addEventListener("click",()=>{
     document.getElementById("despacho-opc").classList.toggle('hidden');
 })
+
+document.getElementById("despachop").addEventListener("click",()=>{
+    emitir_eventos('despacho',1);
+    document.getElementById("despacho-opc").classList.toggle('hidden');
+})
+document.getElementById("despachom").addEventListener("click",()=>{
+    emitir_eventos('despacho',8);
+    document.getElementById("despacho-opc").classList.toggle('hidden');
+})
+
+/////ACCIONES PARA MOSTRAR EL CONTENEDOR FLOTANTE DE INFORMACION DETALLADA
+document.getElementById("flotante-cerrar").addEventListener('click',()=>{
+    document.getElementById("flotante-superior").classList.add("hidden");
+})

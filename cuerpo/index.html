@@ -191,140 +191,108 @@
           </div>
         </div>
     </nav>
-    <!--FIN CABEZERA PARA MOVERSE-->
-    <!-- opciones para MYM -->
-    <!-- <header class="bg-white">
-      <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-        <div class="flex lg:flex-1">
-          <a href="#" class="-m-1.5 p-1.5">
-            <span class="sr-only">Your Company</span>
-            <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="">
-          </a>
-        </div>
-        <div class="flex lg:hidden">
-          <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-            <span class="sr-only">Open main menu</span>
-            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
-        </div>
-        <div class="hidden lg:flex lg:gap-x-12">
-          <div class="relative">
-            <button type="button" class="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900" aria-expanded="false">
-              Product
-              <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-              </svg>
-            </button>    
-            
-            <div class="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5">
-              <div class="p-4">
-                <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
-                  <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                  </div>
-                  <div class="flex-auto">
-                    <a href="#" class="block font-semibold text-gray-900">
-                      Analytics
-                      <span class="absolute inset-0"></span>
-                    </a>
-                    <p class="mt-1 text-gray-600">Get a better understanding of your traffic</p>
-                  </div>
-                </div>
-                <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
-                  <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                  </div>
-                  <div class="flex-auto">
-                    <a href="#" class="block font-semibold text-gray-900">
-                      Engagement
-                      <span class="absolute inset-0"></span>
-                    </a>
-                    <p class="mt-1 text-gray-600">Speak directly to your customers</p>
-                  </div>
+
+    <!-- PRIMER DISEÑO REVISAR EN CASO DE VER ID -->
+    <div id="flotante-superior" class="relative z-10 hidden" role="dialog" aria-modal="true">
+      <!--
+        Background backdrop, show/hide based on modal state.    
+        Entering: "ease-out duration-300"
+          From: "opacity-0"  
+          To: "opacity-100"
+        Leaving: "ease-in duration-200"
+          From: "opacity-100"
+          To: "opacity-0"
+      -->
+      <div class="fixed inset-0 hidden bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
+    
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+          <!--
+            Modal panel, show/hide based on modal state.
+    
+            Entering: "ease-out duration-300"
+              From: "opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+              To: "opacity-100 translate-y-0 md:scale-100"
+            Leaving: "ease-in duration-200"
+              From: "opacity-100 translate-y-0 md:scale-100"
+              To: "opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+          -->
+          <div class="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
+            <div class="relative flex w-full items-center overflow-hidden bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+              <button id="flotante-cerrar" type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
+                <span class="sr-only">Close</span>
+                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+    
+              <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
+                <!-- <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/product-quick-preview-02-detail.jpg" alt="Two each of gray, white, and black shirts arranged on table." class="aspect-2/3 w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5"> -->
+                <div class="sm:col-span-8 lg:col-span-7">
+                  <h2 class="text-2xl font-bold text-gray-900 sm:pr-12">TOTAL DE PRODUCTOS</h2>
+    
+                  <section aria-labelledby="options-heading" class="mt-10">
+                    <h3 id="options-heading" class="sr-only">Product options</h3>
+    
+                    <form>
+                      <!-- Colors -->
+                      <fieldset aria-label="Choose a color">
+                        <legend class="text-sm font-medium text-gray-900">Leyenda</legend>
+    
+                        <div class="mt-4 flex items-center gap-x-3">
+                          <!-- Active and Checked: "ring-3 ring-offset-1" -->
+                          <label aria-label="White" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-hidden">
+                            <input type="radio" name="color-choice" value="White" class="sr-only">
+                            <span aria-hidden="true" class="size-8 rounded-full border border-black/10 bg-white"></span>
+                          </label>
+                          <!-- Active and Checked: "ring-3 ring-offset-1" -->
+                          <label aria-label="Black" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-900 focus:outline-hidden">
+                            <input type="radio" name="color-choice" value="Black" class="sr-only">
+                            <span aria-hidden="true" class="size-8 rounded-full border border-black/10 bg-gray-900"></span>
+                          </label>
+                        </div>
+                      </fieldset>
+    
+                      <!-- Sizes -->
+                      <fieldset class="mt-10" aria-label="Choose a product">
+                        <div class="flex items-center justify-between">
+                          <div class="text-sm font-medium text-gray-900">PRODUCTOS</div>
+                          <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">Recolectar</a>
+                        </div>
+    
+                        <div id="detallado-completo" class="mt-4 grid grid-cols-4 gap-4">
+                          <!-- Active: "ring-2 ring-indigo-500" -->
+                          <label class="group relative flex cursor-not-allowed items-center justify-center rounded-md border bg-gray-50 px-4 py-3 text-sm font-medium text-gray-200 uppercase hover:bg-gray-50 focus:outline-hidden sm:flex-1">
+                            <input type="radio" name="size-choice" value="XXXL" disabled class="sr-only">
+                            <span>4</span>
+                            <span aria-hidden="true" class="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200">
+                              <svg class="absolute inset-0 size-full stroke-2 text-gray-200" viewBox="0 0 100 100" preserveAspectRatio="none" stroke="currentColor">
+                                <line x1="0" y1="100" x2="100" y2="0" vector-effect="non-scaling-stroke" />
+                              </svg>
+                            </span>
+                          </label>
+                        </div>
+                      </fieldset>
+    
+                      <button type="button" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden">Detallado a Seleccion</button>
+                    </form>
+                  </section>
                 </div>
               </div>
             </div>
           </div>
-    
-          <a href="#" class="text-sm/6 font-semibold text-gray-900">Features</a>
         </div>
-      </nav>
-    </header> -->
+      </div>
+    </div>
+    <!-- FIN DEL DOCUMENTO SELECCIONADO -->
     
-
-
-    <!-- PRIMER DISEÑO REVISAR EN CASO DE VER ID -->  
-    <!-- <h1>ALMACEN</h1> -->
     <div>
         <button type="button" id="mostrarzone">MUESTRAME EN QUE ZONA ESTOI</button>
     </div>
-    <!-- <div>
-        <button type="button" id="ventanilla">VENTANILLA</button>
-        <button type="button" id="lp">LOCAL/PROVINCIA</button>
-    </div>
-    <div>
-        <button type="button" id="despacho">DESPACHO</button>
-    </div> -->
-    <div id="fac-data">
-        <label for="data1">documento</label>
-        <p id="data1"></p>
-        <!-- <input type="text" name="data1" id="data1" disabled><br> -->
-        <label for="data2">despacho</label>
-        <p id="data2"></p>
-        <!-- <input type="text" name="data2" id="data2"><br> -->
-        <label for="data3">cliente</label>
-        <p id="data3"></p>
-        <!-- <input type="text" name="data3" id="data3"><br> -->
-        <label for="data4">destino</label>
-        <p id="data4"></p>
-        <!-- <input type="text" name="data4" id="data4"><br> -->
-        <label for="data5">departamento</label>
-        <p id="data5"></p>
-        <!-- <input type="text" name="data5" id="data5"><br> -->
-        <label for="data6">provincia</label>
-        <p id="data6"></p>
-        <!-- <input type="text" name="data6" id="data6"><br> -->
-        <label for="data7">transporte</label>
-        <p id="data7"></p>
-        <!-- <input type="text" name="data7" id="data7"><br> -->
-        <label for="data8">vendedor</label>
-        <p id="data8"></p>
-        <!-- <input type="text" name="data8" id="data8"><br> -->
-        <label for="data9">zonas</label>
-        <p id="data9"></p>
-        <!-- <input type="text" name="data9" id="data9"><br> -->
-        <label for="data10">cantidad zonas</label>
-        <p id="data10"></p>
-        <!-- <input type="text" name="data10" id="data10"><br> -->
-    </div>
+
     <!-- <h2>selecciona tu zona</h2> -->
     <div id="distribucion"></div>
     
-    <!-- <div id="titulos">
-        <div id="head-izquierda"><p>NUEVOS DOCUMENTOS</p></div>
-        <div id="head-centro"><p>DOCUMENTOS IMPRESOS</p></div>
-        <div id="head-derecha"><p>DOCUMENTOS EN PICKING</p></div>
-    </div> -->
-    <!-- <div id="contenedor2">
-        <div id="observador-impresos">
-            <table>
-                <thead id="cabesa-tabla-lista-general"></thead>
-                <tbody id="tabla-lista-general"></tbody>
-            </table>
-        </div>
-        <div id="observador-pikings">
-            <table>
-                <thead id="cabesa-tabla-lista-general2"></thead>
-                <tbody id="tabla-lista-general2"></tbody>
-            </table>
-        </div>
-        <div id="observador-checkings">
-            <table>
-                <thead id="cabesa-tabla-lista-general3"></thead>
-                <tbody id="tabla-lista-general3"></tbody>
-            </table>
-        </div>
-    </div> -->
     <!-- contenedor general solo para los despachos no olvidar -->
     <div id="contenedor3">
         <div id="d-venideros">
@@ -412,8 +380,7 @@
     <script src="./scripts/documento_informacion.js"></script>
     <script src="./scripts/documentos_impresos.js"></script>
     <script src="./scripts/documentos_picking.js"></script>
-    <script src="./scripts/refrescar_maestro.js"></script>
-    <script src="./scripts/documento_check2.js"></script>
+    <script src="./scripts/refrescar_maestro.js"></script>    
 
     <script src="./scripts/documento_descargar.js"></script>
     <!-- <script src="./scripts/"></script> -->

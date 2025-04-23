@@ -23,7 +23,7 @@ function obtenerpromesa_destino_consulta(conexion,socket,ndoc){
 
 function documento_destino(resolve,reject,conexion,socket,ndoc){
     ///FIJARTE BIEN LA DIRECCION DE ENTREGA EN TODAS SUS POSIBILIDADES
-    let sp_sql="";
+    let sp_sql="select a.documento,a.cliente,CASE a.despacho when 1 then 'V' when 3 then 'L' when 4 then 'P' END,a.nomdep,a.nompro,a.destino,a.nomtra,b.observ,a.nom_ejecutivo from tbl01_api_programar a inner join mst01fac b on (b.ndocu=a.documento) where a.documento=@doc";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
             conexion.close();

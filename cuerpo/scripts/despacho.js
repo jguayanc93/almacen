@@ -1,11 +1,3 @@
-document.getElementById("despachop").addEventListener("click",()=>{
-    emitir_eventos('despacho',1);
-    document.getElementById("despacho-opc").classList.toggle('hidden');
-})
-document.getElementById("despachom").addEventListener("click",()=>{
-    emitir_eventos('despacho',8);
-    document.getElementById("despacho-opc").classList.toggle('hidden');
-})
 
 socket.on('a despacho',()=>refresco());///para mostrar los nuevos pasados a despacho pero sin chekeado2
 ///////FALTA CREAR SUS RESPECTIVOS EVENTOS PARA EL CHECK2 Y EL EMBALADO Y OTRA FUNCION
@@ -22,10 +14,10 @@ socket.on('despacho venideros',(programados)=>{
     for(let doc in programados){
         const fecha=document.createElement('td');
         fecha.textContent=programados[doc][0];
-        // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
+        fecha.addEventListener('click',()=>factura_observacion(programados[doc][0]))
 
         const item2=document.createElement('td');
-        item2.textContent=programados[doc][1];
+        item2.textContent=programados[doc][1];        
 
         const cliente=document.createElement('td');
         cliente.textContent=programados[doc][2];

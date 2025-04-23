@@ -22,7 +22,8 @@ function obtenerpromesa_items_consulta(conexion,socket,ndoc){
 }
 
 function documento_detallado(resolve,reject,conexion,socket,ndoc){
-    let sp_sql="select marc,descr,cant from dtl01fac where ndocu=@doc AND LEFT(codi,4)<>'0303' order by item";
+    // let sp_sql="select marc,descr,cant from dtl01fac where ndocu=@doc AND LEFT(codi,4)<>'0303' order by item";
+    let sp_sql="select descr,cant from dtl01fac where ndocu=@doc AND LEFT(codi,4)<>'0303' order by item";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
             conexion.close();

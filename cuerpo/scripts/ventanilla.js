@@ -56,6 +56,7 @@ socket.on('ventanilla mestro estados',(registros)=>{
     for(let doc in registros){
         const documento=document.createElement('td')
         documento.textContent=registros[doc][0];
+        documento.addEventListener('click',()=>{factura_informacion(registros[doc][0])})////aun en prueba
 
         const estado=document.createElement('td')
         estado.textContent=registros[doc][1];
