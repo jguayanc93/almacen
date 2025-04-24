@@ -2,13 +2,12 @@
 document.getElementById("ventanilla").addEventListener("click",()=>pasando_a_ventanilla())
 
 function pasando_a_ventanilla(){
-    let user=window.prompt("ventanilla usuario","aqui digitar numero de trabajador");
-    if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
-    else{
+    // let user=window.prompt("ventanilla usuario","aqui digitar numero de trabajador");
+    // if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
+    // else{
         document.getElementById("distribucion").innerHTML="";
         emitir_eventos('ventanilla',0)
-        // socket.emit('ventanilla',user,0);
-    }
+    // }
 }
 ////////ALMACEN PRINCIPAL
 document.getElementById("almprincipal").addEventListener("click",()=>{

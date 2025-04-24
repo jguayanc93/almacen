@@ -12,7 +12,7 @@ const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_cons
 const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado,obtenerpromesa_confirmar,obtenerpromesa_confirmar_consulta,obtenerpromesa_confirmar_consulta_nivel2} = require('./documento_estado_confirmado')
 const {obtenerpromesa_usuario,obtenerpromesa_usuario_consulta} = require('./documentos_receptor')////REEMPLAZADO POR ENTRADA DE USUARIOS
-// const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')////YA NO VALE
+const {autenticador} = require('./documentos_receptor2')////AUNTENTICADOR FUNCION MIDDLEWARE
 // const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')////YA NO VALE
 const {obtenerpromesa_items, obtenerpromesa_items_consulta} = require('./documento_informacion')
 const {obtenerpromesa_destino,obtenerpromesa_destino_consulta} = require('./documento_destino')
@@ -36,25 +36,7 @@ app.use('/',express.static(path.join(__dirname,"cuerpo")))
 
 io.on('connection',(socket)=>{
     /////CAMBIAR ESTO POR UNA FUNCION DE VERIFICACION MAÑANA
-    socket.use(async ([event,...args],next)=>{
-        if(event==='estado pick'){
-            console.log("fui disparado por el middleware")
-            console.log(args);
-            console.log(args[3]);
-            try{
-                const cnn=await obtenerpromesa_usuario();
-                const query=await obtenerpromesa_usuario_consulta(cnn,socket,args[3])
-                if(query) next();
-                else{
-                    console.log("no existe este usuario")
-                }
-            }
-            catch(err){console.log(err)}
-        }
-        else{
-            next();
-        }        
-    })
+    socket.use(async ([event,...args],next)=>{ autenticador(event,args,next); })
 
     socket.on('disconnect',(razon)=>{
         ////FALTA LOGICA DESCONECTADO NO OLVIDAR
@@ -80,7 +62,8 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
     ////MASTER DE VENTANILLA
-    socket.on('ventanilla',async (user,alm)=>{
+    /////////ERROR AL ENTRAR A VENTANILLA PORQUE NO SABE QUE USUARIO A SIDO SOLO LE PASARON EL VALOR DE 0
+    socket.on('ventanilla',async (alm)=>{
         //////FALTA AGREGAR LA VALIDES DEL USUARIO AL RECIBIR SUS PARAMETROS
         try{
             const observador=await zonas_limpiador();
@@ -244,11 +227,10 @@ io.on('connection',(socket)=>{
         try{
             const observador=await zonas_limpiador();
             const grupo=await nueva_zone(zona);
-            // disparo=setInterval(zonas,3000,socket,zona);
             await zonas(socket,zona);
         }
         catch(err){
-            console.log("fui disparado por un reject");console.log(err);
+            console.log(err);
         }
 
         function zonas_limpiador(){
@@ -297,34 +279,37 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('estado impreso',async (ndoc,zona,user)=>{
-        // async function pedir_pdf(ndoc,zona,user){
-            try{
-                const primera_llamada=await obtenerpromesa_impresion();
-                const segunda_llamada=await obtenerpromesa_impresion_consulta(primera_llamada,io,socket,ndoc,zona,user);
-                const tercera_llamada=await leer_file();//////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
-                const cuarta_llamada=await br_generador(ndoc);///GENERAR EL CODIGO BARRAS
-                const quinta_llamada=await obtenerpromesa_factura_datos();////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
-                ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
-                const sexta_llamada=await obtenerpromesa_factura_datos_consulta(quinta_llamada,ndoc,tercera_llamada,cuarta_llamada);
-                const setima_llamada=await obtenerpromesa_factura_datos()////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
-                const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(setima_llamada,ndoc,sexta_llamada);
-                ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
-                const octava_llamada=await generarpdfnuevo(terminar_consulta2);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
-                await emitir_documento(socket,octava_llamada,ndoc);
-            }
-            catch(error){ console.log(error);}
-        //}
+        try{
+            /////////PARTE PARA SACAR EL USUARIO ACEPTADO
+            const llamada=await obtenerpromesa_usuario();
+            const persona=await obtenerpromesa_usuario_consulta(llamada,user);
+            ///////////////////////////
+            const primera_llamada=await obtenerpromesa_impresion();
+            const segunda_llamada=await obtenerpromesa_impresion_consulta(primera_llamada,io,socket,ndoc,zona,persona);
+            const tercera_llamada=await leer_file();//////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
+            const cuarta_llamada=await br_generador(ndoc);///GENERAR EL CODIGO BARRAS
+            const quinta_llamada=await obtenerpromesa_factura_datos();////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
+            ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
+            const sexta_llamada=await obtenerpromesa_factura_datos_consulta(quinta_llamada,ndoc,tercera_llamada,cuarta_llamada);
+            const setima_llamada=await obtenerpromesa_factura_datos()////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
+            const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(setima_llamada,ndoc,sexta_llamada);
+            ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
+            const octava_llamada=await generarpdfnuevo(terminar_consulta2);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
+            await emitir_documento(socket,octava_llamada,ndoc);
+        }
+        catch(error){ console.log(error);}
+        
     })
 
     socket.on('estado pick',async (ndoc,cantidad,zona,user)=>{
         /////AGREGAR LOGICA PARA COMPROBAR EL USUARIO ANTES DEL PROCEDIMIENTO
-        // console.log(user)
         try{
-            // const llamada=await obtenerpromesa_usuario();
-            // const persona=await obtenerpromesa_usuario_consulta(llamada,socket,user);
+            /////////PARTE PARA SACAR EL USUARIO ACEPTADO
+            const llamada=await obtenerpromesa_usuario();
+            const persona=await obtenerpromesa_usuario_consulta(llamada,user);
             ///////////////////////////
             const primera_llamada=await obtenerpromesa_pick();
-            const segunda_llamada=await obtenerpromesa_pick_consulta(primera_llamada,ndoc,zona,user);
+            const segunda_llamada=await obtenerpromesa_pick_consulta(primera_llamada,ndoc,zona,persona);
             const tercera_llamada=await obtenerpromesa_pick();
             const cuarta_llamada=await obtenerpromesa_pick_consulta_nivel2(tercera_llamada,io,ndoc,zona,user);
             const quinta_llamada=await obtenerpromesa_pick();
@@ -346,13 +331,17 @@ io.on('connection',(socket)=>{
 
     socket.on('estado checking',async (ndoc,zonas,despacho,user,identificador_maestro)=>{
         try{
+            /////////PARTE PARA SACAR EL USUARIO ACEPTADO
+            const llamada=await obtenerpromesa_usuario();
+            const persona=await obtenerpromesa_usuario_consulta(llamada,user);
+            ///////////////////////////
             /////CONSULTA PARA PASAR EL PICKING A ESTADO 2 EN TODAS SUS ZONAS POSIBLES
             const primera_llamada=await obtenerpromesa_check();///ABRIR CONEXION
             const segunda_llamada=await obtenerpromesa_check_consulta(primera_llamada,ndoc,zonas,despacho,user);
             console.log(segunda_llamada);
             /////CONSULTA PARA CONFIRMAR EL CHECK EN SU RESPECTIVA TABLA
             const tercera_llamada=await obtenerpromesa_check();///ABRIR CONEXION
-            const cuarta_llamada=await obtenerpromesa_check_consulta2(tercera_llamada,ndoc,zonas,despacho,user,identificador_maestro);
+            const cuarta_llamada=await obtenerpromesa_check_consulta2(tercera_llamada,ndoc,zonas,despacho,persona,identificador_maestro);
             console.log(cuarta_llamada);
             /////CONSULTA PARA CONFIRMAR EL CHECK EN LA TABLA MAESTRO GENERAL
             const quinta_llamada=await obtenerpromesa_check();
@@ -373,8 +362,12 @@ io.on('connection',(socket)=>{
 
     socket.on('despacho check',async (ndoc,alm,user)=>{
         try{
+            /////////PARTE PARA SACAR EL USUARIO ACEPTADO
+            const llamada=await obtenerpromesa_usuario();
+            const persona=await obtenerpromesa_usuario_consulta(llamada,user);
+            ///////////////////////////
             const primera_llamada=await obtenerpromesa_check2();
-            const segunda_llamada=await obtenerpromesa_check2_consulta(primera_llamada,io,ndoc,alm,user);
+            const segunda_llamada=await obtenerpromesa_check2_consulta(primera_llamada,io,ndoc,alm,persona);
             const tercera_llamada=await obtenerpromesa_check2();
             const cuarta_llamada=await obtenerpromesa_check2_consulta2(tercera_llamada,io,ndoc,alm,user);
         }
@@ -383,8 +376,12 @@ io.on('connection',(socket)=>{
 
     socket.on('despacho embalar',async (ndoc,alm,user)=>{
         try{
+            /////////PARTE PARA SACAR EL USUARIO ACEPTADO
+            const llamada=await obtenerpromesa_usuario();
+            const persona=await obtenerpromesa_usuario_consulta(llamada,user);
+            ///////////////////////////
             const primera_llamada=await obtenerpromesa_embalado();
-            const segunda_llamada=await obtenerpromesa_embalado_consulta(primera_llamada,io,ndoc,alm,user);
+            const segunda_llamada=await obtenerpromesa_embalado_consulta(primera_llamada,io,ndoc,alm,persona);
         }
         catch(err){console.log(err)}
     })

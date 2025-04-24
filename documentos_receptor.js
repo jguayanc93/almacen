@@ -19,13 +19,13 @@ function usuario_conexion(resolve,reject){
     });
 }
 
-function obtenerpromesa_usuario_consulta(conexion,socket,user){
+function obtenerpromesa_usuario_consulta(conexion,user){
     return new Promise((resolve,reject)=>{
-        busqueda_usuario(resolve,reject,conexion,socket,user)
+        busqueda_usuario(resolve,reject,conexion,user)
     })
 }
 
-function busqueda_usuario(resolve,reject,conexion,socket,user){
+function busqueda_usuario(resolve,reject,conexion,user){
     let sp_sql="select usuario from tbl01_api_almacen_usuarios where clave=@pass";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -55,7 +55,7 @@ function busqueda_usuario(resolve,reject,conexion,socket,user){
                 Object.assign(respuesta2,respuesta);
                 // socket.emit('ventanilla mestro nuevos',respuesta2);
                 // resolve("usuario aceptado")
-                resolve(true)
+                resolve(respuesta2[0][0])
             }
         }
     })

@@ -67,12 +67,6 @@ function obtenerpromesa_check_consulta2(conexion,ndoc,zonas,despacho,user,identi
 }
 
 function document_lista_actualisado(resolve,reject,conexion,ndoc,zonas,despacho,user,identificador_maestro){
-    // if(despacho=="1"){
-    //     sp_sql="update tbl01_api_almacen_documento_checking set ventanilla=1,usr=@user where documento=@doc";
-    // }
-    // else{
-    //     sp_sql="update tbl01_api_almacen_documento_checking set loca_provincia=1,usr=@user where documento=@doc";
-    // }
     let sp_sql="jc_documentos_estado_check";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
