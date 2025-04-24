@@ -11,9 +11,9 @@ const {documento_estado_checking,obtenerpromesa_check,obtenerpromesa_check_consu
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3} = require('./zona_documentos')
 const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado,obtenerpromesa_confirmar,obtenerpromesa_confirmar_consulta,obtenerpromesa_confirmar_consulta_nivel2} = require('./documento_estado_confirmado')
-const {nuevos_documentos} = require('./documentos_receptor')////YA NO VALE
-const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')////YA NO VALE
-const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')////YA NO VALE
+const {obtenerpromesa_usuario,obtenerpromesa_usuario_consulta} = require('./documentos_receptor')////REEMPLAZADO POR ENTRADA DE USUARIOS
+// const {nuevos_documentos_dinamicos} = require('./documentos_receptor2')////YA NO VALE
+// const {nuevos_documentos_dinamicosmm} = require('./documentos_receptor3')////YA NO VALE
 const {obtenerpromesa_items, obtenerpromesa_items_consulta} = require('./documento_informacion')
 const {obtenerpromesa_destino,obtenerpromesa_destino_consulta} = require('./documento_destino')
 const {ventanilla_registros,obtenerpromesa_ventanilla,obtenerpromesa_ventanilla_consulta} = require('./ventanilla_documentos_nuevos')
@@ -22,6 +22,7 @@ const {obtenerpromesa_mym,obtenerpromesa_mym_consulta} = require('./local_provin
 const {despacho_registros,obtenerpromesa_despacho,obtenerpromesa_despacho_consulta,obtenerpromesa_despacho_consulta2,obtenerpromesa_despacho_consulta3} = require('./despacho_documentos_nuevos')
 const {obtenerpromesa_check2,obtenerpromesa_check2_consulta,obtenerpromesa_check2_consulta2} = require('./documento_estado_check2');
 const {obtenerpromesa_embalado,obtenerpromesa_embalado_consulta} = require('./documento_estado_embalado');
+const cuartos = require('./rango_zonas');
 
 const app=express();
 const server=createServer(app);
@@ -34,16 +35,29 @@ const port=8080;
 app.use('/',express.static(path.join(__dirname,"cuerpo")))
 
 io.on('connection',(socket)=>{
-    let disparo=null;
+    /////CAMBIAR ESTO POR UNA FUNCION DE VERIFICACION MAÑANA
+    socket.use(async ([event,...args],next)=>{
+        if(event==='estado pick'){
+            console.log("fui disparado por el middleware")
+            console.log(args);
+            console.log(args[3]);
+            try{
+                const cnn=await obtenerpromesa_usuario();
+                const query=await obtenerpromesa_usuario_consulta(cnn,socket,args[3])
+                if(query) next();
+                else{
+                    console.log("no existe este usuario")
+                }
+            }
+            catch(err){console.log(err)}
+        }
+        else{
+            next();
+        }        
+    })
+
     socket.on('disconnect',(razon)=>{
-        // socket.leave("ZONA Z1");
-        // socket.leave("ZONA Z2");
-        // socket.leave("ZONA Z3");
-        // socket.leave("ZONA desconocido");
-        // socket.leave("ZONA VENTANILLA");
-        // socket.leave("ZONA PRINCIPAL");
-        // socket.leave("ZONA MYM");
-        if(disparo!=null){ clearInterval(disparo);disparo=null;}
+        ////FALTA LOGICA DESCONECTADO NO OLVIDAR
     })
     // socket.on('trae zone',async()=>{
     //     try{
@@ -60,26 +74,18 @@ io.on('connection',(socket)=>{
     ////CONTADOR DE REGISTROS
     socket.on('registros fecha',async (msg)=>{
         try{
-            await registros(socket,msg);
+            const primera_llamada=await obtenerpromesa_contador();
+            const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,msg);
         }
         catch(err){console.log(err)}
-
-        async function registros(socket,registros){
-            try{
-                const primera_llamada=await obtenerpromesa_contador();
-                const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,registros);
-            }
-            catch(error){ console.log(error);}
-        }
     })
     ////MASTER DE VENTANILLA
-    socket.on('ventanilla',async (user)=>{
+    socket.on('ventanilla',async (user,alm)=>{
         //////FALTA AGREGAR LA VALIDES DEL USUARIO AL RECIBIR SUS PARAMETROS
         try{
             const observador=await zonas_limpiador();
             const grupo=await nueva_zone("VENTANILLA");
             console.log(grupo);
-            // disparo=setInterval(almventanilla,2000,socket,alm);
             await almventanilla(socket,alm);
         }
         catch(err){console.log(err)}
@@ -87,7 +93,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -110,24 +116,13 @@ io.on('connection',(socket)=>{
             }
             catch(error){ console.log(error);}
         }
-
-        // async function ejecutar_intervalov(socket,alm){
-        //     const observador=await zonas_limpiador();
-        //     console.log(observador);
-        //     const grupo=await nueva_zone("VENTANILLA");
-        //     console.log(grupo);
-        //     disparo=setInterval(almventanilla,2000,socket,alm);
-        //     // setTimeout(()=>{clearInterval(disparo);console.log("termine de sincronisar el principal")},30000);
-        // }
     })
     /////MASTER DE LOCAL-PROVINCIA
     socket.on('almacen principal',async (alm)=>{
-        // socket.join("ZONA PRINCIPAL");
         try{
             const observador=await zonas_limpiador();
             const grupo=await nueva_zone("PRINCIPAL");
             console.log(grupo);
-            // disparo=setInterval(almprincipal,2000,socket,alm);
             await almprincipal(socket,alm);
         }
         catch(err){console.log(err)};
@@ -135,7 +130,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -175,7 +170,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -214,7 +209,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -259,7 +254,7 @@ io.on('connection',(socket)=>{
         function zonas_limpiador(){
             return new Promise((resolve,reject)=>{
                 socket.rooms.forEach((zone)=>{
-                    let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA VENTANILLA','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA VENTANILLA','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
                     if(cuartos.includes(zone)) socket.rooms.delete(zone);
                 })
                 resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
@@ -322,7 +317,12 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('estado pick',async (ndoc,cantidad,zona,user)=>{
+        /////AGREGAR LOGICA PARA COMPROBAR EL USUARIO ANTES DEL PROCEDIMIENTO
+        // console.log(user)
         try{
+            // const llamada=await obtenerpromesa_usuario();
+            // const persona=await obtenerpromesa_usuario_consulta(llamada,socket,user);
+            ///////////////////////////
             const primera_llamada=await obtenerpromesa_pick();
             const segunda_llamada=await obtenerpromesa_pick_consulta(primera_llamada,ndoc,zona,user);
             const tercera_llamada=await obtenerpromesa_pick();

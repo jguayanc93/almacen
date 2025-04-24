@@ -82,13 +82,9 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
             reject(err);
         }
         else{
-            ////revivir luego la cerrada de conexion
             conexion.close();
             if(rows.length==0){
                 io.to(`ZONA ${zona}`).emit('impresos',{},zona);
-                //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 //////////
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro ventanilla");
                 // io.to("ZONA PRINCIPAL").emit('f5 a1',"almacen principal",1);
@@ -97,7 +93,7 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
                 // io.emit("ZONA MYM").emit('f5 a8',"actualisa maestro");
                 // socket.emit('f5 maestros',"actualisa maestro");
                 /////////////
-                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").to("ZONA DESPACHO").emit('f5');
                 resolve("exitoso la impresion")
             }
             else{
@@ -115,14 +111,11 @@ function documento_lista_impreso(resolve,reject,conexion,io,socket,ndoc,zona,use
                 });
                 Object.assign(respuesta2,respuesta);
                 io.to(`ZONA ${zona}`).emit('impresos',respuesta2,zona);
-                //////EN PRUEBA EL ENVIO A LA ZONA MAESTRA
-                // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro");
-                // io.to("ZONA LOCAL").emit('retornar',"actualisa maestro");
                 ///////////////
                 // io.to("ZONA VENTANILLA").emit('f5 v',"actualisa maestro ventanilla");
                 // io.to("ZONA PRINCIPAL").emit('f5 a1',"almacen principal",1);
                 // io.to("ZONA MYM").emit('f5 a8',"almacen mym",8);
-                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").emit('f5');
+                io.to("ZONA VENTANILLA").to("ZONA PRINCIPAL").to("ZONA MYM").to("ZONA DESPACHO").emit('f5');
                 /////////////
                 resolve("exitoso la impresion")
             }

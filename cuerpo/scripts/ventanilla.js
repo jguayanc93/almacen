@@ -1,15 +1,4 @@
 
-document.getElementById("ventanilla").addEventListener("click",()=>pasando_a_ventanilla())
-
-function pasando_a_ventanilla(){
-    let user=window.prompt("ventanilla usuario","aqui digitar numero de trabajador");
-    if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
-    else{
-        document.getElementById("distribucion").innerHTML="";
-        socket.emit('ventanilla',user);
-    }
-}
-
 /////////PROTOTIPO PARA MOSTRAR LA TABLA MAESTRO DESTRUCTURADA
 socket.on('ventanilla mestro nuevos',(registros)=>{
     document.getElementById("tabla1titulo").textContent="Nuevos Documentos";
@@ -107,7 +96,8 @@ socket.on('ventanilla mestro terminados',(registros)=>{
 socket.on('registros nuevos',(registros)=>{
     if(registros[0]>contadorxglobalxcliente){
         contadorxglobalxcliente=registros[0];
-        emitir_eventos(nombre_ev_actual,valor_ev_actual);////DEBO DE EMITIR A TODOS LOS CANALES
+        ////DEBO DE EMITIR A TODOS LOS SOCKET CONECTADOS DE CADA MAQUINA INDIVIDUAL
+        emitir_eventos(nombre_ev_actual,valor_ev_actual);
         // socket.emit(nombre_ev_actual,valor_ev_actual);
     }
 })
