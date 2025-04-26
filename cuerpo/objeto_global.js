@@ -1,10 +1,10 @@
-// const socket=io();
+const socket=io();
 
-const socket=io({
-    auth:{
-        serverOffset:0
-    }
-});
+// const socket=io({
+//     auth:{
+//         serverOffset:0
+//     }
+// });
 
 // const socket=io({
 //     ackTimeout:10000,

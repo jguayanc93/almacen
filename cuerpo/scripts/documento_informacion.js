@@ -231,7 +231,11 @@ socket.on('comprobar destino',(data)=>{
 
 ///////AUN EN TEST NO MOVER
 socket.on('enviando archivo',(data,doc)=>{
-    const blob = new Blob([data]);
+    console.log(data)
+    console.log(doc)
+    // const blob = new Blob([data]);
+    // const blob = new Blob([data],{type:'application/pdf'});
+    const blob = new Blob([new Uint8Array(data)],{type:'application/pdf'});
     const link=document.createElement('a');
     link.href=URL.createObjectURL(blob);
     link.download=doc+'.pdf';

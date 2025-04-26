@@ -5,7 +5,8 @@ const puppeteer = require('puppeteer')
 const JsBarcode = require('jsbarcode')
 const {createCanvas} = require('canvas')
 const path = require('path')
-const html_pdf = require('html-pdf-node');
+// const html_pdf = require('html-pdf-node');
+const pdfconversor = require('html-pdf')
 // Crear un canvas para generar el código de barras
 const canvas=createCanvas();
 
@@ -327,14 +328,17 @@ function nuevos_registros2(resolve,reject,conexion,ndoc,texto){
 }
 
 /////OTRA MANERA DE GENERAR MULTIPLES ARCHIVOS ALA VES
-function generarpdfnuevo(htmlcontent){
-    return new Promise((resolve,reject)=>{
-        html_pdf.generatePdf({content:htmlcontent},{format:'A4'},(err,pdfbuf)=>{
-            if(err) reject(err);
-            resolve(pdfbuf);
-            // resolve("deveria haberme resuelto");
-        })
-    })
+async function generarpdfnuevo(socket,htmlcontent,ndoc){
+    // return new Promise((resolve,reject)=>{
+    //     html_pdf.generatePdf({content:htmlcontent},{format:'A4'},(err,pdfbuf)=>{
+    //         if(err) reject(err);
+    //         resolve(pdfbuf);
+    //         // resolve("deveria haberme resuelto");
+    //     })
+    // })
+    html_pdf.generatePdf({content:htmlcontent},{format:'A4'}).then(pdfbuff=>{
+        socket.emit('enviando archivo',pdfbuff,'123');
+    });
     // let archivo={content:htmlcontent};
     // html_pdf.generatePdf({content:htmlcontent},{format:'A4'},(err,pdfbuf)=>{
     //     if(err) console.log(err);
@@ -345,6 +349,14 @@ function generarpdfnuevo(htmlcontent){
     // });
 }
 ///////////////
+//////////UNA FORMA QUE FUNCIONE SIN CHROMIUM
+async function generarpdfultimointento(socket,htmlcontent,ndoc){
+    pdfconversor.create(htmlcontent,{format:'A4'}).toBuffer((err,buffito)=>{
+        if(err){console.log(err)}
+        socket.emit('enviando archivo',buffito,ndoc);
+    })
+}
+//////////////////////////////
 
 async function generatepdf2(htmlcontent,outputpath){
     const browser = await puppeteer.launch();
@@ -404,6 +416,7 @@ module.exports={
     obtenerpromesa_factura_datos_consulta,
     obtenerpromesa_factura_datos_consulta2,
     generarpdfnuevo,
+    generarpdfultimointento,
     generatepdf2,
     mandar_archivo,
     emitir_documento

@@ -9,7 +9,7 @@ const {obtenerpromesa_contador,obtenerpromesa_contador_consulta} = require('./do
 const {documento_estado_piking,obtenerpromesa_pick,obtenerpromesa_pick_consulta,obtenerpromesa_pick_consulta_nivel2,obtenerpromesa_pick_consulta_nivel3} = require('./documento_estado_piking')
 const {documento_estado_checking,obtenerpromesa_check,obtenerpromesa_check_consulta,obtenerpromesa_check_consulta2,obtenerpromesa_check_consulta3,obtenerpromesa_check_consulta4,obtenerpromesa_check_consulta5} = require('./documento_estado_checking')
 const {obtenerpromesa_zona,obtenerpromesa_zona_consulta,obtenerpromesa_zona_consulta2,obtenerpromesa_zona_consulta3} = require('./zona_documentos')
-const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
+const {obtenerpromesa_impresion,obtenerpromesa_impresion_consulta,documento_estado_impreso,leer_file,br_generador,obtenerpromesa_factura_datos,obtenerpromesa_factura_datos_consulta,obtenerpromesa_factura_datos_consulta2,generarpdfnuevo,generarpdfultimointento,generatepdf2,mandar_archivo,emitir_documento} = require('./documento_estado_impreso')/////MODIFICAR ESTA FUNCION DE IMPRESION
 const {documento_estado_confirmado,obtenerpromesa_confirmar,obtenerpromesa_confirmar_consulta,obtenerpromesa_confirmar_consulta_nivel2} = require('./documento_estado_confirmado')
 const {obtenerpromesa_usuario,obtenerpromesa_usuario_consulta} = require('./documentos_receptor')////REEMPLAZADO POR ENTRADA DE USUARIOS
 const {autenticador} = require('./documentos_receptor2')////AUNTENTICADOR FUNCION MIDDLEWARE
@@ -30,7 +30,7 @@ const server=createServer(app);
 const io = new Server(server,{
     connectionStateRecovery:{}
 });
-const port=8080;
+const port=3001;
 
 app.use('/',express.static(path.join(__dirname,"cuerpo")))
 
@@ -289,13 +289,13 @@ io.on('connection',(socket)=>{
             const tercera_llamada=await leer_file();//////LECTURA SOLO PARA REVISAR EL CONTENIDO VACIO
             const cuarta_llamada=await br_generador(ndoc);///GENERAR EL CODIGO BARRAS
             const quinta_llamada=await obtenerpromesa_factura_datos();////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA
-            ///LLAMADA DE CONSULTA PARA LOS DATOS DE LA FACTURA
             const sexta_llamada=await obtenerpromesa_factura_datos_consulta(quinta_llamada,ndoc,tercera_llamada,cuarta_llamada);
             const setima_llamada=await obtenerpromesa_factura_datos()////LLAMADA DE CONEXION PARA LOS DATOS DE LA FACTURA SEGUNDA PARTE
             const terminar_consulta2=await obtenerpromesa_factura_datos_consulta2(setima_llamada,ndoc,sexta_llamada);
             ////LLAMADA DE GENERACION DE PDF POR 1 INSTANTE
-            const octava_llamada=await generarpdfnuevo(terminar_consulta2);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
-            await emitir_documento(socket,octava_llamada,ndoc);
+            // const octava_llamada=await generarpdfnuevo(socket,terminar_consulta2,ndoc);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
+            const octava_llamada=await generarpdfultimointento(socket,terminar_consulta2,ndoc);///LLAMADA DE GENERACION DE PDF NUEVO METODO EN PRUEVA
+            // await emitir_documento(socket,octava_llamada,ndoc);
         }
         catch(error){ console.log(error);}
         
