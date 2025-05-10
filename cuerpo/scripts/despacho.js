@@ -13,6 +13,7 @@ socket.on('despacho venideros',(programados)=>{
 
     for(let doc in programados){
         const fecha=document.createElement('td');
+        fecha.className="font-mono bg-red-500";
         fecha.textContent=programados[doc][0];
         fecha.addEventListener('click',()=>factura_observacion(programados[doc][0]))
 
@@ -49,6 +50,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
     const cuerpo=document.createElement('tbody');
     for(let doc in programados){
         const item1=document.createElement('td');
+        item1.className="font-mono";
         item1.textContent=programados[doc][0];
         // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
 
@@ -63,6 +65,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
 
         const boton=document.createElement("button");
         boton.setAttribute("id","emb"+programados[doc][0]);
+        boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
         boton.textContent="CHEKEADO";
         boton.addEventListener("click",()=>estado_despacho_check(programados[doc][0],alm));
 
@@ -88,7 +91,7 @@ socket.on('despacho embalados',(programados,alm)=>{
     for(let doc in programados){
         const item1=document.createElement('td');
         item1.textContent=programados[doc][0];
-        // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
+        item1.addEventListener("click",()=>factura_observacion(programados[doc][0]))
 
         const item2=document.createElement('td');
         item2.textContent=programados[doc][1];
@@ -98,7 +101,8 @@ socket.on('despacho embalados',(programados,alm)=>{
 
         const boton=document.createElement("button");
         boton.setAttribute("id","gui"+programados[doc][0]);
-        boton.textContent="GUIA";
+        boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
+        boton.textContent="EMBALADO";
         boton.addEventListener("click",()=>estado_despacho_embalado(programados[doc][0],alm));
 
         const armason=document.createElement("tr");

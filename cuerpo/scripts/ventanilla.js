@@ -5,8 +5,8 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados para ser trabajados";
     document.getElementById("tablero-maestro-control-inicio").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
-    console.log("ESTOS REGISTROS SON UNICOS PARA EL LLAMADO DE CIERTAS ZONAS REVISAR SI SE REPITE")
-    console.log(registros);
+    // console.log("ESTOS REGISTROS SON UNICOS PARA EL LLAMADO DE CIERTAS ZONAS REVISAR SI SE REPITE")
+    // console.log(registros);
     const cuerpo=document.createElement('tbody');
     for(let doc in registros){
         const fecha=document.createElement('td')
@@ -16,6 +16,7 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         hora.textContent=registros[doc][1];
 
         const documento=document.createElement('td')
+        documento.className="font-mono";
         documento.textContent=registros[doc][2];
 
         const cliente=document.createElement('td')
@@ -44,10 +45,12 @@ socket.on('ventanilla mestro estados',(registros)=>{
     const cuerpo=document.createElement('tbody');
     for(let doc in registros){
         const documento=document.createElement('td')
+        documento.className="font-mono";
         documento.textContent=registros[doc][0];
         documento.addEventListener('click',()=>{factura_informacion(registros[doc][0])})////aun en prueba
 
         const estado=document.createElement('td')
+        estado.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
         estado.textContent=registros[doc][1];
 
         const fila=document.createElement('tr');
@@ -68,6 +71,7 @@ socket.on('ventanilla mestro terminados',(registros)=>{
     console.log(registros);
     for(let doc in registros){
         const documento=document.createElement('td')
+        documento.className="font-mono";
         documento.textContent=registros[doc][0];
 
         const estado=document.createElement('td')
@@ -75,9 +79,13 @@ socket.on('ventanilla mestro terminados',(registros)=>{
 
         //////////BOTON ESPECIAL
         const boton=document.createElement("button");
-        if(registros[doc][1]==0) boton.textContent="FALTA";
+        if(registros[doc][1]==0){
+            boton.className="bg-red-500 rounded-md w-24 text-white text-sm font-mono";
+            boton.textContent="FALTA";
+        }
         else if(registros[doc][1]==1){
             boton.setAttribute("id","chk"+registros[doc][0]);
+            boton.className="bg-emerald-500 rounded-md w-24 text-white text-sm font-mono";
             boton.textContent="CHECKING";
             // boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][4],registros[doc][22]));
             boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2],registros[doc][4]));

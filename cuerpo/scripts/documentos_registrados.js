@@ -8,6 +8,7 @@ socket.on('lista documentos',(msg,zone)=>{
         /////CAMPO DOCUMENTO
         const item1=document.createElement('td');
         item1.textContent=msg[documento][0];
+        item1.className="font-mono";
         item1.addEventListener("click",()=>factura_informacion(msg[documento][0]))
         /////CAMPO DESPACHO
         const item2=document.createElement('td');
@@ -22,6 +23,7 @@ socket.on('lista documentos',(msg,zone)=>{
         const boton=document.createElement("button");
         /////id repetido para diferentes documentos
         boton.setAttribute("id",msg[documento][0]);
+        boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
         boton.textContent="imprimir";
         boton.addEventListener("click",()=>estado_cambiado_impreso(msg[documento][0],zone));
 

@@ -7,6 +7,7 @@ socket.on('impresos',(impresos,zona)=>{
     for(let documento in impresos){
         const item1=document.createElement('td');
         item1.textContent=impresos[documento][0];
+        item1.className="font-mono";
         item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
 
         const item2=document.createElement('td');
@@ -14,6 +15,7 @@ socket.on('impresos',(impresos,zona)=>{
 
         const boton=document.createElement("button");
         boton.setAttribute("id","imp"+impresos[documento][0]);
+        boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
         boton.textContent="picking";
         boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3],zona));
 

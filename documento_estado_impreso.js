@@ -7,6 +7,9 @@ const {createCanvas} = require('canvas')
 const path = require('path')
 // const html_pdf = require('html-pdf-node');
 const pdfconversor = require('html-pdf')
+///////PODRIA FUNCIONAR DE OTRA MANERA CON WEBKIT
+const wkhtmltopdf = require('wkhtmltopdf');
+const {Readable} = require('stream');
 // Crear un canvas para generar el código de barras
 const canvas=createCanvas();
 
@@ -327,6 +330,23 @@ function nuevos_registros2(resolve,reject,conexion,ndoc,texto){
     conexion.execSql(consulta);
 }
 
+/////ULTIMA MANERA DE GENERAR CON WKHTMLTOPDF
+async function ultimobuffer(html){
+    return new Promise((resolve,reject)=>{
+        const htmlStream=new Readable();
+        htmlStream.push(html);
+        htmlStream.push(null);
+
+        const chunks = [];
+        wkhtmltopdf(htmlStream, { pageSize: 'A4' })
+        .on('data', chunk => chunks.push(chunk))
+        .on('end', () => resolve(Buffer.concat(chunks)))
+        // .on('error', reject);
+        .on('error', ()=>{console.log("error inesperado en la trozeada")});
+    });
+}
+////////////////////
+
 /////OTRA MANERA DE GENERAR MULTIPLES ARCHIVOS ALA VES
 async function generarpdfnuevo(socket,htmlcontent,ndoc){
     // return new Promise((resolve,reject)=>{
@@ -415,6 +435,7 @@ module.exports={
     obtenerpromesa_factura_datos,
     obtenerpromesa_factura_datos_consulta,
     obtenerpromesa_factura_datos_consulta2,
+    ultimobuffer,
     generarpdfnuevo,
     generarpdfultimointento,
     generatepdf2,

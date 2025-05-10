@@ -6,6 +6,7 @@ socket.on('lista picking',(pikings,zona)=>{
 
     for(let documento in pikings){
         const item1=document.createElement('td');
+        item1.className="font-mono";
         item1.textContent=pikings[documento][0];
         item1.addEventListener("click",()=>factura_informacion(pikings[documento][0]))
 
@@ -16,9 +17,13 @@ socket.on('lista picking',(pikings,zona)=>{
         boton.setAttribute("id","pick"+pikings[documento][0]);
         ///SI EL DOCUMENTO TIENE SOLO 1 ZONA
         if(pikings[documento][2]==1){
-            if(pikings[documento][3]==1){boton.textContent="ESPERANDO CHECKING";}
+            if(pikings[documento][3]==1){
+                boton.className="bg-amber-500 rounded-md w-32 text-black text-sm font-mono font-bold text-center";
+                boton.textContent="ESPERANDO CHECKING";
+            }
             else{
                 boton.textContent="CONFIRMAR PICKING";
+                boton.className="bg-blue-500 rounded-md text-white text-sm w-32 font-mono";
                 boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             }
         }
@@ -26,11 +31,18 @@ socket.on('lista picking',(pikings,zona)=>{
         else{
             if(pikings[documento][3]==0){
                 boton.textContent="CONFIRMAR PICKING";
+                boton.className="bg-blue-500 rounded-md text-white text-sm w-32 font-mono";
                 boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             }
             else if(pikings[documento][3]==1){
-                if(pikings[documento][4]<pikings[documento][2]){boton.textContent="ESPERANDO OTRAS ZONAS";}
-                else{ boton.textContent="ESPERANDO CHECKING";}
+                if(pikings[documento][4]<pikings[documento][2]){
+                    boton.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
+                    boton.textContent="ESPERANDO OTRAS ZONAS";
+                }
+                else{
+                    boton.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
+                    boton.textContent="ESPERANDO CHECKING";
+                }
             }
         }
         const armason=document.createElement("tr");
