@@ -8,6 +8,45 @@
      <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
+  <div class="grid grid-cols-6 gap-1 grid-rows-1">
+    <nav class="col-span-1 h-dvh w-2/3 bg-gray-800 text-gray-400 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide">
+      <div class="my-8">
+        <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="logo" class="h-8 w-auto" />
+      </div>
+      <ul class="w-full flex flex-col gap-y-8">
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white">
+          <a class="">Dashboard</a>
+        </li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white">
+          <a href="#" id="operador-v" class="">VENTANILLA</a>
+        </li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white">
+          <a href="#" id="operador-ap" class="">PRINCIPAL</a>
+        </li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white">
+          <a href="#" id="operador-am" class="">M&M</a>
+        </li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white">
+          <a href="#" id="operador-d" class="">DESPACHO</a>
+        </li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white">
+          <a href="#" class="">Desp. M&M</a>
+        </li>
+      </ul>
+      <ul class="w-full flex flex-col mt-6 pt-4 gap-y-4 border-t-2 border-white text-sm">
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white"><a href="#">OPCIONES</a></li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white"><a href="#">AYUDA</a></li>
+      </ul> 
+    </nav>
+    <nav id="operador-opciones" class="hidden"></nav>
+    <main id="mensaje-opcion" class="col-span-2 w-3/4 flex flex-col justify-center content-center text-2xl font-sans font-bold">
+      Demo de almacen para acceder a sus respectivos cargos puede entrar a su cargo para comensar,
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore sunt, maiores ea quos odit minus, saepe quam cumque adipisci optio modi laboriosam facere? Culpa officiis dolores, perferendis quidem cupiditate eaque.
+    </main>
+    <aside class="col-span-3 w-3/4 flex flex-col justify-center content-center">
+      <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+    </aside>
+  </div>
     <!--CABEZERA PARA MOVERSE-->
     <nav class="bg-gray-800">
         <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -363,7 +402,8 @@
           
     </div>
     <!--FIN TABLERO DE CONTROL PARA MAESTRO OBSERVADOR-->
-    
+    <!-- este scrip es solo para generar el menu de opciones de cada operador no el de opciones -->
+    <script src="./scripts/operador_menu.js"></script>
     
     <script src="/socket.io/socket.io.js"></script>
     <script src="objeto_global.js"></script>
