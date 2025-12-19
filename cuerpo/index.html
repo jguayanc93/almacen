@@ -8,7 +8,7 @@
      <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-  <div class="grid grid-cols-6 gap-1 grid-rows-1">
+  <div class="grid grid-cols-7 gap-1 grid-rows-1">
     <nav class="col-span-1 h-dvh w-2/3 bg-gray-800 text-gray-400 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide">
       <div class="my-8">
         <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="logo" class="h-8 w-auto" />
@@ -35,17 +35,31 @@
       </ul>
       <ul class="w-full flex flex-col mt-6 pt-4 gap-y-4 border-t-2 border-white text-sm">
         <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white"><a href="#">OPCIONES</a></li>
+        <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white"><a href="#">CERRAR</a></li>
         <li class="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white"><a href="#">AYUDA</a></li>
       </ul> 
     </nav>
     <nav id="operador-opciones" class="hidden"></nav>
     <main id="mensaje-opcion" class="col-span-2 w-3/4 flex flex-col justify-center content-center text-2xl font-sans font-bold">
-      Demo de almacen para acceder a sus respectivos cargos puede entrar a su cargo para comensar,
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore sunt, maiores ea quos odit minus, saepe quam cumque adipisci optio modi laboriosam facere? Culpa officiis dolores, perferendis quidem cupiditate eaque.
+      Demo de almacen,para acceder a sus respectivos cargos puede entrar a su cargo para comensar
     </main>
-    <aside class="col-span-3 w-3/4 flex flex-col justify-center content-center">
+    <aside id="imagen-principal-temporal" class="col-span-3 w-3/4 flex flex-col justify-center content-center">
       <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
     </aside>
+    <main id="tabla-para-bravos" class="col-span-6 grid grid-cols-3 gap-1 grid-rows-3 bg-gray-400 text-white hidden">
+      <section class="col-span-1 h-full w-full flex justify-center items-center">
+        <img class="h-44 w-4/5 object-cover rounded-lg" src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+      </section>
+      <section class="col-span-1 h-full w-full flex justify-center items-center">
+        <img class="h-44 w-4/5 object-cover rounded-lg" src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+      </section>
+      <section class="col-span-1 h-full w-full flex justify-center items-center">
+        <img class="h-44 w-4/5 object-cover rounded-lg" src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+      </section>
+      <section class="col-span-1 row-span-2">sobrantes</section>
+      <section class="col-span-1 row-span-2">tabla para estados de documentos</section>
+      <section class="col-span-1 row-span-2">tabla para documentos finalisados</section>
+    </main>
   </div>
     <!--CABEZERA PARA MOVERSE-->
     <nav class="bg-gray-800">
@@ -408,7 +422,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="objeto_global.js"></script>
     <script src="cambio_zona.js"></script>
-    <script src="./scripts/ventanilla.js"></script>
+    <!-- <script src="./scripts/ventanilla.js"></script> -->
+    <script src="./scripts/nueva_ventanilla.js"></script>
     <script src="./scripts/local_provincia.js"></script>
     <script src="./scripts/despacho.js"></script>
     <script src="./scripts/documentos_registrados.js"></script>
