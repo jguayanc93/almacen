@@ -3,6 +3,7 @@ socket.on('impresos',(impresos,zona)=>{
     document.getElementById("tabla2titulo").textContent="Documentos Impresos";
     document.getElementById("tabla2descripcion").textContent="Documentos impresos y listos para su trabajo";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
+    
 
     for(let documento in impresos){
         const item1=document.createElement('td');
@@ -35,27 +36,52 @@ socket.on('impresos',(impresos,zona)=>{
     let segundatabla=document.getElementById("tablero-maestro-control-medio2");
     segundatabla.innerHTML="";
     for(let documento in impresos){
-        const item1=document.createElement('td');
+        let grapador=document.createElement("div");
+        grapador.className="w-full flex flex-row justify-around";
+
+        const item1=document.createElement('div');
         item1.textContent=impresos[documento][0];
         item1.className="truncate w-[30%]";
-        item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
+        // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
 
-        const item2=document.createElement('td');
-        item2.className="truncate w-[30%]";
+        const item2=document.createElement('div');
+        item2.className="truncate w-[20%]";
         item2.textContent=impresos[documento][2];
 
         const boton=document.createElement("button");
         boton.setAttribute("id","imp"+impresos[documento][0]);
-        boton.className="bg-blue-500 rounded-md w-full text-white font-mono";
+        boton.className="bg-blue-500 rounded-md w-[30%] text-white font-mono";
         boton.textContent="picking";
         boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3],zona));
 
-        const armason=document.createElement("tr");
-        armason.appendChild(item1)
-        armason.appendChild(item2)
-        armason.appendChild(boton)
-        document.getElementById("tablero-maestro-control-medio2").appendChild(armason);
-    }
+        grapador.appendChild(item1)
+        grapador.appendChild(item2)
+        grapador.appendChild(boton)
+        segundatabla.appendChild(grapador);
+    }   
+    ///////////////////////
+    // for(let documento in impresos){
+    //     const item1=document.createElement('td');
+    //     item1.textContent=impresos[documento][0];
+    //     item1.className="truncate w-[30%]";
+    //     item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
+
+    //     const item2=document.createElement('td');
+    //     item2.className="truncate w-[30%]";
+    //     item2.textContent=impresos[documento][2];
+
+    //     const boton=document.createElement("button");
+    //     boton.setAttribute("id","imp"+impresos[documento][0]);
+    //     boton.className="bg-blue-500 rounded-md w-full text-white font-mono";
+    //     boton.textContent="picking";
+    //     boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3],zona));
+
+    //     const armason=document.createElement("tr");
+    //     armason.appendChild(item1)
+    //     armason.appendChild(item2)
+    //     armason.appendChild(boton)
+    //     document.getElementById("tablero-maestro-control-medio2").appendChild(armason);
+    // }
 })
 
 function estado_cambiado_piking(ndoc,cantidad,zone){

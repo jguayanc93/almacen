@@ -7,6 +7,9 @@ document.getElementById("operador-d").addEventListener("click",acomodar_menu_opc
 function acomodar_menu_opciones_operador(ev){
     console.log(ev.target.text);
     document.getElementById("operador-opciones").innerHTML="";
+    //////intentemos mover primero el elemento de alado
+    let mensaje_bienvenida=document.getElementById("mensaje-opcion");
+    mensaje_bienvenida.classList.replace("col-start-2","col-start-3")
     
     // let menu_mensaje=document.getElementById("mensaje-opcion");
     // menu_mensaje.classList.replace("col-span-2","col-span-1");
@@ -17,12 +20,20 @@ function acomodar_menu_opciones_operador(ev){
 }
 
 function activar_menu_opciones_operador(operador){
+    let tablero_contro=document.getElementById("tabla-para-bravos");
+    if(!tablero_contro.classList.contains("hidden")){
+        document.getElementById("mensaje-opcion").classList.toggle("hidden");
+        document.getElementById("imagen-principal-temporal").classList.toggle("hidden");
+        tablero_contro.classList.toggle("hidden");
+    }
+    
 
     let menu_operador=document.getElementById("operador-opciones");
-    menu_operador.className="col-span-1 h-[90dvh] w-2/3 my-auto transform skew-y-3  justify-center bg-gray-800 text-gray-400 -ml-16 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide";
+    // menu_operador.className="col-span-1 h-[90dvh] w-2/3 my-auto transform skew-y-3  justify-center bg-gray-800 text-gray-400 -ml-16 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide";
+    menu_operador.className="col-span-1 col-start-2 row-span-2 w-2/3 rounded-b-xl bg-gray-800 text-gray-400 -ml-12 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide";
 
     let lista_opciones=document.createElement("ul");
-    lista_opciones.className="w-full flex flex-col gap-y-8 pt-16";
+    lista_opciones.className="w-full flex flex-col gap-y-10 pt-16";
     let opcion1=document.createElement("li");
     opcion1.className="rounded-md px-3 py-2 hover:bg-gray-600 hover:text-white";
     opcion1.textContent="OPERADOR";
@@ -123,6 +134,8 @@ function submenu_zona_seleccion(zona){
 
 
 function cerrar_sub_menu(){
+    let mensaje_bienvenida=document.getElementById("mensaje-opcion");
+    mensaje_bienvenida.classList.replace("col-start-3","col-start-2");
     let menu_opciones_operador=document.getElementById("operador-opciones")
     menu_opciones_operador.innerHTML="";
     menu_opciones_operador.classList.add("hidden");

@@ -8,8 +8,8 @@
      <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-  <div class="grid grid-cols-7 gap-1 grid-rows-1">
-    <nav class="col-span-1 h-dvh w-2/3 bg-gray-800 text-gray-400 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide">
+  <div class="grid grid-cols-7 grid-rows-3 h-screen">
+    <nav class="col-span-1 row-span-3 col-start-1 col-end-2 w-2/3 bg-gray-800 text-gray-400 pt-4 pl-5 pr-5 font-sans text-base not-italic font-medium tracking-wide">
       <div class="my-8">
         <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="logo" class="h-8 w-auto" />
       </div>
@@ -40,13 +40,13 @@
       </ul> 
     </nav>
     <nav id="operador-opciones" class="hidden"></nav>
-    <main id="mensaje-opcion" class="col-span-2 w-3/4 flex flex-col justify-center content-center text-2xl font-sans font-bold">
+    <main id="mensaje-opcion" class="col-span-2 col-start-2 row-span-1 row-start-2 w-full flex items-center text-center text-3xl font-sans font-bold">
       Demo de almacen,para acceder a sus respectivos cargos puede entrar a su cargo para comensar
     </main>
-    <aside id="imagen-principal-temporal" class="col-span-3 w-3/4 flex flex-col justify-center content-center">
-      <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
+    <aside id="imagen-principal-temporal" class="col-span-3 col-start-5 h-screen w-full flex flex-row justify-center items-center">
+      <img class="h-[75%] w-4/5 rounded-lg" src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf.">
     </aside>
-    <main id="tabla-para-bravos" class="col-span-6 grid grid-cols-3 gap-1 grid-rows-3 bg-gray-400 text-white hidden">
+    <main id="tabla-para-bravos" class="col-span-6 row-span-3 grid grid-cols-3 gap-1 grid-rows-3 bg-gray-400 text-white hidden">
       <section class="col-span-1 h-full w-full flex justify-center items-center">
         <img class="h-44 w-4/5 object-cover rounded-lg" src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-edition-01.jpg" alt="Collection of four insulated travel bottles on wooden shelf." class="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square">
       </section>
@@ -88,8 +88,9 @@
             <div id="segundatablatitulo" class="text-center"></div>
             <div id="segundatablamensaje" class="text-center"></div>
           </div>
-          <div class="">
-            <table id="tablero-maestro-control-medio2" class="w-full table-fixed border-separate border-spacing-x-1 border-spacing-y-5 text-xs font-bold text-center">
+          <div id="tablero-maestro-control-medio2" class="grid grid-cols-1 grid-flow-row w-full mt-5 text-center gap-y-4">
+            <!-- <table id="tablero-maestro-control-medio2" class="table-fixed w-full border-separate border-spacing-x-2 border-spacing-y-5 text-xs font-bold text-center"> -->
+            <!-- <table id="tablero-maestro-control-medio2" class="table-fixed w-full border-separate border-spacing-y-5 font-bold text-center">
               <tr>
                 <td class="w-1/3">F009-0605181</td>
                 <td class="w-2/3 bg-amber-500 rounded-md text-black font-mono font-bold">ESTADO DE DOCUMENTO IMPRESO</td>
@@ -98,7 +99,7 @@
                 <td class="">F009-0605181</td>
                 <td class="">ESTADO DE DOCUMENTO IMPRESO</td>
               </tr>
-            </table>
+            </table> -->
           </div>
         </div>
       </section>
@@ -108,8 +109,8 @@
             <div id="terceratablatitulo" class="text-center"></div>
             <div id="terceratablamensaje" class="text-center"></div>
           </div>
-          <div class="">
-            <table id="tablero-maestro-control-fin2" class="w-full table-fixed border-separate border-spacing-x-1 border-spacing-y-5 text-xs font-bold text-center">
+          <div id="tablero-maestro-control-fin2" class="grid grid-cols-1 grid-flow-row w-full mt-5 gap-y-4">
+            <!-- <table id="tablero-maestro-control-fin2" class="w-full table-fixed border-separate border-spacing-x-1 border-spacing-y-5 text-xs font-bold text-center">
               <tr>
                 <td class="truncate w-1/5 bg-red-500 rounded-md text-white font-mono">F009-0605181</td>
                 <td class="truncate w-1/5 ">0</td>
@@ -120,7 +121,7 @@
                 <td class="border">0</td>
                 <td class="border">z1,z2,desconocido</td>
               </tr>
-            </table>
+            </table> -->
           </div>
         </div>
       </section>

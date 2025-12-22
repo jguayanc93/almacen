@@ -10,13 +10,16 @@ socket.on('registros nuevos',(registros)=>{
 //////////////////
 function mostrar_nuevos_documentos(){
     let sub_menu=document.getElementById("operador-opciones");
-    let mensaje_submenu=document.getElementById("mensaje-opcion");    
-    let imagen=document.getElementById("imagen-principal-temporal");
     sub_menu.innerHTML="";
     sub_menu.classList.add("hidden");
-    mensaje_submenu.innerHTML="";
+
+    let mensaje_submenu=document.getElementById("mensaje-opcion");    
+    // mensaje_submenu.innerHTML="";
     mensaje_submenu.classList.add("hidden");
+
+    let imagen=document.getElementById("imagen-principal-temporal");
     imagen.classList.toggle("hidden");
+
     let nueva_tabla1=document.getElementById("tabla-para-bravos");    
     nueva_tabla1.classList.toggle("hidden");
     // nueva_tabla1.className="col-span-6 bg-gray-400 text-white";
@@ -89,6 +92,7 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         zonas.textContent=registros[doc][4];
 
         const fila=document.createElement('tr');
+        fila.className="hover:bg-black";
         fila.appendChild(fecha)
         fila.appendChild(hora)
         fila.appendChild(documento)
@@ -132,22 +136,20 @@ socket.on('ventanilla mestro estados',(registros)=>{
     let segundatabla=document.getElementById("tablero-maestro-control-medio2");
     segundatabla.innerHTML="";
     for(let doc in registros){
-        const documento=document.createElement('td')
-        documento.className="w-1/3 font-mono";
+        let grapador=document.createElement("div");
+        grapador.className="w-full flex flex-row justify-around";
+
+        const documento=document.createElement("div");
+        documento.className="w-[30%] font-bold";
         documento.textContent=registros[doc][0];
-        // documento.addEventListener('click',()=>{factura_informacion(registros[doc][0])})////aun en prueba
 
-        const estado=document.createElement('td')
-        estado.className="w-2/3 bg-amber-500 rounded-md text-black font-mono font-bold";
+        const estado=document.createElement("div");
+        estado.className="w-[50%] bg-amber-500 rounded-md text-black font-mono font-bold";
         estado.textContent=registros[doc][1];
-
-        const fila=document.createElement('tr');
-        fila.appendChild(documento)
-        fila.appendChild(estado)
-
-        segundatabla.appendChild(fila);
+        grapador.appendChild(documento)
+        grapador.appendChild(estado);
+        segundatabla.appendChild(grapador);
     }
-    
 })
 
 socket.on('ventanilla mestro terminados',(registros)=>{
@@ -197,33 +199,62 @@ socket.on('ventanilla mestro terminados',(registros)=>{
     let terceratabla=document.getElementById("tablero-maestro-control-fin2");
     terceratabla.innerHTML="";
     for(let doc in registros){
-        const documento=document.createElement('td')
-        documento.className="truncate w-1/5 bg-red-500 rounded-md text-white font-mono";
+        let grapador=document.createElement("div");
+        grapador.className="w-full flex flex-row justify-center";
+
+        const documento=document.createElement("div");
+        documento.className="w-[30%] font-bold front-mono";
         documento.textContent=registros[doc][0];
 
-        const estado=document.createElement('td')
-        estado.className="truncate w-1/5";
+        const estado=document.createElement('div');
+        estado.className="w-[5%]";
         estado.textContent=registros[doc][1];
 
-        //////////BOTON ESPECIAL
         const boton=document.createElement("button");
         if(registros[doc][1]==0){
-            boton.className="truncate w-2/5 bg-red-500 rounded-md text-white font-mono";
+            boton.className="truncate w-[40%] bg-red-500 rounded-md text-white font-mono";
             boton.textContent="FALTA";
         }
         else if(registros[doc][1]==1){
             boton.setAttribute("id","chk"+registros[doc][0]);
-            boton.className="truncate w-2/5 bg-emerald-500 rounded-md text-white font-mono";
+            boton.className="truncate w-[40%] bg-emerald-500 rounded-md text-white font-mono";
             boton.textContent="CHECKING";
             boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2],registros[doc][4]));
-        }   
+        }
+        grapador.appendChild(documento)
+        grapador.appendChild(estado)
+        grapador.appendChild(boton)
+        terceratabla.appendChild(grapador);
 
-        const fila=document.createElement('tr');
-        fila.appendChild(documento)
-        fila.appendChild(estado)
-        fila.appendChild(boton)
-
-        terceratabla.appendChild(fila);
     }
+    // for(let doc in registros){
+    //     const documento=document.createElement('td')
+    //     documento.className="truncate w-1/5 bg-red-500 rounded-md text-white font-mono";
+    //     documento.textContent=registros[doc][0];
+
+    //     const estado=document.createElement('td')
+    //     estado.className="truncate w-1/5";
+    //     estado.textContent=registros[doc][1];
+
+    //     //////////BOTON ESPECIAL
+    //     const boton=document.createElement("button");
+    //     if(registros[doc][1]==0){
+    //         boton.className="truncate w-2/5 bg-red-500 rounded-md text-white font-mono";
+    //         boton.textContent="FALTA";
+    //     }
+    //     else if(registros[doc][1]==1){
+    //         boton.setAttribute("id","chk"+registros[doc][0]);
+    //         boton.className="truncate w-2/5 bg-emerald-500 rounded-md text-white font-mono";
+    //         boton.textContent="CHECKING";
+    //         boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2],registros[doc][4]));
+    //     }   
+
+    //     const fila=document.createElement('tr');
+    //     fila.appendChild(documento)
+    //     fila.appendChild(estado)
+    //     fila.appendChild(boton)
+
+    //     terceratabla.appendChild(fila);
+    // }
 })
 
