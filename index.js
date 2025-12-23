@@ -28,8 +28,9 @@ const {zonas_limpiador} = require('./funciones/limpiador')
 const {nueva_zone} = require('./funciones/new_zone')
 /////////espacio para separar las funciones de los operarios
 const {almventanilla} = require('./funciones/ventanilla/ventanilla')
-const {} = require('./funciones/principal/principal')
-const {} = require('./funciones/mym/mym')
+const {almprincipal} = require('./funciones/principal/principal')
+const {almmym} = require('./funciones/mym/mym')
+const {zonaseleccion} = require('./funciones/zonas/zona')
 
 const app=express();
 const server=createServer(app);
@@ -91,15 +92,15 @@ io.on('connection',(socket)=>{
         }
         catch(err){console.log(err)};
 
-        async function almprincipal(socket,alm){
-            try{
-                const primera_llamada=await obtenerpromesa_principal();
-                /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
-                const segunda_llamada=await obtenerpromesa_principal_consulta(primera_llamada,socket,alm);
-                console.log(segunda_llamada);
-            }
-            catch(error){ console.log(error);}
-        }
+        // async function almprincipal(socket,alm){
+        //     try{
+        //         const primera_llamada=await obtenerpromesa_principal();
+        //         /////SEPARACION ENTRE LA CONEXION Y LA CONSULTA
+        //         const segunda_llamada=await obtenerpromesa_principal_consulta(primera_llamada,socket,alm);
+        //         console.log(segunda_llamada);
+        //     }
+        //     catch(error){ console.log(error);}
+        // }
     })
 
     socket.on('almacen mym',async (alm)=>{
@@ -113,15 +114,15 @@ io.on('connection',(socket)=>{
         }
         catch(err){console.log(err)}
 
-        async function almmym(socket,alm){
-            try{
-                const primera_llamada=await obtenerpromesa_mym();
-                const segunda_llamada=await obtenerpromesa_mym_consulta(primera_llamada,socket,alm);
-                console.log(segunda_llamada);
-                // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
-            }
-            catch(error){ console.log(error);}
-        }
+        // async function almmym(socket,alm){
+        //     try{
+        //         const primera_llamada=await obtenerpromesa_mym();
+        //         const segunda_llamada=await obtenerpromesa_mym_consulta(primera_llamada,socket,alm);
+        //         console.log(segunda_llamada);
+        //         // const primera_llamada=setInterval(obtenerpromesa_principal(socket,alm),2000);
+        //     }
+        //     catch(error){ console.log(error);}
+        // }
         
     })
 
@@ -155,23 +156,24 @@ io.on('connection',(socket)=>{
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,zona);
-            await zonas(socket,zona);
+            // await zonas(socket,zona);
+            await zonaseleccion(socket,zona);
         }
         catch(err){
             console.log(err);
         }
         
-        async function zonas(socket,zona){
-            try{
-                const primera_llamada=await obtenerpromesa_zona();
-                const segunda_llamada=await obtenerpromesa_zona_consulta(primera_llamada,socket,zona);
-                const tercera_llamada=await obtenerpromesa_zona();///////EN TESTEO LAS MULTIPLES CONEXIONES PERO SOLO 1 PETICION POR CADA UNA
-                const cuarta_llamada=await obtenerpromesa_zona_consulta2(tercera_llamada,socket,zona);
-                const quinta_llamada=await obtenerpromesa_zona();
-                const sexta_llamada=await obtenerpromesa_zona_consulta3(quinta_llamada,socket,zona);
-            }
-            catch(error){ console.log(error);}
-        }
+        // async function zonas(socket,zona){
+        //     try{
+        //         const primera_llamada=await obtenerpromesa_zona();
+        //         const segunda_llamada=await obtenerpromesa_zona_consulta(primera_llamada,socket,zona);
+        //         const tercera_llamada=await obtenerpromesa_zona();///////EN TESTEO LAS MULTIPLES CONEXIONES PERO SOLO 1 PETICION POR CADA UNA
+        //         const cuarta_llamada=await obtenerpromesa_zona_consulta2(tercera_llamada,socket,zona);
+        //         const quinta_llamada=await obtenerpromesa_zona();
+        //         const sexta_llamada=await obtenerpromesa_zona_consulta3(quinta_llamada,socket,zona);
+        //     }
+        //     catch(error){ console.log(error);}
+        // }
     })
     ////RECUPERAR INFORMACION SEGUN EL ESTADO DEL DOCUMENTO Y PODRIA MOSTRAR DIFERENTE INFORMACION SEGUN AVANSE
     socket.on('pedir items',async (ndoc)=>{

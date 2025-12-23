@@ -1,11 +1,11 @@
 
 const {conn} = require('../../conexion/cnn')
 ////espacio para las consultas necesarias
-let {local_provincia_registrosmm1} = require('../../querys/mym/local_mym_registros')
-let {local_provincia_registrosmm2} = require('../../querys/mym/local_mym_estados')
-let {local_provincia_registrosmm3} = require('../../querys/mym/local_mym_confirmados')
+let {identificar_zona} = require('../../querys/zonas/zona_lista_documentos')
+let {listar_impresos} = require('../../querys/zonas/zona_lista_impresos')
+let {listar_picking} = require('../../querys/zonas/zona_lista_picking')
 
-async function almmym(socket,alm){
+async function zonaseleccion(socket,alm){
     try{
         const primera_llamada=await obtenerpromesa_conexion();
         // const segunda_llamada=await obtenerpromesa_ventanilla_consulta(primera_llamada,socket,alm);
@@ -21,10 +21,10 @@ async function almmym(socket,alm){
 
 function obtenerpromesa_conexion(){ return new Promise((resolve,reject)=>conn(resolve,reject)) }
 
-function consulta1(conexion,socket,alm){ return new Promise((resolve,reject)=>local_provincia_registrosmm1(resolve,reject,conexion,socket,alm)) }
+function consulta1(conexion,socket,alm){ return new Promise((resolve,reject)=>identificar_zona(resolve,reject,conexion,socket,alm)) }
 
-function consulta2(conexion,socket,alm){ return new Promise((resolve,reject)=>local_provincia_registrosmm2(resolve,reject,conexion,socket,alm)) }
+function consulta2(conexion,socket,alm){ return new Promise((resolve,reject)=>listar_impresos(resolve,reject,conexion,socket,alm)) }
 
-function consulta3(conexion,socket,alm){ return new Promise((resolve,reject)=>local_provincia_registrosmm3(resolve,reject,conexion,socket,alm)) }
+function consulta3(conexion,socket,alm){ return new Promise((resolve,reject)=>listar_picking(resolve,reject,conexion,socket,alm)) }
 
-module.exports={almmym}
+module.exports={zonaseleccion}
