@@ -25,11 +25,7 @@ const {obtenerpromesa_embalado,obtenerpromesa_embalado_consulta} = require('./do
 const cuartos = require('./rango_zonas');
 ///////espacio para separar las funciones repetitivas
 const {zonas_limpiador} = require('./funciones/limpiador')
-const {nueva_zone} = require('./funciones/new_zone')
-/////////espacio para separar las funciones de los operarios
-const {almventanilla} = require('./funciones/ventanilla/ventanilla')
-const {} = require('./funciones/principal/principal')
-const {} = require('./funciones/mym/mym')
+/////////espacio para separar las conexiones a BD
 
 const app=express();
 const server=createServer(app);
@@ -74,22 +70,66 @@ io.on('connection',(socket)=>{
         //////FALTA AGREGAR LA VALIDES DEL USUARIO AL RECIBIR SUS PARAMETROS
         try{
             const observador=await zonas_limpiador(socket);
-            const grupo=await nueva_zone(socket,"VENTANILLA");
+            const grupo=await nueva_zone("VENTANILLA");
             console.log(grupo);
             await almventanilla(socket,alm);
         }
         catch(err){console.log(err)}
 
+        // function zonas_limpiador(){
+        //     return new Promise((resolve,reject)=>{
+        //         socket.rooms.forEach((zone)=>{
+        //             // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+        //             if(cuartos.includes(zone)) socket.rooms.delete(zone);
+        //         })
+        //         resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+        //     })
+        // }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
+        }
+
+        async function almventanilla(socket,alm){
+            try{
+                const primera_llamada=await obtenerpromesa_ventanilla();
+                const segunda_llamada=await obtenerpromesa_ventanilla_consulta(primera_llamada,socket,alm);
+                console.log(segunda_llamada);
+            }
+            catch(error){ console.log(error);}
+        }
     })
     /////MASTER DE LOCAL-PROVINCIA
     socket.on('almacen principal',async (alm)=>{
         try{
-            const observador=await zonas_limpiador(socket);
-            const grupo=await nueva_zone(socket,"PRINCIPAL");
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("PRINCIPAL");
             console.log(grupo);
             await almprincipal(socket,alm);
         }
         catch(err){console.log(err)};
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
+        }
 
         async function almprincipal(socket,alm){
             try{
@@ -105,13 +145,31 @@ io.on('connection',(socket)=>{
     socket.on('almacen mym',async (alm)=>{
         
         try{
-            const observador=await zonas_limpiador(socket);
-            const grupo=await nueva_zone(socket,"MYM");
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("MYM");
             console.log(grupo);
             // disparo=setInterval(almmym,2000,socket,alm);
             await almmym(socket,alm);
         }
         catch(err){console.log(err)}
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
+        }
 
         async function almmym(socket,alm){
             try{
@@ -128,11 +186,28 @@ io.on('connection',(socket)=>{
     socket.on('despacho',async (alm)=>{
         // socket.join("ZONA DESPACHO");
         try{
-            const observador=await zonas_limpiador(socket);
-            const grupo=await nueva_zone(socket,"DESPACHO");
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone("DESPACHO");
             await despachop(socket,alm);
         }
         catch(err){console.log(err)}
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA desconocido','ZONA VENTANILLA','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+            })
+        }
 
         async function despachop(socket,alm){
             try{
@@ -153,14 +228,30 @@ io.on('connection',(socket)=>{
     socket.on('cambio zona',async (zona)=>{
 
         try{
-            const observador=await zonas_limpiador(socket);
-            const grupo=await nueva_zone(socket,zona);
+            const observador=await zonas_limpiador();
+            const grupo=await nueva_zone(zona);
             await zonas(socket,zona);
         }
         catch(err){
             console.log(err);
         }
-        
+
+        function zonas_limpiador(){
+            return new Promise((resolve,reject)=>{
+                socket.rooms.forEach((zone)=>{
+                    // let cuartos=['ZONA Z1','ZONA Z2','ZONA Z3','ZONA VENTANILLA','ZONA desconocido','ZONA PRINCIPAL','ZONA MYM','ZONA DESPACHO'];
+                    if(cuartos.includes(zone)) socket.rooms.delete(zone);
+                })
+                resolve("TERMINE DE LIMPIAR LAS ZONAS SOBRANTES");
+            })
+        }
+        function nueva_zone(zone){
+            return new Promise((resolve,reject)=>{
+                socket.join(`ZONA ${zone}`);
+                resolve(`ingrese ala nueva zona ${zone}`);
+                // resolve(socket.rooms);
+            })
+        }
         async function zonas(socket,zona){
             try{
                 const primera_llamada=await obtenerpromesa_zona();
