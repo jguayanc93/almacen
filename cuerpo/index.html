@@ -589,9 +589,27 @@
                 document.getElementById('tabla-3-titulo').textContent = data.tabla3;
                 document.getElementById('tabla-3-descripcion').textContent = data.tabla3desc;
 
-                // Emit socket event if it's ventanilla
+                // Emit socket event based on menu key
                 if (menuKey === 'ventanilla') {
                     emitir_eventos('ventanilla', 0);
+                } else if (menuKey === 'almacen-principal') {
+                    emitir_eventos('almacen principal', 1);
+                } else if (menuKey === 'zona-1') {
+                    emitir_eventos('cambio zona', 'Z1');
+                } else if (menuKey === 'zona-2') {
+                    emitir_eventos('cambio zona', 'Z2');
+                } else if (menuKey === 'zona-3') {
+                    emitir_eventos('cambio zona', 'Z3');
+                } else if (menuKey === 'zona-desconocido') {
+                    emitir_eventos('cambio zona', 'desconocido');
+                } else if (menuKey === 'almacen-mym') {
+                    emitir_eventos('almacen mym', 8);
+                } else if (menuKey === 'zona-unica') {
+                    emitir_eventos('almacen mym', 8);
+                } else if (menuKey === 'despacho-principal') {
+                    emitir_eventos('despacho', 1);
+                } else if (menuKey === 'despacho-mym') {
+                    emitir_eventos('despacho', 8);
                 }
             }
         }
