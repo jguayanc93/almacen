@@ -33,25 +33,52 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     // document.getElementById("tablero-maestro-control").innerHTML="";
     // console.log("ESTOS REGISTROS SON UNICOS PARA EL LLAMADO DE CIERTAS ZONAS REVISAR SI SE REPITE")
     // console.log(registros);
+    
+    // Crear encabezados (thead)
+    const thead = document.createElement('thead');
+    thead.className = 'bg-indigo-600 text-white sticky top-0';
+    const headerRow = document.createElement('tr');
+    const headers = ['Fecha', 'Hora', 'Documento', 'Cliente', 'Zona'];
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        th.className = 'px-6 py-3 text-left font-semibold';
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    document.getElementById("tablero-maestro-control-inicio").appendChild(thead);
+    
+    // Crear cuerpo (tbody)
     const cuerpo=document.createElement('tbody');
+    let rowIndex = 0;
     for(let doc in registros){
         const fecha=document.createElement('td')
         fecha.textContent=registros[doc][0];
+        fecha.className="px-6 py-4 border-b border-gray-200";
 
         const hora=document.createElement('td')
         hora.textContent=registros[doc][1];
+        hora.className="px-6 py-4 border-b border-gray-200";
 
         const documento=document.createElement('td')
-        documento.className="font-mono";
+        documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600";
         documento.textContent=registros[doc][2];
 
         const cliente=document.createElement('td')
         cliente.textContent=registros[doc][3];
+        cliente.className="px-6 py-4 border-b border-gray-200";
 
         const zonas=document.createElement('td')
         zonas.textContent=registros[doc][4];
+        zonas.className="px-6 py-4 border-b border-gray-200 font-medium";
 
         const fila=document.createElement('tr');
+        // Colores alternados y hover
+        if(rowIndex % 2 === 0) {
+            fila.className="bg-white hover:bg-indigo-50 transition";
+        } else {
+            fila.className="bg-gray-50 hover:bg-indigo-50 transition";
+        }
         fila.appendChild(fecha)
         fila.appendChild(hora)
         fila.appendChild(documento)
@@ -59,6 +86,7 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         fila.appendChild(zonas)
 
         cuerpo.appendChild(fila);
+        rowIndex++;
     }
     document.getElementById("tablero-maestro-control-inicio").appendChild(cuerpo)
     /////////////////////ESTO PARA LA NUEVA VERSION AHORA DEBE CAMBIARSE POR LA NUEVA
@@ -108,22 +136,49 @@ socket.on('ventanilla mestro estados',(registros)=>{
     document.getElementById("tabla-2-descripcion").textContent="Permite observar el flujo del documento y en que estado se encuentra";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
+    
+    // Crear encabezados (thead)
+    const thead = document.createElement('thead');
+    thead.className = 'bg-amber-600 text-white sticky top-0';
+    const headerRow = document.createElement('tr');
+    const headers = ['Documento', 'Estado'];
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        th.className = 'px-6 py-3 text-left font-semibold';
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    document.getElementById("tablero-maestro-control-medio").appendChild(thead);
+    
+    // Crear cuerpo (tbody)
     const cuerpo=document.createElement('tbody');
+    let rowIndex = 0;
     for(let doc in registros){
         const documento=document.createElement('td')
-        documento.className="font-mono";
+        documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600 cursor-pointer hover:underline";
         documento.textContent=registros[doc][0];
         documento.addEventListener('click',()=>{factura_informacion(registros[doc][0])})////aun en prueba
 
         const estado=document.createElement('td')
-        estado.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
-        estado.textContent=registros[doc][1];
+        estado.className="px-6 py-4 border-b border-gray-200";
+        const estadoBtn = document.createElement('span');
+        estadoBtn.className="bg-amber-500 text-black text-sm font-mono font-bold px-4 py-2 rounded-md inline-block";
+        estadoBtn.textContent=registros[doc][1];
+        estado.appendChild(estadoBtn);
 
         const fila=document.createElement('tr');
+        // Colores alternados y hover
+        if(rowIndex % 2 === 0) {
+            fila.className="bg-white hover:bg-amber-50 transition";
+        } else {
+            fila.className="bg-gray-50 hover:bg-amber-50 transition";
+        }
         fila.appendChild(documento)
         fila.appendChild(estado)
 
         cuerpo.appendChild(fila);
+        rowIndex++;
     }
     document.getElementById("tablero-maestro-control-medio").appendChild(cuerpo)
     /////////////////////ESTO PARA LA NUEVA VERSION AHORA DEBE CAMBIARSE POR LA NUEVA
@@ -157,36 +212,72 @@ socket.on('ventanilla mestro terminados',(registros)=>{
     document.getElementById("tabla-3-descripcion").textContent="Termina el procesado del documento y pasa a su despacho";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
     // document.getElementById("tablero-maestro-control").innerHTML="";
+    
+    // Crear encabezados (thead)
+    const thead = document.createElement('thead');
+    thead.className = 'bg-emerald-600 text-white sticky top-0';
+    const headerRow = document.createElement('tr');
+    const headers = ['Documento', 'Estado', 'Acción'];
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        th.className = 'px-6 py-3 text-left font-semibold';
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    document.getElementById("tablero-maestro-control-fin").appendChild(thead);
+    
+    // Crear cuerpo (tbody)
     const cuerpo=document.createElement('tbody');
     console.log(registros);
+    let rowIndex = 0;
     for(let doc in registros){
         const documento=document.createElement('td')
-        documento.className="font-mono";
+        documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600";
         documento.textContent=registros[doc][0];
 
         const estado=document.createElement('td')
-        estado.textContent=registros[doc][1];
+        estado.className="px-6 py-4 border-b border-gray-200";
+        const estadoSpan = document.createElement('span');
+        if(registros[doc][1]==0){
+            estadoSpan.className="bg-gray-300 text-gray-800 text-sm font-mono font-bold px-3 py-1 rounded";
+            estadoSpan.textContent="Pendiente";
+        } else if(registros[doc][1]==1){
+            estadoSpan.className="bg-yellow-300 text-yellow-800 text-sm font-mono font-bold px-3 py-1 rounded";
+            estadoSpan.textContent="En Checking";
+        }
+        estado.appendChild(estadoSpan);
 
+        const accionCell=document.createElement('td')
+        accionCell.className="px-6 py-4 border-b border-gray-200";
         //////////BOTON ESPECIAL
         const boton=document.createElement("button");
         if(registros[doc][1]==0){
-            boton.className="bg-red-500 rounded-md w-24 text-white text-sm font-mono";
+            boton.className="bg-red-500 hover:bg-red-600 rounded-md px-4 py-2 text-white text-sm font-mono font-bold transition";
             boton.textContent="FALTA";
         }
         else if(registros[doc][1]==1){
             boton.setAttribute("id","chk"+registros[doc][0]);
-            boton.className="bg-emerald-500 rounded-md w-24 text-white text-sm font-mono";
+            boton.className="bg-emerald-500 hover:bg-emerald-600 rounded-md px-4 py-2 text-white text-sm font-mono font-bold transition";
             boton.textContent="CHECKING";
             // boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][4],registros[doc][22]));
             boton.addEventListener("click",()=>estado_cambio_checking(registros[doc][0],registros[doc][3],registros[doc][2],registros[doc][4]));
         }   
+        accionCell.appendChild(boton);
 
         const fila=document.createElement('tr');
+        // Colores alternados y hover
+        if(rowIndex % 2 === 0) {
+            fila.className="bg-white hover:bg-emerald-50 transition";
+        } else {
+            fila.className="bg-gray-50 hover:bg-emerald-50 transition";
+        }
         fila.appendChild(documento)
         fila.appendChild(estado)
-        fila.appendChild(boton)
+        fila.appendChild(accionCell)
 
         cuerpo.appendChild(fila);
+        rowIndex++;
     }
     document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo)
     /////////////////////ESTO PARA LA NUEVA VERSION AHORA DEBE CAMBIARSE POR LA NUEVA
