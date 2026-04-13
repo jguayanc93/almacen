@@ -165,8 +165,32 @@
 
         <!-- CONTENT AREA -->
         <div class="p-8">
-            <!-- IMAGES SECTION -->
-            <div class="grid grid-cols-3 gap-6 mb-8">
+            <!-- WELCOME MESSAGE - Initial state -->
+            <div id="welcome-message" class="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl shadow-lg p-12 mb-8">
+                <h2 class="text-3xl font-bold mb-4">Bienvenido al Sistema de Almacén</h2>
+                <p class="text-lg text-indigo-100 mb-6">Selecciona una opción del menú lateral para comenzar a trabajar.</p>
+                <div class="space-y-3">
+                    <p class="flex items-center gap-2">
+                        <span class="text-2xl">📦</span>
+                        <span>Ventanilla - Gestión de documentos</span>
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span class="text-2xl">🏢</span>
+                        <span>Almacén Principal - Control de zonas</span>
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span class="text-2xl">⚡</span>
+                        <span>Almacén M&M - Gestión dedicada</span>
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span class="text-2xl">✓</span>
+                        <span>Despacho - Gestión de envíos</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- IMAGES SECTION - Hidden initially -->
+            <div id="images-section" class="grid grid-cols-3 gap-6 mb-8 hidden">
                 <div class="group cursor-pointer">
                     <div class="relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 h-48">
                         <img id="img-card-1" src="https://images.unsplash.com/photo-1586528116039-c48145d33c64?w=600&q=80" alt="Imagen 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
@@ -195,8 +219,8 @@
                 </div>
             </div>
 
-            <!-- TABLES SECTION -->
-            <div class="grid grid-cols-3 gap-6">
+            <!-- TABLES SECTION - Hidden initially -->
+            <div id="tables-section" class="grid grid-cols-3 gap-6 hidden">
                 <!-- TABLE 1 -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
                     <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
@@ -529,6 +553,17 @@
             document.getElementById('current-section-title').textContent = data.title;
             document.getElementById('current-section-desc').textContent = data.desc;
 
+            // Hide welcome message and show content
+            const welcomeMessage = document.getElementById('welcome-message');
+            const imagesSection = document.getElementById('images-section');
+            const tablesSection = document.getElementById('tables-section');
+            
+            if (welcomeMessage) {
+                welcomeMessage.classList.add('hidden');
+            }
+            imagesSection.classList.remove('hidden');
+            tablesSection.classList.remove('hidden');
+
             // Load content area if it's an option
             if (data.isOption) {
                 loadOptionContent(menuKey);
@@ -554,16 +589,23 @@
                 document.getElementById('tabla-3-titulo').textContent = data.tabla3;
                 document.getElementById('tabla-3-descripcion').textContent = data.tabla3desc;
 
-                // Show images and tables section
-                document.querySelector('.grid.grid-cols-3.gap-6.mb-8').classList.remove('hidden');
-                document.querySelector('.grid.grid-cols-3.gap-6:last-child').classList.remove('hidden');
+                // Emit socket event if it's ventanilla
+                if (menuKey === 'ventanilla') {
+                    emitir_eventos('ventanilla', 0);
+                }
             }
         }
 
         // Load option content
         function loadOptionContent(optionKey) {
-            const contentArea = document.querySelector('.grid.grid-cols-3.gap-6.mb-8');
-            const tablesArea = document.querySelector('.grid.grid-cols-3.gap-6:last-child');
+            const welcomeMessage = document.getElementById('welcome-message');
+            const contentArea = document.getElementById('images-section');
+            const tablesArea = document.getElementById('tables-section');
+
+            // Hide welcome message
+            if (welcomeMessage) {
+                welcomeMessage.classList.add('hidden');
+            }
 
             // Hide normal content
             contentArea.classList.add('hidden');
@@ -660,13 +702,7 @@
                     // Add active class to clicked item
                     toggle.classList.add('menu-item-active');
 
-                    // Restore normal layout
-                    const contentArea = document.querySelector('.grid.grid-cols-3.gap-6.mb-8');
-                    const tablesArea = document.querySelector('.grid.grid-cols-3.gap-6:last-child');
-                    contentArea.classList.remove('hidden');
-                    tablesArea.classList.remove('hidden');
-
-                    // Load the menu content
+                    // Load the menu content (loadMenuItem handles visibility)
                     loadMenuItem(menuKey);
                 }
             });
@@ -684,13 +720,7 @@
                 // Add active class to clicked item
                 item.classList.add('menu-item-active');
 
-                // Restore normal layout
-                const contentArea = document.querySelector('.grid.grid-cols-3.gap-6.mb-8');
-                const tablesArea = document.querySelector('.grid.grid-cols-3.gap-6:last-child');
-                contentArea.classList.remove('hidden');
-                tablesArea.classList.remove('hidden');
-
-                // Load the menu content
+                // Load the menu content (loadMenuItem handles visibility)
                 loadMenuItem(menuKey);
             });
         });
@@ -710,13 +740,7 @@
                     parentMenu.classList.add('menu-item-active');
                 }
 
-                // Restore normal layout
-                const contentArea = document.querySelector('.grid.grid-cols-3.gap-6.mb-8');
-                const tablesArea = document.querySelector('.grid.grid-cols-3.gap-6:last-child');
-                contentArea.classList.remove('hidden');
-                tablesArea.classList.remove('hidden');
-
-                // Load submenu content
+                // Load submenu content (loadMenuItem handles visibility)
                 loadMenuItem(submenuKey);
             });
         });
@@ -733,13 +757,7 @@
                 // Add active class to clicked item
                 item.classList.add('menu-item-active');
 
-                // Restore normal layout
-                const contentArea = document.querySelector('.grid.grid-cols-3.gap-6.mb-8');
-                const tablesArea = document.querySelector('.grid.grid-cols-3.gap-6:last-child');
-                contentArea.classList.remove('hidden');
-                tablesArea.classList.remove('hidden');
-
-                // Load the menu content
+                // Load the menu content (loadMenuItem handles visibility)
                 loadMenuItem(menuKey);
             });
         });
