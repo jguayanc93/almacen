@@ -1,73 +1,108 @@
 /////////EXTRACCION DE ZONAS SEGUN ALMACEN EVENTOS DISCRIMINATORIOS
-document.getElementById("ventanilla").addEventListener("click",()=>pasando_a_ventanilla())
-
-function pasando_a_ventanilla(){
-    // let user=window.prompt("ventanilla usuario","aqui digitar numero de trabajador");
-    // if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
-    // else{
-        document.getElementById("distribucion").innerHTML="";
-        emitir_eventos('ventanilla',0)
-    // }
-}
-////////ALMACEN PRINCIPAL
-document.getElementById("almprincipal").addEventListener("click",()=>{
-    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+document.getElementById("ventanilla").addEventListener("click",(e)=>{
+    e.preventDefault();
+    pasando_a_ventanilla();
+    loadMenuItem('ventanilla');
 })
 
-document.getElementById("alm1").addEventListener("click",()=>{
-    // socket.emit('almacen principal',1);
+function pasando_a_ventanilla(){
+    document.getElementById("distribucion").innerHTML="";
+    emitir_eventos('ventanilla',0)
+}
+
+// Función auxiliar para togglear accordion
+function toggleAccordion(accordionContentId, buttonId) {
+    const content = document.getElementById(accordionContentId);
+    const button = document.getElementById(buttonId);
+    const icon = button ? button.querySelector('.accordion-icon') : null;
+    if (!content) return;
+    
+    const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+    
+    if (isOpen) {
+        content.style.maxHeight = '0px';
+        if (icon) icon.style.transform = 'rotate(0deg)';
+    } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        if (icon) icon.style.transform = 'rotate(90deg)';
+    }
+}
+
+////////ALMACEN PRINCIPAL
+document.getElementById("almprincipal").addEventListener("click",(e)=>{
+    e.preventDefault();
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+})
+
+document.getElementById("alm1").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('almacen principal',1)
-    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('almacen-principal');
 })
 
 ///////EMISORES DE ZONAS
-document.getElementById("Z1").addEventListener("click",()=>{
-    // socket.emit('cambio zona','Z1');
+document.getElementById("Z1").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('cambio zona','Z1');
-    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('zona-1');
 })
-document.getElementById("Z2").addEventListener("click",()=>{
-    // socket.emit('cambio zona','Z2');
+document.getElementById("Z2").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('cambio zona','Z2');
-    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('zona-2');
 })
-document.getElementById("Z3").addEventListener("click",()=>{
-    // socket.emit('cambio zona','Z3');
+document.getElementById("Z3").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('cambio zona','Z3');
-    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('zona-3');
 })
-document.getElementById("desconocido").addEventListener("click",()=>{
-    // socket.emit('cambio zona','desconocido');
+document.getElementById("desconocido").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('cambio zona','desconocido')
-    document.getElementById("almprincipal-opc").classList.toggle('hidden');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('zona-desconocido');
 })
 
 ////////////ALMACEN MYM
-document.getElementById("almmym").addEventListener("click",()=>{
-    document.getElementById("almmym-opc").classList.toggle('hidden');
+document.getElementById("almmym").addEventListener("click",(e)=>{
+    e.preventDefault();
+    toggleAccordion('almmym-opc', 'almmym');
 })
 
-document.getElementById("alm8").addEventListener("click",()=>{
-    // socket.emit('almacen mym',8);
+document.getElementById("alm8").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('almacen mym',8);
-    document.getElementById("almmym-opc").classList.toggle('hidden');
+    toggleAccordion('almmym-opc', 'almmym');
+    loadMenuItem('zona-unica');
 })
 
 //////DESPACHO
-document.getElementById("despacho").addEventListener("click",()=>{
-    document.getElementById("despacho-opc").classList.toggle('hidden');
+document.getElementById("despacho").addEventListener("click",(e)=>{
+    e.preventDefault();
+    toggleAccordion('despacho-opc', 'despacho');
 })
 
-document.getElementById("despachop").addEventListener("click",()=>{
+document.getElementById("despachop").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('despacho',1);
-    document.getElementById("despacho-opc").classList.toggle('hidden');
+    toggleAccordion('despacho-opc', 'despacho');
+    loadMenuItem('despacho-principal');
 })
-document.getElementById("despachom").addEventListener("click",()=>{
+document.getElementById("despachom").addEventListener("click",(e)=>{
+    e.preventDefault();
     emitir_eventos('despacho',8);
-    document.getElementById("despacho-opc").classList.toggle('hidden');
+    toggleAccordion('despacho-opc', 'despacho');
+    loadMenuItem('despacho-mym');
 })
 
 /////ACCIONES PARA MOSTRAR EL CONTENEDOR FLOTANTE DE INFORMACION DETALLADA
-document.getElementById("flotante-cerrar").addEventListener('click',()=>{
-    document.getElementById("flotante-superior").classList.add("hidden");
-})
+const flotanteCerrar = document.getElementById("flotante-cerrar");
+if (flotanteCerrar) {
+    flotanteCerrar.addEventListener('click',()=>{
+        document.getElementById("flotante-superior").classList.add("hidden");
+    });
+}
