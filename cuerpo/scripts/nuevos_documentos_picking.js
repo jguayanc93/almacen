@@ -1,111 +1,72 @@
 
 socket.on('lista picking',(pikings,zona)=>{
-    document.getElementById("tabla3titulo").textContent="Documentos Picking";
-    document.getElementById("tabla3descripcion").textContent="Documentos para pikar/confirmar y mandar a su checking";
-    document.getElementById("tablero-maestro-control-fin2").innerHTML="";
+    document.getElementById("tabla-3-titulo").textContent="Documentos Picking";
+    document.getElementById("tabla-3-descripcion").textContent="Documentos para pikar/confirmar y mandar a su checking";
+    document.getElementById("tablero-maestro-control-fin").innerHTML="";
 
-    document.getElementById("terceratablatitulo").textContent="Documentos Picking";
-    document.getElementById("terceratablamensaje").textContent="Documentos para pikar/confirmar y mandar a su checking";
-    document.getElementById("tablero-maestro-control-fin2").innerHTML="";
-
-    for(let documento in pikings){
-        let grapador=document.createElement("div");
-        grapador.className="w-[90%] flex flex-row justify-center";
-
-        const item1=document.createElement('p');
-        item1.className="w-[30%] font-bold text-center";
-        item1.textContent=pikings[documento][0];
-        
-        const item2=document.createElement('p');
-        item2.className="w-[30%] text-center";
-        item2.textContent=pikings[documento][5];
-
-        const boton=document.createElement("button");
-        boton.className="w-[30%]";
-        boton.setAttribute("id","pick"+pikings[documento][0]);
-        ///SI EL DOCUMENTO TIENE SOLO 1 ZONA
-        if(pikings[documento][2]==1){
-            if(pikings[documento][3]==1){
-                boton.className="bg-amber-500 rounded-md w-32 text-black text-sm font-mono font-bold text-center";
-                boton.textContent="ESPERANDO CHECKING";
-            }
-            else{
-                boton.textContent="CONFIRMAR PICKING";
-                boton.className="bg-blue-500 rounded-md text-white text-sm w-32 font-mono";
-                boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
-            }
-        }
-        ////SI EL DOCUMENTO TIENE VARIAS ZONAS
-        else{
-            if(pikings[documento][3]==0){
-                boton.textContent="CONFIRMAR PICKING";
-                boton.className="bg-blue-500 rounded-md text-white text-sm w-32 font-mono";
-                boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
-            }
-            else if(pikings[documento][3]==1){
-                if(pikings[documento][4]<pikings[documento][2]){
-                    boton.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
-                    boton.textContent="ESPERANDO OTRAS ZONAS";
-                }
-                else{
-                    boton.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
-                    boton.textContent="ESPERANDO CHECKING";
-                }
-            }
-        }
-        grapador.appendChild(item1)
-        grapador.appendChild(item2)
-        grapador.appendChild(boton);
-        document.getElementById("tablero-maestro-control-fin2").appendChild(grapador);
-    }    
+    // Crear tabla con estructura de tbody
+    let tbody = document.createElement('tbody');
+    tbody.className = "divide-y divide-gray-200";
 
     for(let documento in pikings){
-        const item1=document.createElement('td');
-        item1.className="font-mono";
-        item1.textContent=pikings[documento][0];
+        const row = document.createElement('tr');
+        row.className = "hover:bg-gray-50 transition";
+
+        const item1 = document.createElement('td');
+        item1.className = "px-4 py-3 font-mono text-indigo-600 cursor-pointer";
+        item1.textContent = pikings[documento][0];
         item1.addEventListener("click",()=>factura_informacion(pikings[documento][0]))
 
-        const item2=document.createElement('td');
-        item2.textContent=pikings[documento][5];
+        const item2 = document.createElement('td');
+        item2.className = "px-4 py-3";
+        item2.textContent = pikings[documento][5];
 
-        const boton=document.createElement("button");
+        const cellBtn = document.createElement('td');
+        cellBtn.className = "px-4 py-3";
+
+        const boton = document.createElement("button");
         boton.setAttribute("id","pick"+pikings[documento][0]);
-        ///SI EL DOCUMENTO TIENE SOLO 1 ZONA
+
+        // Lógica de estado - SI EL DOCUMENTO TIENE SOLO 1 ZONA
         if(pikings[documento][2]==1){
             if(pikings[documento][3]==1){
-                boton.className="bg-amber-500 rounded-md w-32 text-black text-sm font-mono font-bold text-center";
+                boton.className="bg-amber-500 rounded-md px-4 py-2 text-white text-sm font-mono w-full";
                 boton.textContent="ESPERANDO CHECKING";
+                boton.disabled = true;
             }
             else{
                 boton.textContent="CONFIRMAR PICKING";
-                boton.className="bg-blue-500 rounded-md text-white text-sm w-32 font-mono";
+                boton.className="bg-green-500 rounded-md px-4 py-2 text-white text-sm font-mono hover:bg-green-600 transition";
                 boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             }
         }
-        ////SI EL DOCUMENTO TIENE VARIAS ZONAS
+        // SI EL DOCUMENTO TIENE VARIAS ZONAS
         else{
             if(pikings[documento][3]==0){
                 boton.textContent="CONFIRMAR PICKING";
-                boton.className="bg-blue-500 rounded-md text-white text-sm w-32 font-mono";
+                boton.className="bg-green-500 rounded-md px-4 py-2 text-white text-sm font-mono hover:bg-green-600 transition";
                 boton.addEventListener("click",()=>estado_cambio_confirmado(pikings[documento][0],pikings[documento][2],zona));
             }
             else if(pikings[documento][3]==1){
+                boton.className="bg-amber-500 rounded-md px-4 py-2 text-white text-sm font-mono w-full";
+                boton.disabled = true;
                 if(pikings[documento][4]<pikings[documento][2]){
-                    boton.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
                     boton.textContent="ESPERANDO OTRAS ZONAS";
                 }
                 else{
-                    boton.className="bg-amber-500 rounded-md w-40 text-black text-sm font-mono font-bold text-center";
                     boton.textContent="ESPERANDO CHECKING";
                 }
             }
         }
-        const armason=document.createElement("tr");
-        armason.appendChild(item1)
-        armason.appendChild(item2)
-        armason.appendChild(boton)
-        document.getElementById("tablero-maestro-control-fin").appendChild(armason);
+
+        cellBtn.appendChild(boton);
+        row.appendChild(item1);
+        row.appendChild(item2);
+        row.appendChild(cellBtn);
+        tbody.appendChild(row);
     }
+
+    document.getElementById("tablero-maestro-control-fin").appendChild(tbody);
 })
 
 

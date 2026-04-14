@@ -1,87 +1,42 @@
 
 socket.on('impresos',(impresos,zona)=>{
-    document.getElementById("tabla2titulo").textContent="Documentos Impresos";
-    document.getElementById("tabla2descripcion").textContent="Documentos impresos y listos para su trabajo";
+    document.getElementById("tabla-2-titulo").textContent="Documentos Impresos";
+    document.getElementById("tabla-2-descripcion").textContent="Documentos impresos y listos para su trabajo";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
     
+    // Crear tabla con estructura de tbody
+    let tbody = document.createElement('tbody');
+    tbody.className = "divide-y divide-gray-200";
 
     for(let documento in impresos){
-        const item1=document.createElement('td');
-        item1.textContent=impresos[documento][0];
-        item1.className="font-mono";
+        const row = document.createElement('tr');
+        row.className = "hover:bg-gray-50 transition";
+
+        const item1 = document.createElement('td');
+        item1.textContent = impresos[documento][0];
+        item1.className = "px-4 py-3 font-mono text-indigo-600 cursor-pointer";
         item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
 
-        const item2=document.createElement('td');
-        item2.textContent=impresos[documento][2];
+        const item2 = document.createElement('td');
+        item2.textContent = impresos[documento][2];
+        item2.className = "px-4 py-3";
 
-        const boton=document.createElement("button");
+        const cellBtn = document.createElement('td');
+        cellBtn.className = "px-4 py-3";
+        const boton = document.createElement("button");
         boton.setAttribute("id","imp"+impresos[documento][0]);
-        boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
-        boton.textContent="picking";
+        boton.className = "bg-amber-500 rounded-md px-4 py-2 text-white text-sm font-mono hover:bg-amber-600 transition";
+        boton.textContent = "Picking";
         boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3],zona));
+        cellBtn.appendChild(boton);
 
-        const armason=document.createElement("tr");
-        armason.appendChild(item1)
-        armason.appendChild(item2)
-        armason.appendChild(boton)
-        document.getElementById("tablero-maestro-control-medio").appendChild(armason);
+        row.appendChild(item1);
+        row.appendChild(item2);
+        row.appendChild(cellBtn);
+        tbody.appendChild(row);
     }
-    /////////////////////ESTO PARA LA NUEVA VERSION AHORA DEBE CAMBIARSE POR LA NUEVA
-    let segundatablatitulo=document.getElementById("segundatablatitulo");
-    segundatablatitulo.className="text-center text-xl font-bold";
-    segundatablatitulo.textContent="DOCUMENTOS IMPRESOS";
-    let segundatablamensaje=document.getElementById("segundatablamensaje");
-    segundatablamensaje.className="text-center text-lg font-medium";
-    segundatablamensaje.textContent="Documentos impresos y listos para su trabajo";
-    let segundatabla=document.getElementById("tablero-maestro-control-medio2");
-    segundatabla.innerHTML="";
-    for(let documento in impresos){
-        let grapador=document.createElement("div");
-        grapador.className="w-full flex flex-row justify-around";
 
-        const item1=document.createElement('div');
-        item1.textContent=impresos[documento][0];
-        item1.className="truncate w-[30%]";
-        // item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
-
-        const item2=document.createElement('div');
-        item2.className="truncate w-[20%]";
-        item2.textContent=impresos[documento][2];
-
-        const boton=document.createElement("button");
-        boton.setAttribute("id","imp"+impresos[documento][0]);
-        boton.className="bg-blue-500 rounded-md w-[30%] text-white font-mono";
-        boton.textContent="picking";
-        boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3],zona));
-
-        grapador.appendChild(item1)
-        grapador.appendChild(item2)
-        grapador.appendChild(boton)
-        segundatabla.appendChild(grapador);
-    }   
-    ///////////////////////
-    // for(let documento in impresos){
-    //     const item1=document.createElement('td');
-    //     item1.textContent=impresos[documento][0];
-    //     item1.className="truncate w-[30%]";
-    //     item1.addEventListener("click",()=>factura_informacion(impresos[documento][0]))
-
-    //     const item2=document.createElement('td');
-    //     item2.className="truncate w-[30%]";
-    //     item2.textContent=impresos[documento][2];
-
-    //     const boton=document.createElement("button");
-    //     boton.setAttribute("id","imp"+impresos[documento][0]);
-    //     boton.className="bg-blue-500 rounded-md w-full text-white font-mono";
-    //     boton.textContent="picking";
-    //     boton.addEventListener("click",()=>estado_cambiado_piking(impresos[documento][0],impresos[documento][3],zona));
-
-    //     const armason=document.createElement("tr");
-    //     armason.appendChild(item1)
-    //     armason.appendChild(item2)
-    //     armason.appendChild(boton)
-    //     document.getElementById("tablero-maestro-control-medio2").appendChild(armason);
-    // }
+    document.getElementById("tablero-maestro-control-medio").appendChild(tbody);
 })
 
 function estado_cambiado_piking(ndoc,cantidad,zone){
