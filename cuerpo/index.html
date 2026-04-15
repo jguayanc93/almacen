@@ -7,20 +7,46 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="estilo.css">
     <style>
-        .menu-item-active {
-            background-color: #4f46e5;
-            color: white;
-        }
         .sidebar {
             height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
             width: 280px;
+            transition: width 0.3s ease-in-out;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.5);
+            flex-shrink: 0;
+        }
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .sidebar-footer {
+            border-top: 1px solid rgba(100, 116, 139, 0.5);
+            padding: 1rem;
+            flex-shrink: 0;
         }
         .main-content {
             margin-left: 280px;
             min-height: 100vh;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .main-content.expanded {
+            margin-left: 80px;
         }
         .accordion-content {
             overflow: hidden;
@@ -29,33 +55,68 @@
         .accordion-icon {
             transition: transform 0.3s ease-in-out;
         }
+        .sidebar-text {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .sidebar.collapsed .sidebar-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        .sidebar-initial {
+            font-weight: 700;
+            font-size: 0.875rem;
+            transition: opacity 0.3s ease-in-out;
+            text-align: center;
+            width: 100%;
+        }
+        .sidebar.collapsed .sidebar-initial {
+            opacity: 1;
+        }
+        .sidebar:not(.collapsed) .sidebar-initial {
+            display: none;
+        }
+        .toggle-sidebar-btn {
+            transition: transform 0.3s ease-in-out;
+            flex-shrink: 0;
+        }
+        .toggle-sidebar-btn.collapsed {
+            transform: rotate(180deg);
+        }
+        .menu-item-active {
+            background-color: #4f46e5;
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- SIDEBAR MENU -->
-    <div class="sidebar bg-gradient-to-b from-slate-900 to-slate-800 text-gray-100 flex flex-col">
+    <div class="sidebar bg-gradient-to-b from-slate-900 to-slate-800 text-gray-100">
         <!-- HEADER -->
-        <div class="p-6 border-b border-slate-700">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center">
+        <div class="sidebar-header">
+            <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition" id="sidebar-logo-toggle">
+                <div class="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8 4m-8-4v10l8 4m0-10l8 4m-8-4v10l8-4"></path>
                     </svg>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg">Almacén</h1>
-                    <p class="text-xs text-gray-400">Logística</p>
+                    <h1 class="font-bold text-lg sidebar-text">Almacén</h1>
                 </div>
             </div>
+            <button id="toggle-sidebar-btn" class="toggle-sidebar-btn p-2 hover:bg-slate-700 rounded-lg transition" title="Colapsar/Expandir menú">
+                <svg class="w-5 h-5 text-gray-300 flex-shrink-0 sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
         </div>
 
         <!-- MENU ITEMS -->
-        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav class="sidebar-nav space-y-2">
             <!-- VENTANILLA -->
             <a href="#" id="ventanilla" class="menu-item block px-4 py-3 rounded-lg font-medium transition-all hover:bg-slate-700 text-gray-300 hover:text-white">
-                <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                    <span>Ventanilla</span>
+                <div class="flex items-center gap-3 justify-center">
+                    <svg class="w-5 h-5 flex-shrink-0 sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span class="sidebar-text">Ventanilla</span>
+                    <span class="sidebar-initial">V</span>
                 </div>
             </a>
 
@@ -64,30 +125,36 @@
                 <button id="almprincipal" class="accordion-toggle menu-item block w-full px-4 py-3 rounded-lg font-medium transition-all hover:bg-slate-700 text-gray-300 hover:text-white text-left">
                     <div class="flex items-center gap-3 justify-between">
                         <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 3l3 3m0 0l3-3m-3 3V8"></path></svg>
-                            <span>Almacén Principal</span>
+                            <svg class="w-5 h-5 flex-shrink-0 sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 3l3 3m0 0l3-3m-3 3V8"></path></svg>
+                            <span class="sidebar-text">Almacén Principal</span>
+                            <span class="sidebar-initial">P</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-4 h-4 transition-transform duration-300 accordion-icon sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </button>
                 <!-- Acordeón submenu -->
                 <div id="almprincipal-opc" class="accordion-content max-h-0 overflow-hidden transition-all duration-300">
                     <a href="#" id="Z1" class="block px-8 py-2 text-gray-300 hover:bg-indigo-600 hover:text-white transition text-sm">
-                        🏭 Zona 1
+                        <span class="sidebar-text">🏭 Zona 1</span>
+                        <span class="sidebar-initial">Z1</span>
                     </a>
                     <a href="#" id="Z2" class="block px-8 py-2 text-gray-300 hover:bg-indigo-600 hover:text-white transition text-sm">
-                        🖨️ Zona 2
+                        <span class="sidebar-text">🖨️ Zona 2</span>
+                        <span class="sidebar-initial">Z2</span>
                     </a>
                     <a href="#" id="Z3" class="block px-8 py-2 text-gray-300 hover:bg-indigo-600 hover:text-white transition text-sm">
-                        💾 Zona 3
+                        <span class="sidebar-text">💾 Zona 3</span>
+                        <span class="sidebar-initial">Z3</span>
                     </a>
                     <a href="#" id="desconocido" class="block px-8 py-2 text-gray-300 hover:bg-indigo-600 hover:text-white transition text-sm">
-                        ❓ Desconocido
+                        <span class="sidebar-text">❓ Desconocido</span>
+                        <span class="sidebar-initial">?</span>
                     </a>
                 </div>
                 <!-- Botón para seleccionar "Almacén Principal General" -->
                 <a href="#" id="alm1" class="block px-8 py-2 text-gray-300 hover:bg-indigo-600 hover:text-white transition text-sm border-t border-slate-600">
-                    📊 Almacén Principal (General)
+                    <span class="sidebar-text">📊 Almacén Principal (General)</span>
+                    <span class="sidebar-initial">P</span>
                 </a>
             </div>
 
@@ -96,21 +163,24 @@
                 <button id="almmym" class="accordion-toggle menu-item block w-full px-4 py-3 rounded-lg font-medium transition-all hover:bg-slate-700 text-gray-300 hover:text-white text-left">
                     <div class="flex items-center gap-3 justify-between">
                         <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            <span>Almacén M&M</span>
+                            <svg class="w-5 h-5 flex-shrink-0 sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span class="sidebar-text">Almacén M&M</span>
+                            <span class="sidebar-initial">MYM</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-4 h-4 transition-transform duration-300 accordion-icon sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </button>
                 <!-- Acordeón submenu -->
                 <div id="almmym-opc" class="accordion-content max-h-0 overflow-hidden transition-all duration-300">
                     <a href="#" class="block px-8 py-2 text-gray-300 hover:bg-amber-600 hover:text-white transition text-sm">
-                        ⚡ Zona Única
+                        <span class="sidebar-text">⚡ Zona Única</span>
+                        <span class="sidebar-initial">ZU</span>
                     </a>
                 </div>
                 <!-- Botón para seleccionar "Almacén MYM General" -->
                 <a href="#" id="alm8" class="block px-8 py-2 text-gray-300 hover:bg-amber-600 hover:text-white transition text-sm border-t border-slate-600">
-                    📊 Almacén M&M (General)
+                    <span class="sidebar-text">📊 Almacén M&M (General)</span>
+                    <span class="sidebar-initial">MYM</span>
                 </a>
             </div>
 
@@ -119,19 +189,22 @@
                 <button id="despacho" class="accordion-toggle menu-item block w-full px-4 py-3 rounded-lg font-medium transition-all hover:bg-slate-700 text-gray-300 hover:text-white text-left">
                     <div class="flex items-center gap-3 justify-between">
                         <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span>Despacho</span>
+                            <svg class="w-5 h-5 flex-shrink-0 sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="sidebar-text">Despacho</span>
+                            <span class="sidebar-initial">D</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg class="w-4 h-4 transition-transform duration-300 accordion-icon sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </button>
                 <!-- Acordeón submenu -->
                 <div id="despacho-opc" class="accordion-content max-h-0 overflow-hidden transition-all duration-300">
                     <a href="#" id="despachop" class="block px-8 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm">
-                        📦 Despacho Principal
+                        <span class="sidebar-text">📦 Despacho Principal</span>
+                        <span class="sidebar-initial">D</span>
                     </a>
                     <a href="#" id="despachom" class="block px-8 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm">
-                        📦 Despacho M&M
+                        <span class="sidebar-text">📦 Despacho M&M</span>
+                        <span class="sidebar-initial">D</span>
                     </a>
                 </div>
             </div>
@@ -142,23 +215,27 @@
             <!-- OPCIONES con acordeón -->
             <div class="accordion-item">
                 <button class="accordion-toggle block w-full px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-slate-700 transition text-left flex items-center justify-between">
-                    <span>⚙️ Opciones</span>
-                    <svg class="w-4 h-4 transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    <span class="sidebar-text">⚙️ Opciones</span>
+                    <span class="sidebar-initial">O</span>
+                    <svg class="w-4 h-4 transition-transform duration-300 accordion-icon sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
                 <!-- Acordeón Opciones -->
                 <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300">
                     <a href="#" class="submenu-item block px-6 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm" data-submenu="buscar-factura" data-parent="opciones">
-                        🔍 Buscar Factura
+                        <span class="sidebar-text">🔍 Buscar Factura</span>
+                        <span class="sidebar-initial">BF</span>
                     </a>
                     <a href="#" class="submenu-item block px-6 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm" data-submenu="modificar-despacho" data-parent="opciones">
-                        ✏️ Modificar Despacho
+                        <span class="sidebar-text">✏️ Modificar Despacho</span>
+                        <span class="sidebar-initial">MD</span>
                     </a>
                     <a href="#" class="submenu-item block px-6 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm" data-submenu="retirar-almacen" data-parent="opciones">
-                        📤 Retirar de Almacén
+                        <span class="sidebar-text">📤 Retirar de Almacén</span>
+                        <span class="sidebar-initial">RA</span>
                     </a>
                 </div>
             </div>
-            <button class="w-full px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-900/20 transition text-left">🚪 Cerrar Sesión</button>
+            <button class="w-full px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-900/20 transition text-left"><span class="sidebar-text">🚪 Cerrar Sesión</span><span class="sidebar-initial">CS</span></button>
         </div>
     </div>
 
@@ -795,6 +872,40 @@
                 // Load the menu content (loadMenuItem handles visibility)
                 loadMenuItem(menuKey);
             });
+        });
+
+        // Toggle sidebar functionality
+        const toggleBtn = document.getElementById('toggle-sidebar-btn');
+        const logoToggle = document.getElementById('sidebar-logo-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        let isCollapsed = false;
+
+        function toggleSidebar() {
+            isCollapsed = !isCollapsed;
+            
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                toggleBtn.classList.add('collapsed');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                toggleBtn.classList.remove('collapsed');
+            }
+        }
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSidebar();
+        });
+
+        // Click en el logo para expandir
+        logoToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isCollapsed) {
+                toggleSidebar();
+            }
         });
     </script>
 
