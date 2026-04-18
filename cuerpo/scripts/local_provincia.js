@@ -84,6 +84,8 @@ document.getElementById("alm8").addEventListener("click",(e)=>{
 document.getElementById("despacho").addEventListener("click",(e)=>{
     e.preventDefault();
     toggleAccordion('despacho-opc', 'despacho');
+    emitir_eventos('despacho', null);
+    loadMenuItem('despacho-principal');
 })
 
 document.getElementById("despachop").addEventListener("click",(e)=>{
