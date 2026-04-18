@@ -4,39 +4,96 @@ socket.on('a despacho',()=>refresco());///para mostrar los nuevos pasados a desp
 socket.on('despacho venideros',(programados)=>{
     document.getElementById("tabla-1-titulo").textContent="Nuevos Documentos";
     document.getElementById("tabla-1-descripcion").textContent="Nuevos documentos programados que vendran";
+    document.getElementById("tablero-maestro-control-inicio").innerHTML="";
     
-    const tbody = document.querySelector("#tablero-maestro-control-inicio tbody");
-    tbody.innerHTML="";
+    // const tbody = document.querySelector("#tablero-maestro-control-inicio tbody");
+    // tbody.innerHTML="";
     
     console.log("despacho los que vienen")
     console.log(programados);
 
-    for(let doc in programados){
-        const fecha=document.createElement('td');
-        fecha.className="font-mono bg-red-500";
-        fecha.textContent=programados[doc][0];
-        fecha.addEventListener('click',()=>factura_observacion(programados[doc][0]))
+    // for(let doc in programados){
+    //     const fecha=document.createElement('td');
+    //     fecha.className="font-mono bg-red-500";
+    //     fecha.textContent=programados[doc][0];
+    //     fecha.addEventListener('click',()=>factura_observacion(programados[doc][0]))
 
-        const item2=document.createElement('td');
-        item2.textContent=programados[doc][1];        
+    //     const item2=document.createElement('td');
+    //     item2.textContent=programados[doc][1];        
+
+    //     const cliente=document.createElement('td');
+    //     cliente.textContent=programados[doc][2];
+
+    //     const destino=document.createElement('td');
+    //     // destino.textContent=programados[doc][3];///ERA PARA DEAR SOLO EL DESTINO
+    //     programados[doc][1]==='P' ? destino.textContent=programados[doc][4] : destino.textContent=programados[doc][3];
+
+    //     const armason=document.createElement("tr");
+    //     armason.className="hover:bg-gray-50 transition";
+        
+    //     armason.appendChild(fecha);
+    //     armason.appendChild(item2);
+    //     armason.appendChild(cliente);
+    //     armason.appendChild(destino);
+
+    //     tbody.appendChild(armason);
+    // }
+    ///////////revisar separacion sino revivir
+    const thead=document.createElement('thead');
+    thead.className= 'bg-indigo-600 text-white sticky top-0';
+    const headerRow=document.createElement('tr');
+    const headers=['Documento','Salida','Cliente','Destino','Currier'];
+    headers.forEach(header => {
+        const th=document.createElement('th');
+        th.textContent=header;
+        th.className="px-6 py-3 text-left font-semibold";
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    document.getElementById("tablero-maestro-control-inicio").appendChild(thead);
+
+    const cuerpo=document.createElement('tbody');
+    let rowIndex = 0;
+    for(let doc in programados){
+        const documento=document.createElement('td');
+        documento.textContent=programados[doc][0];
+        documento.className="px-6 py-4 border-b border-gray-200";
+
+        const salida=document.createElement('td');
+        salida.textContent=programados[doc][1];
+        salida.className="px-6 py-4 border-b border-gray-200";
 
         const cliente=document.createElement('td');
         cliente.textContent=programados[doc][2];
+        cliente.className="px-6 py-4 border-b border-gray-200";
 
         const destino=document.createElement('td');
-        // destino.textContent=programados[doc][3];///ERA PARA DEAR SOLO EL DESTINO
-        programados[doc][1]==='P' ? destino.textContent=programados[doc][4] : destino.textContent=programados[doc][3];
+        destino.className="px-6 py-4 border-b border-gray-200";
+        destino.textContent=programados[doc][3];
 
-        const armason=document.createElement("tr");
-        armason.className="hover:bg-gray-50 transition";
+        const currier=document.createElement('td');
+        currier.className="px-6 py-4 border-b border-gray-200";
+        currier.textContent=programados[doc][4]
         
-        armason.appendChild(fecha);
-        armason.appendChild(item2);
-        armason.appendChild(cliente);
-        armason.appendChild(destino);
+        const fila=document.createElement('tr');
 
-        tbody.appendChild(armason);
+        if(rowIndex % 2 === 0){
+            fila.className="bg-white hover:bg-indigo-50 transition";
+        }
+        else{
+            fila.className="bg-gray-50 hover:bg-indigo-50 transition";
+        }
+        fila.appendChild(documento);
+        fila.appendChild(salida);
+        fila.appendChild(cliente);
+        fila.appendChild(destino);
+        fila.appendChild(currier);
+        // tbody.appendChild(fila);
+
+        cuerpo.appendChild(fila);
+        rowIndex++;
     }
+    document.getElementById("tablero-maestro-control-inicio").appendChild(cuerpo);
 })
 
 socket.on('despacho recolectados',(programados,alm)=>{
