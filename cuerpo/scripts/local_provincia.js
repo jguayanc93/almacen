@@ -81,11 +81,20 @@ document.getElementById("alm8").addEventListener("click",(e)=>{
 })
 
 //////DESPACHO
-document.getElementById("despacho").addEventListener("click",(e)=>{
+// El acordeón de Despacho es manejado automáticamente por el script en index.html
+
+document.getElementById("despachop").addEventListener("click",(e)=>{
     e.preventDefault();
+    emitir_eventos('despacho',1);
     toggleAccordion('despacho-opc', 'despacho');
-    emitir_eventos('despacho', null);
     loadMenuItem('despacho-principal');
+})
+
+document.getElementById("despachom").addEventListener("click",(e)=>{
+    e.preventDefault();
+    emitir_eventos('despacho',8);
+    toggleAccordion('despacho-opc', 'despacho');
+    loadMenuItem('despacho-mym');
 })
 
 document.getElementById("despachop").addEventListener("click",(e)=>{

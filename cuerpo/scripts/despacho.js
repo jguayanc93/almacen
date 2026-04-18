@@ -2,14 +2,14 @@
 socket.on('a despacho',()=>refresco());///para mostrar los nuevos pasados a despacho pero sin chekeado2
 ///////FALTA CREAR SUS RESPECTIVOS EVENTOS PARA EL CHECK2 Y EL EMBALADO Y OTRA FUNCION
 socket.on('despacho venideros',(programados)=>{
-    document.getElementById("tabla1titulo").textContent="Nuevos Documentos";
-    document.getElementById("tabla1descripcion").textContent="Nuevos documentos programados que vendran";
-    document.getElementById("tablero-maestro-control-inicio").innerHTML="";
-    /////////TERMINA DE REEMPLAZAR A DONDE DEBE INSERTARSE ESTAS DATA EN SUS RESPECTIVOS ELEMENTOS
+    document.getElementById("tabla-1-titulo").textContent="Nuevos Documentos";
+    document.getElementById("tabla-1-descripcion").textContent="Nuevos documentos programados que vendran";
+    
+    const tbody = document.querySelector("#tablero-maestro-control-inicio tbody");
+    tbody.innerHTML="";
+    
     console.log("despacho los que vienen")
     console.log(programados);
-
-    const cuerpo=document.createElement('tbody');
 
     for(let doc in programados){
         const fecha=document.createElement('td');
@@ -28,26 +28,28 @@ socket.on('despacho venideros',(programados)=>{
         programados[doc][1]==='P' ? destino.textContent=programados[doc][4] : destino.textContent=programados[doc][3];
 
         const armason=document.createElement("tr");
+        armason.className="hover:bg-gray-50 transition";
         
         armason.appendChild(fecha);
         armason.appendChild(item2);
         armason.appendChild(cliente);
         armason.appendChild(destino);
 
-        cuerpo.appendChild(armason);
+        tbody.appendChild(armason);
     }
-    document.getElementById("tablero-maestro-control-inicio").appendChild(cuerpo);
 })
 
 socket.on('despacho recolectados',(programados,alm)=>{
-    document.getElementById("tabla2titulo").textContent="Control Checking";
-    document.getElementById("tabla2descripcion").textContent="Permite observar los documentos terminados de almacen que pasaron a Despacho";
-    document.getElementById("tablero-maestro-control-medio").innerHTML="";
+    document.getElementById("tabla-2-titulo").textContent="Control Checking";
+    document.getElementById("tabla-2-descripcion").textContent="Permite observar los documentos terminados de almacen que pasaron a Despacho";
+    
+    const tbody = document.querySelector("#tablero-maestro-control-medio tbody");
+    tbody.innerHTML="";
+    
     console.log("documentos que pasaron el cheking")
     console.log(programados);
     console.log(alm)
 
-    const cuerpo=document.createElement('tbody');
     for(let doc in programados){
         const item1=document.createElement('td');
         item1.className="font-mono";
@@ -70,24 +72,26 @@ socket.on('despacho recolectados',(programados,alm)=>{
         boton.addEventListener("click",()=>estado_despacho_check(programados[doc][0],alm));
 
         const armason=document.createElement("tr");
+        armason.className="hover:bg-gray-50 transition";
         armason.appendChild(item1);
         armason.appendChild(despacho);
         armason.appendChild(cliente);
         armason.appendChild(destino);
         armason.appendChild(boton)///aun falta agregar bien la logica aqui
 
-        cuerpo.appendChild(armason);
+        tbody.appendChild(armason);
     }
-    document.getElementById("tablero-maestro-control-medio").appendChild(cuerpo);
 })
 socket.on('despacho embalados',(programados,alm)=>{
-    document.getElementById("tabla3titulo").textContent="Embalar";
-    document.getElementById("tabla3descripcion").textContent="Control de documentos Embalados";
-    document.getElementById("tablero-maestro-control-fin").innerHTML="";
+    document.getElementById("tabla-3-titulo").textContent="Embalar";
+    document.getElementById("tabla-3-descripcion").textContent="Control de documentos Embalados";
+    
+    const tbody = document.querySelector("#tablero-maestro-control-fin tbody");
+    tbody.innerHTML="";
+    
     console.log("documentos para embalar")
     console.log(programados)
 
-    const cuerpo=document.createElement('tbody');
     for(let doc in programados){
         const item1=document.createElement('td');
         item1.textContent=programados[doc][0];
@@ -106,14 +110,14 @@ socket.on('despacho embalados',(programados,alm)=>{
         boton.addEventListener("click",()=>estado_despacho_embalado(programados[doc][0],alm));
 
         const armason=document.createElement("tr");
+        armason.className="hover:bg-gray-50 transition";
         armason.appendChild(item1)
         armason.appendChild(item2)
         armason.appendChild(item3)
         armason.appendChild(boton)
 
-        cuerpo.appendChild(armason);
+        tbody.appendChild(armason);
     }
-    document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo);
 })
 
 function estado_despacho_check(documento,alm){
