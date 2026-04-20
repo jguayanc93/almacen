@@ -200,23 +200,68 @@ socket.on('despacho recolectados',(programados,alm)=>{
 socket.on('despacho embalados',(programados,alm)=>{
     document.getElementById("tabla-3-titulo").textContent="Embalar";
     document.getElementById("tabla-3-descripcion").textContent="Control de documentos Embalados";
+    document.getElementById("tablero-maestro-control-fin").innerHTML="";
     
-    const tbody = document.querySelector("#tablero-maestro-control-fin tbody");
-    tbody.innerHTML="";
+    // const tbody = document.querySelector("#tablero-maestro-control-fin tbody");
+    // tbody.innerHTML="";
     
     console.log("documentos para embalar")
     console.log(programados)
 
+    // for(let doc in programados){
+    //     const item1=document.createElement('td');
+    //     item1.textContent=programados[doc][0];
+    //     item1.addEventListener("click",()=>factura_observacion(programados[doc][0]))
+
+    //     const item2=document.createElement('td');
+    //     item2.textContent=programados[doc][1];
+
+    //     const item3=document.createElement('td');
+    //     item3.textContent=programados[doc][2];
+
+    //     const boton=document.createElement("button");
+    //     boton.setAttribute("id","gui"+programados[doc][0]);
+    //     boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
+    //     boton.textContent="EMBALADO";
+    //     boton.addEventListener("click",()=>estado_despacho_embalado(programados[doc][0],alm));
+
+    //     const armason=document.createElement("tr");
+    //     armason.className="hover:bg-gray-50 transition";
+    //     armason.appendChild(item1)
+    //     armason.appendChild(item2)
+    //     armason.appendChild(item3)
+    //     armason.appendChild(boton)
+
+    //     tbody.appendChild(armason);
+    // }
+    ///////////revisar separacion sino revivir
+    const thead=document.createElement('thead');
+    thead.className='bg-amber-600 text-white sticky top-0';
+    const headerRow=document.createElement('tr');
+    const headers=['Documento','Salida','Cliente','Destino','Accion'];
+    headers.forEach(header => {
+        const th=document.createElement('th');  
+        th.textContent=header;
+        th.className="px-6 py-3 text-left font-semibold";
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    document.getElementById("tablero-maestro-control-medio").appendChild(thead);
+
+    const cuerpo=document.createElement('tbody');
+    let rowIndex = 0;
     for(let doc in programados){
-        const item1=document.createElement('td');
-        item1.textContent=programados[doc][0];
-        item1.addEventListener("click",()=>factura_observacion(programados[doc][0]))
+        const documento=document.createElement('td');
+        documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600 cursor-pointer hover:underline";
+        documento.textContent=programados[doc][0];
 
-        const item2=document.createElement('td');
-        item2.textContent=programados[doc][1];
+        const salida=document.createElement('td');
+        salida.className="px-6 py-4 border-b border-gray-200";
+        salida.textContent=programados[doc][1];
 
-        const item3=document.createElement('td');
-        item3.textContent=programados[doc][2];
+        const cliente=document.createElement('td');
+        cliente.className="px-6 py-4 border-b border-gray-200";
+        cliente.textContent=programados[doc][2];
 
         const boton=document.createElement("button");
         boton.setAttribute("id","gui"+programados[doc][0]);
@@ -226,13 +271,16 @@ socket.on('despacho embalados',(programados,alm)=>{
 
         const armason=document.createElement("tr");
         armason.className="hover:bg-gray-50 transition";
-        armason.appendChild(item1)
-        armason.appendChild(item2)
-        armason.appendChild(item3)
+        armason.appendChild(documento)
+        armason.appendChild(salida)
+        armason.appendChild(cliente)
         armason.appendChild(boton)
 
-        tbody.appendChild(armason);
+        cuerpo.appendChild(armason);
+        rowIndex++;
     }
+    document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo);
+
 })
 
 function estado_despacho_check(documento,alm){
