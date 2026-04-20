@@ -141,11 +141,11 @@ socket.on('despacho recolectados',(programados,alm)=>{
     // }
     ///////////revisar separacion sino revivir
     const thead=document.createElement('thead');
-    thead.className='bg-amber-600 text-white sticky top-0';
+    thead.className='bg-indigo-600 text-white sticky top-0';
     const headerRow=document.createElement('tr');
     const headers=['Documento','Salida','Cliente','Destino','Accion'];
     headers.forEach(header => {
-        const th=document.createElement('th');  
+        const th=document.createElement('th');
         th.textContent=header;
         th.className="px-6 py-3 text-left font-semibold";
         headerRow.appendChild(th);
@@ -246,7 +246,7 @@ socket.on('despacho embalados',(programados,alm)=>{
         headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
-    document.getElementById("tablero-maestro-control-medio").appendChild(thead);
+    document.getElementById("tablero-maestro-control-fin").appendChild(thead);
 
     const cuerpo=document.createElement('tbody');
     let rowIndex = 0;
