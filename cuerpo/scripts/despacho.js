@@ -269,14 +269,21 @@ socket.on('despacho embalados',(programados,alm)=>{
         boton.textContent="EMBALADO";
         boton.addEventListener("click",()=>estado_despacho_embalado(programados[doc][0],alm));
 
-        const armason=document.createElement("tr");
-        armason.className="hover:bg-gray-50 transition";
-        armason.appendChild(documento)
-        armason.appendChild(salida)
-        armason.appendChild(cliente)
-        armason.appendChild(boton)
+        const fila=document.createElement("tr");
 
-        cuerpo.appendChild(armason);
+        if(rowIndex % 2 === 0){
+            fila.className="bg-white hover:bg-gray-50 transition";
+        }
+        else{
+            fila.className="bg-gray-50 hover:bg-gray-50 transition";
+        }
+        fila.className="hover:bg-gray-50 transition";
+        fila.appendChild(documento)
+        fila.appendChild(salida)
+        fila.appendChild(cliente)
+        fila.appendChild(boton)
+
+        cuerpo.appendChild(fila);
         rowIndex++;
     }
     document.getElementById("tablero-maestro-control-fin").appendChild(cuerpo);
