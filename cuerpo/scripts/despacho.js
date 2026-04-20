@@ -141,7 +141,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
     // }
     ///////////revisar separacion sino revivir
     const thead=document.createElement('thead');
-    thead.className='bg-indigo-600 text-white sticky top-0';
+    thead.className='bg-amber-600 text-white sticky top-0';
     const headerRow=document.createElement('tr');
     const headers=['Documento','Salida','Cliente','Destino','Accion'];
     headers.forEach(header => {
@@ -236,9 +236,9 @@ socket.on('despacho embalados',(programados,alm)=>{
     // }
     ///////////revisar separacion sino revivir
     const thead=document.createElement('thead');
-    thead.className='bg-amber-600 text-white sticky top-0';
+    thead.className='bg-red-600 text-white sticky top-0';
     const headerRow=document.createElement('tr');
-    const headers=['Documento','Salida','Cliente','Destino','Accion'];
+    const headers=['Documento','Salida','Cliente','Accion'];
     headers.forEach(header => {
         const th=document.createElement('th');  
         th.textContent=header;
