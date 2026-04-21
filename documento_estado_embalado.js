@@ -15,13 +15,13 @@ function documento_despacho_embalado_conexion(resolve,reject){
     });
 }
 
-function obtenerpromesa_embalado_consulta(conexion,io,ndoc,user,alm){
+function obtenerpromesa_embalado_consulta(conexion,io,ndoc,user,alm,salida){
     return new Promise((resolve,reject)=>{
-        documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm)
+        documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm,salida)
     })
 }
 
-function documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm){
+function documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm,salida){
     let sp_sql="jc_documentos_estado_embalado_despacho";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -31,7 +31,7 @@ function documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm){
         else{
             conexion.close();
             if(rows.length==0){
-                io.to(`ZONA DESPACHO`).emit('despacho embalados',{},alm);
+                io.to(`ZONA DESPACHO`).emit('despacho embalados',{},alm,salida);
                 resolve("EMBALADO DESPACHO CONFORME Y PASADO A 1");
             }
             else{
@@ -48,7 +48,7 @@ function documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm){
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                io.to(`ZONA DESPACHO`).emit('despacho embalados',respuesta2,alm);
+                io.to(`ZONA DESPACHO`).emit('despacho embalados',respuesta2,alm,salida);
                 resolve("EMBALADO DESPACHO CONFORME Y PASADO A 1");
             }
         }
@@ -57,6 +57,7 @@ function documento_despacho_embalado(resolve,reject,conexion,io,ndoc,user,alm){
     consulta.addParameter('user',TYPES.VarChar,user);
     consulta.addParameter('alm',TYPES.Int,alm);
     consulta.addParameter('nivel',TYPES.Int,1);
+    consulta.addParameter('salida',TYPES.VarChar,salida);
     conexion.callProcedure(consulta);
 }
 

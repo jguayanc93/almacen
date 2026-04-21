@@ -264,7 +264,7 @@ io.on('connection',(socket)=>{
             const persona=await obtenerpromesa_usuario_consulta(llamada,user);
             ///////////////////////////
             const primera_llamada=await obtenerpromesa_embalado();
-            const segunda_llamada=await obtenerpromesa_embalado_consulta(primera_llamada,io,ndoc,persona,alm);
+            const segunda_llamada=await obtenerpromesa_embalado_consulta(primera_llamada,io,ndoc,persona,alm,salida);
         }
         catch(err){console.log(err)}
     })
