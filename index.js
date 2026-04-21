@@ -106,25 +106,25 @@ io.on('connection',(socket)=>{
         
     })
 
-    socket.on('despacho',async (alm)=>{
+    socket.on('despacho',async (alm,salida)=>{
         // socket.join("ZONA DESPACHO");
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"DESPACHO");
-            await despachop(socket,alm);
+            await despachop(socket,alm,salida);
         }
         catch(err){console.log(err)}
 
-        async function despachop(socket,alm){
+        async function despachop(socket,alm,salida){
             try{
                 const primera_llamada=await obtenerpromesa_despacho();
-                const segunda_llamada=await obtenerpromesa_despacho_consulta(primera_llamada,socket,alm);
+                const segunda_llamada=await obtenerpromesa_despacho_consulta(primera_llamada,socket,alm,salida);
                 
                 const tercera_llamada=await obtenerpromesa_despacho();
-                const cuarta_llamada=await obtenerpromesa_despacho_consulta2(tercera_llamada,socket,alm);
+                const cuarta_llamada=await obtenerpromesa_despacho_consulta2(tercera_llamada,socket,alm,salida);
 
                 const quinta_llamada=await obtenerpromesa_despacho();
-                const sexta_llamada=await obtenerpromesa_despacho_consulta3(quinta_llamada,socket,alm);
+                const sexta_llamada=await obtenerpromesa_despacho_consulta3(quinta_llamada,socket,alm,salida);
             }
             catch(error){ console.log(error);}
         }
@@ -243,21 +243,21 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
 
-    socket.on('despacho check',async (ndoc,alm,user)=>{
+    socket.on('despacho check',async (ndoc,alm,salida,user)=>{
         try{
             /////////PARTE PARA SACAR EL USUARIO ACEPTADO
             const llamada=await obtenerpromesa_usuario();
             const persona=await obtenerpromesa_usuario_consulta(llamada,user);
             ///////////////////////////
             const primera_llamada=await obtenerpromesa_check2();
-            const segunda_llamada=await obtenerpromesa_check2_consulta(primera_llamada,io,ndoc,alm,persona);
+            const segunda_llamada=await obtenerpromesa_check2_consulta(primera_llamada,io,ndoc,alm,salida,persona);
             const tercera_llamada=await obtenerpromesa_check2();
-            const cuarta_llamada=await obtenerpromesa_check2_consulta2(tercera_llamada,io,ndoc,alm,user);
+            const cuarta_llamada=await obtenerpromesa_check2_consulta2(tercera_llamada,io,ndoc,alm,salida,user);
         }
         catch(err){console.log(err)}
     })
 
-    socket.on('despacho embalar',async (ndoc,alm,user)=>{
+    socket.on('despacho embalar',async (ndoc,alm,salida,user)=>{
         try{
             /////////PARTE PARA SACAR EL USUARIO ACEPTADO
             const llamada=await obtenerpromesa_usuario();

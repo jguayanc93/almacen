@@ -42,7 +42,7 @@ socket.on('despacho venideros',(programados)=>{
     const thead=document.createElement('thead');
     thead.className= 'bg-indigo-600 text-white sticky top-0';
     const headerRow=document.createElement('tr');
-    const headers=['Documento','Salida','Cliente','Destino','Currier'];
+    const headers=['Documento','Cliente','Destino','Currier'];
     headers.forEach(header => {
         const th=document.createElement('th');
         th.textContent=header;
@@ -59,21 +59,21 @@ socket.on('despacho venideros',(programados)=>{
         documento.textContent=programados[doc][0];
         documento.className="px-6 py-4 border-b border-gray-200";
 
-        const salida=document.createElement('td');
-        salida.textContent=programados[doc][1];
-        salida.className="px-6 py-4 border-b border-gray-200";
+        // const salida=document.createElement('td');
+        // salida.textContent=programados[doc][1];
+        // salida.className="px-6 py-4 border-b border-gray-200";
 
         const cliente=document.createElement('td');
-        cliente.textContent=programados[doc][2];
+        cliente.textContent=programados[doc][1];
         cliente.className="px-6 py-4 border-b border-gray-200";
 
         const destino=document.createElement('td');
         destino.className="px-6 py-4 border-b border-gray-200";
-        destino.textContent=programados[doc][3];
+        destino.textContent=programados[doc][2];
 
         const currier=document.createElement('td');
         currier.className="px-6 py-4 border-b border-gray-200";
-        currier.textContent=programados[doc][4]
+        currier.textContent=programados[doc][3]
         
         const fila=document.createElement('tr');
 
@@ -84,11 +84,10 @@ socket.on('despacho venideros',(programados)=>{
             fila.className="bg-gray-50 hover:bg-indigo-50 transition";
         }
         fila.appendChild(documento);
-        fila.appendChild(salida);
+        // fila.appendChild(salida);
         fila.appendChild(cliente);
         fila.appendChild(destino);
         fila.appendChild(currier);
-        // tbody.appendChild(fila);
 
         cuerpo.appendChild(fila);
         rowIndex++;
@@ -96,7 +95,7 @@ socket.on('despacho venideros',(programados)=>{
     document.getElementById("tablero-maestro-control-inicio").appendChild(cuerpo);
 })
 
-socket.on('despacho recolectados',(programados,alm)=>{
+socket.on('despacho recolectados',(programados,alm,salida)=>{
     document.getElementById("tabla-2-titulo").textContent="Control Checking";
     document.getElementById("tabla-2-descripcion").textContent="Permite observar los documentos terminados de almacen que pasaron a Despacho";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
@@ -107,6 +106,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
     console.log("documentos que pasaron el cheking")
     console.log(programados);
     console.log(alm)
+    console.log(salida)
 
     // for(let doc in programados){
     //     const item1=document.createElement('td');
@@ -143,7 +143,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
     const thead=document.createElement('thead');
     thead.className='bg-amber-600 text-white sticky top-0';
     const headerRow=document.createElement('tr');
-    const headers=['Documento','Salida','Cliente','Destino','Accion'];
+    const headers=['Documento','Cliente','Destino','Accion'];
     headers.forEach(header => {
         const th=document.createElement('th');
         th.textContent=header;
@@ -160,23 +160,24 @@ socket.on('despacho recolectados',(programados,alm)=>{
         documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600 cursor-pointer hover:underline";
         documento.textContent=programados[doc][0];
         
-        const salida=document.createElement('td');
-        salida.className="px-6 py-4 border-b border-gray-200";
-        salida.textContent=programados[doc][1];
+        // const salida=document.createElement('td');
+        // salida.className="px-6 py-4 border-b border-gray-200";
+        // salida.textContent=programados[doc][1];
 
         const cliente=document.createElement('td');
         cliente.className="px-6 py-4 border-b border-gray-200";
-        cliente.textContent=programados[doc][2];
+        cliente.textContent=programados[doc][1];
 
         const destino=document.createElement('td');
         destino.className="px-6 py-4 border-b border-gray-200";
-        programados[doc][1]==='P' ? destino.textContent=programados[doc][4] : destino.textContent=programados[doc][3];
+        // programados[doc][1]==='P' ? destino.textContent=programados[doc][4] : destino.textContent=programados[doc][3];
+        destino.textContent=programados[doc][2];
 
         const boton=document.createElement("button");
         boton.setAttribute("id","emb"+programados[doc][0]);
         boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
         boton.textContent="CHEKEADO";
-        boton.addEventListener("click",()=>estado_despacho_check(programados[doc][0],alm));
+        boton.addEventListener("click",()=>estado_despacho_check(programados[doc][0],alm,salida));
 
         const fila=document.createElement('tr');
 
@@ -187,7 +188,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
             fila.className="bg-gray-50 hover:bg-amber-50 transition";
         }
         fila.appendChild(documento);
-        fila.appendChild(salida);
+        // fila.appendChild(salida);
         fila.appendChild(cliente);
         fila.appendChild(destino);
         fila.appendChild(boton);
@@ -197,7 +198,7 @@ socket.on('despacho recolectados',(programados,alm)=>{
     }
     document.getElementById("tablero-maestro-control-medio").appendChild(cuerpo);
 })
-socket.on('despacho embalados',(programados,alm)=>{
+socket.on('despacho embalados',(programados,alm,salida)=>{
     document.getElementById("tabla-3-titulo").textContent="Embalar";
     document.getElementById("tabla-3-descripcion").textContent="Control de documentos Embalados";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
@@ -238,7 +239,7 @@ socket.on('despacho embalados',(programados,alm)=>{
     const thead=document.createElement('thead');
     thead.className='bg-red-600 text-white sticky top-0';
     const headerRow=document.createElement('tr');
-    const headers=['Documento','Salida','Cliente','Accion'];
+    const headers=['Documento','Cliente','Destino','Accion'];
     headers.forEach(header => {
         const th=document.createElement('th');  
         th.textContent=header;
@@ -255,19 +256,19 @@ socket.on('despacho embalados',(programados,alm)=>{
         documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600 cursor-pointer hover:underline";
         documento.textContent=programados[doc][0];
 
-        const salida=document.createElement('td');
-        salida.className="px-6 py-4 border-b border-gray-200";
-        salida.textContent=programados[doc][1];
-
         const cliente=document.createElement('td');
         cliente.className="px-6 py-4 border-b border-gray-200";
-        cliente.textContent=programados[doc][2];
+        cliente.textContent=programados[doc][1];
+
+        const destino=document.createElement('td');
+        destino.className="px-6 py-4 border-b border-gray-200";
+        destino.textContent=programados[doc][2];
 
         const boton=document.createElement("button");
         boton.setAttribute("id","gui"+programados[doc][0]);
         boton.className="bg-blue-500 rounded-md w-24 text-white text-sm font-mono";
         boton.textContent="EMBALADO";
-        boton.addEventListener("click",()=>estado_despacho_embalado(programados[doc][0],alm));
+        boton.addEventListener("click",()=>estado_despacho_embalado(programados[doc][0],alm,salida));
 
         const fila=document.createElement("tr");
 
@@ -279,8 +280,8 @@ socket.on('despacho embalados',(programados,alm)=>{
         }
         fila.className="hover:bg-gray-50 transition";
         fila.appendChild(documento)
-        fila.appendChild(salida)
         fila.appendChild(cliente)
+        fila.appendChild(destino)
         fila.appendChild(boton)
 
         cuerpo.appendChild(fila);
@@ -290,19 +291,19 @@ socket.on('despacho embalados',(programados,alm)=>{
 
 })
 
-function estado_despacho_check(documento,alm){
+function estado_despacho_check(documento,alm,salida){
     // console.log(documento);console.log(alm)
     let user=window.prompt(`quien va a chekear la factura ${documento}`,"aqui digitar numero de trabajador");
     if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
     else{
-        socket.emit('despacho check',documento,alm,user)
+        socket.emit('despacho check',documento,alm,salida,user)
     }
 }
 
-function estado_despacho_embalado(documento,alm){
+function estado_despacho_embalado(documento,alm,salida){
     let user=window.prompt(`quien va a embalar la factura ${documento}`,"aqui digitar numero de trabajador");
     if(user===null || user===''){ alert("valor no aceptable vuelve a intentarlo") }
     else{
-        socket.emit('despacho embalar',documento,alm,user)
+        socket.emit('despacho embalar',documento,alm,salida,user)
     }
 }

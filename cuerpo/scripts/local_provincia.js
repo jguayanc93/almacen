@@ -83,29 +83,44 @@ document.getElementById("alm8").addEventListener("click",(e)=>{
 //////DESPACHO
 // El acordeón de Despacho es manejado automáticamente por el script en index.html
 
-document.getElementById("despachop").addEventListener("click",(e)=>{
+// document.getElementById("despachop").addEventListener("click",(e)=>{
+//     e.preventDefault();
+//     emitir_eventos('despacho',1);
+//     toggleAccordion('despacho-opc', 'despacho');
+//     loadMenuItem('despacho-principal');
+// })
+
+// document.getElementById("despachom").addEventListener("click",(e)=>{
+//     e.preventDefault();
+//     emitir_eventos('despacho',8);
+//     toggleAccordion('despacho-opc', 'despacho');
+//     loadMenuItem('despacho-mym');
+// })
+///////////version nueva de segmentacion de despacho segun salida
+document.getElementById("despachop-l").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('despacho',1);
+    emitir_eventos('despacho',1,'L');
     toggleAccordion('despacho-opc', 'despacho');
     loadMenuItem('despacho-principal');
 })
 
-document.getElementById("despachom").addEventListener("click",(e)=>{
+document.getElementById("despachop-p").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('despacho',8);
+    emitir_eventos('despacho',1,'P');
+    toggleAccordion('despacho-opc', 'despacho');
+    loadMenuItem('despacho-principal');
+})
+
+document.getElementById("despachom-l").addEventListener("click",(e)=>{
+    e.preventDefault();
+    emitir_eventos('despacho',8,'L');
     toggleAccordion('despacho-opc', 'despacho');
     loadMenuItem('despacho-mym');
 })
 
-document.getElementById("despachop").addEventListener("click",(e)=>{
+document.getElementById("despachom-p").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('despacho',1);
-    toggleAccordion('despacho-opc', 'despacho');
-    loadMenuItem('despacho-principal');
-})
-document.getElementById("despachom").addEventListener("click",(e)=>{
-    e.preventDefault();
-    emitir_eventos('despacho',8);
+    emitir_eventos('despacho',8,'P');
     toggleAccordion('despacho-opc', 'despacho');
     loadMenuItem('despacho-mym');
 })

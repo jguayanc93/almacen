@@ -16,5 +16,6 @@ var pedidor=null;
 var contadorxglobalxcliente=1;
 var nombre_ev_actual="";/////CAPTURAR MOMENTANEAMENTE EL NOMBRE DEL EVENTO ACTUAL
 var valor_ev_actual="";////CAPTURAR EL VALOR PASADO AL EVENTO ACTUAL
+var salida_ev_actual="";////CAPTURAR EL VALOR DE SALIDA PASADO AL EVENTO ACTUAL PARA USARLO EN EL REFRESCO SI ES NECESARIO
 
 function detener(){clearInterval(pedidor);}
