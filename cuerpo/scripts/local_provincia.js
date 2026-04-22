@@ -95,7 +95,21 @@ document.getElementById("almmym").addEventListener("click",(e)=>{
 
 document.getElementById("alm8").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('almacen mym',8);
+    emitir_eventos('almacen mym',8,'G');
+    toggleAccordion('almmym-opc', 'almmym');
+    loadMenuItem('zona-unica');
+})
+
+document.getElementById("alm8-L").addEventListener("click",(e)=>{
+    e.preventDefault();
+    emitir_eventos('almacen mym',8,'L');
+    toggleAccordion('almmym-opc', 'almmym');
+    loadMenuItem('zona-unica');
+})
+
+document.getElementById("alm8-P").addEventListener("click",(e)=>{
+    e.preventDefault();
+    emitir_eventos('almacen mym',8,'P');
     toggleAccordion('almmym-opc', 'almmym');
     loadMenuItem('zona-unica');
 })
