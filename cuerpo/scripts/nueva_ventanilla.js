@@ -3,7 +3,7 @@ socket.on('registros nuevos',(registros)=>{
     if(registros[0]>contadorxglobalxcliente){
         contadorxglobalxcliente=registros[0];
         ////DEBO DE EMITIR A TODOS LOS SOCKET CONECTADOS DE CADA MAQUINA INDIVIDUAL
-        emitir_eventos(nombre_ev_actual,valor_ev_actual);
+        emitir_eventos(nombre_ev_actual,valor_ev_actual,salida_ev_actual);
         // socket.emit(nombre_ev_actual,valor_ev_actual);
     }
 })
