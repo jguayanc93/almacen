@@ -7,7 +7,7 @@ document.getElementById("ventanilla").addEventListener("click",(e)=>{
 
 function pasando_a_ventanilla(){
     document.getElementById("distribucion").innerHTML="";
-    emitir_eventos('ventanilla',0)
+    emitir_eventos('ventanilla',0,'G')
 }
 
 // Función auxiliar para togglear accordion

@@ -71,13 +71,13 @@ io.on('connection',(socket)=>{
     })
     ////MASTER DE VENTANILLA
     /////////ERROR AL ENTRAR A VENTANILLA PORQUE NO SABE QUE USUARIO A SIDO SOLO LE PASARON EL VALOR DE 0
-    socket.on('ventanilla',async (alm)=>{
+    socket.on('ventanilla',async (alm,salida)=>{
         //////FALTA AGREGAR LA VALIDES DEL USUARIO AL RECIBIR SUS PARAMETROS
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"VENTANILLA");
             console.log(grupo);
-            await almventanilla(socket,alm);
+            await almventanilla(socket,alm,salida);
         }
         catch(err){console.log(err)}
 
