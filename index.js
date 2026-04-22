@@ -83,12 +83,12 @@ io.on('connection',(socket)=>{
 
     })
     /////MASTER DE LOCAL-PROVINCIA
-    socket.on('almacen principal',async (alm)=>{
+    socket.on('almacen principal',async (alm,salida)=>{
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"PRINCIPAL");
             console.log(grupo);
-            await almprincipal(socket,alm);
+            await almprincipal(socket,alm,salida);
         }
         catch(err){console.log(err)};
     })

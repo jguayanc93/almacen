@@ -36,7 +36,27 @@ document.getElementById("almprincipal").addEventListener("click",(e)=>{
 
 document.getElementById("alm1").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('almacen principal',1)
+    ///aqui tendremos que ver la manera de mantener el evento para todos y para sus segmentos
+    // emitir_eventos('almacen principal',1)
+    emitir_eventos('almacen principal',1,'G');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('almacen-principal');
+})
+
+document.getElementById("alm1-L").addEventListener("click",(e)=>{
+    e.preventDefault();
+    ///aqui tendremos que ver la manera de mantener el evento para todos y para sus segmentos
+    // emitir_eventos('almacen principal',1)
+    emitir_eventos('almacen principal',1,'L');
+    toggleAccordion('almprincipal-opc', 'almprincipal');
+    loadMenuItem('almacen-principal');
+})
+
+document.getElementById("alm1-P").addEventListener("click",(e)=>{
+    e.preventDefault();
+    ///aqui tendremos que ver la manera de mantener el evento para todos y para sus segmentos
+    // emitir_eventos('almacen principal',1)
+    emitir_eventos('almacen principal',1,'P');
     toggleAccordion('almprincipal-opc', 'almprincipal');
     loadMenuItem('almacen-principal');
 })
