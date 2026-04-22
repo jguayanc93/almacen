@@ -695,7 +695,8 @@
                 if (menuKey === 'ventanilla') {
                     emitir_eventos('ventanilla', 0);
                 } else if (menuKey === 'almacen-principal') {
-                    emitir_eventos('almacen principal', 1);
+                    // esta duplicidad de eventos es innecesaria por el momento
+                    // emitir_eventos('almacen principal', 1);
                 } else if (menuKey === 'zona-1') {
                     emitir_eventos('cambio zona', 'Z1');
                 } else if (menuKey === 'zona-2') {
@@ -705,7 +706,7 @@
                 } else if (menuKey === 'zona-desconocido') {
                     emitir_eventos('cambio zona', 'desconocido');
                 } else if (menuKey === 'almacen-mym') {
-                    emitir_eventos('almacen mym', 8);
+                    // emitir_eventos('almacen mym', 8);
                 } else if (menuKey === 'zona-unica') {
                     emitir_eventos('almacen mym', 8);
                 } else if (menuKey === 'despacho-principal') {
