@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function local_provincia_registrosmm2(resolve,reject,conexion,socket,alm){
+function local_provincia_registrosmm2(resolve,reject,conexion,socket,alm,salida){
     let sp_sql="jc_documentos_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -34,6 +34,7 @@ function local_provincia_registrosmm2(resolve,reject,conexion,socket,alm){
     // conexion.execSql(consulta);
     consulta.addParameter('despacho', TYPES.Int,alm);
     consulta.addParameter('mostrar', TYPES.VarChar,'estados');
+    consulta.addParameter('salida', TYPES.VarChar,salida);
     conexion.callProcedure(consulta);
 }
 

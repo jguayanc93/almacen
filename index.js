@@ -93,14 +93,14 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)};
     })
 
-    socket.on('almacen mym',async (alm)=>{
+    socket.on('almacen mym',async (alm,salida)=>{
         
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"MYM");
             console.log(grupo);
             // disparo=setInterval(almmym,2000,socket,alm);
-            await almmym(socket,alm);
+            await almmym(socket,alm,salida);
         }
         catch(err){console.log(err)}
         
