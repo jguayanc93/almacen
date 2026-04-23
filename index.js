@@ -131,7 +131,7 @@ io.on('connection',(socket)=>{
     })
     //////////////NO TE OLVIDES VALIDAR LA ZONAS Y EL CAMBIO ENTRE OPCIONES PORQE PODRIA ROMPER LA CONEXION
 
-    socket.on('cambio zona',async (zona)=>{
+    socket.on('cambio zona',async (zona,general)=>{
 
         try{
             const observador=await zonas_limpiador(socket);

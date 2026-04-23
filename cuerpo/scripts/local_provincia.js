@@ -64,25 +64,25 @@ document.getElementById("alm1-P").addEventListener("click",(e)=>{
 ///////EMISORES DE ZONAS
 document.getElementById("Z1").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('cambio zona','Z1');
+    emitir_eventos('cambio zona','Z1','G');
     toggleAccordion('almprincipal-opc', 'almprincipal');
     loadMenuItem('zona-1');
 })
 document.getElementById("Z2").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('cambio zona','Z2');
+    emitir_eventos('cambio zona','Z2','G');
     toggleAccordion('almprincipal-opc', 'almprincipal');
     loadMenuItem('zona-2');
 })
 document.getElementById("Z3").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('cambio zona','Z3');
+    emitir_eventos('cambio zona','Z3','G');
     toggleAccordion('almprincipal-opc', 'almprincipal');
     loadMenuItem('zona-3');
 })
 document.getElementById("desconocido").addEventListener("click",(e)=>{
     e.preventDefault();
-    emitir_eventos('cambio zona','desconocido')
+    emitir_eventos('cambio zona','desconocido','G');
     toggleAccordion('almprincipal-opc', 'almprincipal');
     loadMenuItem('zona-desconocido');
 })
