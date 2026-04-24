@@ -3,6 +3,7 @@
 /////crearemmos 2 eventos para llamar a un buscador y luego otro para mostrar lo buscado
 document.getElementById("crear-ruta-cliente").addEventListener("click",(e)=>{
     e.preventDefault();
+    loadMenuItem('ventanilla');
     emitir_eventos('cliente ruta','cliente',1);
 })
 
