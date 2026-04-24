@@ -269,6 +269,25 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
 
+    ////////temporal luego mover a otro directorio
+    socket.on('cliente ruta',async ()=>{
+        try{
+            const bservador=await zonas_limpiador(socket);
+            // const grupo=await nueva_zone(socket,"RUTAS")
+            await crear_buscador(socket);
+        }
+        catch(err){console.log(err)}
+
+        async function crear_buscador(socket){
+            try{
+                socket.emit('mostrar ruta');
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+    })
+
     
 })
 
