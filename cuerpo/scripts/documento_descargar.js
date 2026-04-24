@@ -6,7 +6,7 @@ document.getElementById("crear-ruta-cliente").addEventListener("click",(e)=>{
     emitir_eventos('cliente ruta','cliente',1);
 })
 
-Socket.on('mostrar ruta',()=>{
+socket.on('mostrar ruta',()=>{
     document.getElementById("tabla-1-titulo").textContent = "Buscar Cliente";
     document.getElementById("tabla-1-descripcion").textContent = "ingresa tu cliente para asignacion de ruta";
     document.getElementById("tablero-maestro-control-inicio").innerHTML = "";
@@ -36,7 +36,7 @@ Socket.on('mostrar ruta',()=>{
     })
 })
 
-// Socket.on('mostrar cliente',(data)=>{
+// socket.on('mostrar cliente',(data)=>{
 //     document.getElementById("tabla-1-titulo").textContent = "Cliente Destinos";
 //     document.getElementById("tabla-1-descripcion").textContent = "direcciones de los clientes";
 //     document.getElementById("tablero-maestro-control-inicio").innerHTML = "";
