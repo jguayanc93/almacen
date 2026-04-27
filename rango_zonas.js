@@ -8,7 +8,8 @@ const cuartos=[
     'ZONA VENTANILLA',
     'ZONA PRINCIPAL',
     'ZONA MYM',
-    'ZONA DESPACHO'
+    'ZONA DESPACHO',
+    'ZONA DOCUMENTO'
 ];
 ///////nueva version de rango de zonas, ahora con el nombre de las zonas, esto es para evitar errores de tipeo en el futuro
 const cuartos2=[

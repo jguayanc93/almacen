@@ -131,6 +131,11 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     // }
 })
 
+////evento para el evento de documento filtrado en el buscador de documento
+socket.on('documento filtrado',(registros)=>{
+    
+})
+
 socket.on('ventanilla mestro estados',(registros)=>{
     document.getElementById("tabla-2-titulo").textContent="Tablero Control";
     document.getElementById("tabla-2-descripcion").textContent="Permite observar el flujo del documento y en que estado se encuentra";

@@ -5,6 +5,27 @@ document.getElementById("ventanilla").addEventListener("click",(e)=>{
     loadMenuItem('ventanilla');
 })
 
+document.getElementById('tabla-1-filtro').addEventListener('search', BuscarDocumento);
+
+function BuscarDocumento(event) {
+    console.log('Buscando documento:', event.target.value);
+    const documento = event.target.value;
+    if(documento === '') {
+        // Si el campo de búsqueda está vacío, puedes optar por mostrar todos los registros o limpiar la tabla
+        // emitir_eventos('filtrar documento', documento, 'G');
+        console.log('Campo de búsqueda vacío, mostrando todos los registros');
+    }
+    else {
+        if(documento.length < 12 || documento.length > 12) {
+            alert('Por favor, ingrese un documento válido para la búsqueda.');
+            return;
+        }
+        else {
+            emitir_eventos('filtrar documento',0 , documento, 'G');
+        }        
+    }
+}
+
 function pasando_a_ventanilla(){
     document.getElementById("distribucion").innerHTML="";
     emitir_eventos('ventanilla',0,'G')
