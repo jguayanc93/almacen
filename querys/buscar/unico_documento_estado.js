@@ -12,13 +12,13 @@ function ventanilla_registros2_unico(resolve,reject,conexion,socket,alm,ndoc,sal
             if(rows.length==0){
                 // socket.emit('ventanilla mestro estados',{});
                 if(alm===0){
-                    socket.emit('ventanilla mestro nuevos',{});
+                    socket.emit('ventanilla mestro estados',{});
                 }
                 else if(alm===1){
                     socket.emit('ventanilla mestro estados',{});
                 }
                 else if(alm===8){
-                    socket.emit('ventanilla mestro terminados',{});
+                    socket.emit('ventanilla mestro estados',{});
                 }
                 resolve('ventanilla registros estados enviados')
             }
@@ -38,13 +38,13 @@ function ventanilla_registros2_unico(resolve,reject,conexion,socket,alm,ndoc,sal
                 Object.assign(respuesta2,respuesta);
                 // socket.emit('ventanilla mestro estados',respuesta2);
                 if(alm===0){
-                    socket.emit('ventanilla mestro nuevos',respuesta2);
+                    socket.emit('ventanilla mestro estados',respuesta2);
                 }
                 else if(alm===1){
                     socket.emit('ventanilla mestro estados',respuesta2);
                 }
                 else if(alm===8){
-                    socket.emit('ventanilla mestro terminados',respuesta2);
+                    socket.emit('ventanilla mestro estados',respuesta2);
                 }
                 resolve('ventanilla registros estados enviados')
             }

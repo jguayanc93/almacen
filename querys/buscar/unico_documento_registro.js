@@ -13,10 +13,10 @@ function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc,salid
                     socket.emit('ventanilla mestro nuevos',{});
                 }
                 else if(alm===1){
-                    socket.emit('ventanilla mestro estados',{});
+                    socket.emit('ventanilla mestro nuevos',{});
                 }
                 else if(alm===8){
-                    socket.emit('ventanilla mestro terminados',{});
+                    socket.emit('ventanilla mestro nuevos',{});
                 }
                 resolve('ventanilla registros nuevos enviados');
             }
@@ -39,10 +39,10 @@ function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc,salid
                     socket.emit('ventanilla mestro nuevos',respuesta2);
                 }
                 else if(alm===1){
-                    socket.emit('ventanilla mestro estados',respuesta2);
+                    socket.emit('ventanilla mestro nuevos',respuesta2);
                 }
                 else if(alm===8){
-                    socket.emit('ventanilla mestro terminados',respuesta2);
+                    socket.emit('ventanilla mestro nuevos',respuesta2);
                 }
                 resolve('ventanilla registros nuevos enviados');
             }
