@@ -10,7 +10,16 @@ function ventanilla_registros3_unico(resolve,reject,conexion,socket,alm,ndoc,sal
         else{
             conexion.close();
             if(rows.length==0){
-                socket.emit('ventanilla mestro terminados',{});
+                // socket.emit('ventanilla mestro terminados',{});
+                if(alm===0){
+                    socket.emit('ventanilla mestro nuevos',{});
+                }
+                else if(alm===1){
+                    socket.emit('ventanilla mestro estados',{});
+                }
+                else if(alm===8){
+                    socket.emit('ventanilla mestro terminados',{});
+                }
                 // resolve("exitoso la promesa ventanilla de consulta");
                 resolve('ventanilla registros confirmados enviados');
             }
@@ -28,12 +37,21 @@ function ventanilla_registros3_unico(resolve,reject,conexion,socket,alm,ndoc,sal
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                socket.emit('ventanilla mestro terminados',respuesta2);
+                // socket.emit('ventanilla mestro terminados',respuesta2);
+                if(alm===0){
+                    socket.emit('ventanilla mestro nuevos',respuesta2);
+                }
+                else if(alm===1){
+                    socket.emit('ventanilla mestro estados',respuesta2);
+                }
+                else if(alm===8){
+                    socket.emit('ventanilla mestro terminados',respuesta2);
+                }
                 resolve('ventanilla registros confirmados enviados');
             }
         }
     })
-    consulta.addParameter('despacho', TYPES.Int,0);
+    consulta.addParameter('despacho', TYPES.Int,alm);
     consulta.addParameter('mostrar', TYPES.VarChar,'terminados');
     consulta.addParameter('salida', TYPES.VarChar,salida);
     consulta.addParameter('documento', TYPES.VarChar,ndoc);
