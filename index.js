@@ -268,6 +268,14 @@ io.on('connection',(socket)=>{
         }
         catch(err){console.log(err)}
     })
+    //////evento unico para mostrar solo 1 documento en las tablas maestro
+    // socket.on('',async (ndoc)=>{
+    //     try{
+    //         const primera_llamada=await obtenerpromesa_contador();
+    //         // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
+    //     }
+    //     catch(err){console.log(err)}
+    // })
 
     ////////temporal luego mover a otro directorio
     socket.on('cliente ruta',async ()=>{

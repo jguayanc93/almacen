@@ -240,7 +240,7 @@
             <div class="accordion-item">
                 <button class="accordion-toggle block w-full px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-slate-700 transition text-left flex items-center justify-between">
                     <span class="sidebar-text">⚙️ Opciones</span>
-                    <span class="sidebar-initial">O</span>
+                    <span class="sidebar-initial">Opc</span>
                     <svg class="w-4 h-4 transition-transform duration-300 accordion-icon sidebar-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
                 <!-- Acordeón Opciones -->
@@ -257,7 +257,7 @@
                         <span class="sidebar-text">📤 Retirar de Almacén</span>
                         <span class="sidebar-initial">RA</span>
                     </a>
-                    <a href="#" id="crear-ruta-cliente" class="submenu-item block px-6 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm" data-submenu="retirar-almacen" data-parent="opciones">
+                    <a href="#" id="crear-ruta-cliente" class="submenu-item block px-6 py-2 text-gray-300 hover:bg-cyan-600 hover:text-white transition text-sm" data-submenu="crear-ruta" data-parent="opciones">
                         <span class="sidebar-text">✏️ crear ruta</span>
                         <span class="sidebar-initial">CR</span>
                     </a>
@@ -347,6 +347,8 @@
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
                     <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
                         <h3 id="tabla-1-titulo" class="font-semibold text-white">Tabla 1</h3>
+                        <!--agregado un input temporal para un buscador de documento-->
+                        <input type="text" id="tabla-1-filtro" placeholder="Filtrar por documento..." class="mt-2 w-full px-3 py-2 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <p id="tabla-1-descripcion" class="text-indigo-100 text-sm">Contenido dinámico</p>
                     </div>
                     <div class="overflow-x-auto">
@@ -662,6 +664,11 @@
             'retirar-almacen': {
                 title: 'Retirar de Almacén',
                 desc: 'Registrar retiros de productos del almacén',
+                isOption: true
+            },
+            'buscar-cliente': {
+                title: 'Buscar cliente',
+                desc: 'Ingresa tu cliente para buscar sus rutas',
                 isOption: true
             }
         };
