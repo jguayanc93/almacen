@@ -27,6 +27,7 @@ function mostrar_nuevos_documentos(){
 }
 /////////PROTOTIPO PARA MOSTRAR LA TABLA MAESTRO DESTRUCTURADA
 socket.on('ventanilla mestro nuevos',(registros)=>{
+    console.log("revisa los registros nuevos para la busqueda unica",registros);
     document.getElementById("tabla-1-titulo").textContent="Nuevos Documentos";
     document.getElementById("tabla-1-descripcion").textContent="Nuevos documentos programados para ser trabajados";
     document.getElementById("tablero-maestro-control-inicio").innerHTML="";
@@ -132,11 +133,10 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
 })
 
 ////evento para el evento de documento filtrado en el buscador de documento
-socket.on('documento filtrado',(registros)=>{
-    
-})
+socket.on('documento filtrado',(registros)=>{})
 
 socket.on('ventanilla mestro estados',(registros)=>{
+    console.log("revisa los registros estados para la busqueda unica",registros);
     document.getElementById("tabla-2-titulo").textContent="Tablero Control";
     document.getElementById("tabla-2-descripcion").textContent="Permite observar el flujo del documento y en que estado se encuentra";
     document.getElementById("tablero-maestro-control-medio").innerHTML="";
@@ -213,6 +213,7 @@ socket.on('ventanilla mestro estados',(registros)=>{
 })
 
 socket.on('ventanilla mestro terminados',(registros)=>{
+    console.log("revisa los registros terminados para la busqueda unica",registros);
     document.getElementById("tabla-3-titulo").textContent="Checking";
     document.getElementById("tabla-3-descripcion").textContent="Termina el procesado del documento y pasa a su despacho";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
