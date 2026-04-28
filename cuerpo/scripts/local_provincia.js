@@ -23,13 +23,16 @@ function BuscarDocumento(event) {
         else {
             console.log("el evento que se va a emitir es: ",nombre_ev_actual);
             if(nombre_ev_actual==="ventanilla"){
-                emitir_eventos('filtrar documento',0 , documento);
+                emitir_eventos('filtrar maestro',0 , documento);
             }
             else if(nombre_ev_actual === "almacen principal") {
-                emitir_eventos('filtrar documento',1 , documento);
+                emitir_eventos('filtrar maestro',1 , documento);
             }
             else if(nombre_ev_actual === "almacen mym") {
-                emitir_eventos('filtrar documento',8 , documento);
+                emitir_eventos('filtrar maestro',8 , documento);
+            }
+            else if(nombre_ev_actual === "cambio zona") {
+                emitir_eventos('filtrar zona',valor_ev_actual , documento);
             }
         }        
     }

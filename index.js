@@ -29,6 +29,7 @@ const {nueva_zone} = require('./funciones/new_zone')
 /////////espacio para separar las funciones de los operarios
 const {almventanilla} = require('./funciones/ventanilla/ventanilla')
 const {almventanilla_filtrado} = require('./funciones/unico_documento/documento_filtrar')
+const {zona_filtrado_documento} = require('./funciones/unico_documento/zona_filtrar')
 const {almprincipal} = require('./funciones/principal/principal')
 const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
@@ -270,11 +271,20 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
     //////evento unico para mostrar solo 1 documento en las tablas maestro
-    socket.on('filtrar documento',async (alm,documento)=>{
+    socket.on('filtrar maestro',async (alm,documento)=>{
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"DOCUMENTO");
             await almventanilla_filtrado(socket,alm,documento);
+            // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
+        }
+        catch(err){console.log(err)}
+    })
+    socket.on('filtrar zona',async (zona,documento)=>{
+        try{
+            const observador=await zonas_limpiador(socket);
+            const grupo=await nueva_zone(socket,"DOCUMENTO");
+            await zona_filtrado_documento(socket,zona,documento);
             // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
         }
         catch(err){console.log(err)}
