@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc,salida){
+function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc){
     let sp_sql="jc_documento_filtrado_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -50,7 +50,6 @@ function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc,salid
     })
     consulta.addParameter('despacho', TYPES.Int,alm);
     consulta.addParameter('mostrar', TYPES.VarChar,'nuevos');
-    consulta.addParameter('salida', TYPES.VarChar,salida);
     consulta.addParameter('documento', TYPES.VarChar,ndoc);
     conexion.callProcedure(consulta);
 }

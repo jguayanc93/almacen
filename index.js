@@ -270,11 +270,11 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
     //////evento unico para mostrar solo 1 documento en las tablas maestro
-    socket.on('filtrar documento',async (alm,ndoc,salida)=>{
+    socket.on('filtrar documento',async (alm,documento)=>{
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"DOCUMENTO");
-            await almventanilla_filtrado(socket,alm,ndoc,salida);
+            await almventanilla_filtrado(socket,alm,documento);
             // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
         }
         catch(err){console.log(err)}
