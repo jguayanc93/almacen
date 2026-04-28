@@ -8,7 +8,6 @@ document.getElementById("ventanilla").addEventListener("click",(e)=>{
 document.getElementById('tabla-1-filtro').addEventListener('search', BuscarDocumento);
 
 function BuscarDocumento(event) {
-    console.log('Buscando documento:', event.target.value);
     const documento = event.target.value;
     if(documento === '') {
         // Si el campo de búsqueda está vacío, puedes optar por mostrar todos los registros o limpiar la tabla
@@ -22,6 +21,7 @@ function BuscarDocumento(event) {
         }
         else {
             console.log("el evento que se va a emitir es: ",nombre_ev_actual);
+            console.log("el valor que se va a emitir es: ",valor_ev_actual);
             if(nombre_ev_actual==="ventanilla"){
                 emitir_eventos('filtrar maestro',0 , documento);
             }
