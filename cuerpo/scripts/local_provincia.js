@@ -34,6 +34,14 @@ function BuscarDocumento(event) {
             else if(nombre_ev_actual === "cambio zona") {
                 emitir_eventos('filtrar zona',valor_ev_actual , documento);
             }
+            else if(nombre_ev_actual === "filtrar maestro"){
+                emitir_eventos('filtrar maestro',valor_ev_actual , documento);
+            }
+            else if(nombre_ev_actual === "filtrar zona"){
+                emitir_eventos('filtrar zona',valor_ev_actual , documento);
+            }
+            /////no puede seguir buscando porqe el anterior evento general se perdio y en lugar solo
+            /////conserva el filtrar zona por eso ya no vuelve a buscar
             else{
                 console.log("deberia ejecutarme? sin ninguna razon");
             }
