@@ -5,7 +5,7 @@ document.getElementById("ventanilla").addEventListener("click",(e)=>{
     loadMenuItem('ventanilla');
 })
 
-document.getElementById('tabla-1-filtro').addEventListener('input', BuscarDocumento);
+document.getElementById('tabla-1-filtro').addEventListener('search', BuscarDocumento);
 
 function BuscarDocumento(event) {
     const documento = event.target.value;
@@ -33,6 +33,9 @@ function BuscarDocumento(event) {
             }
             else if(nombre_ev_actual === "cambio zona") {
                 emitir_eventos('filtrar zona',valor_ev_actual , documento);
+            }
+            else{
+                console.log("deberia ejecutarme? sin ninguna razon");
             }
         }        
     }
