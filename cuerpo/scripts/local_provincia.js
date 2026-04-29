@@ -5,7 +5,7 @@ document.getElementById("ventanilla").addEventListener("click",(e)=>{
     loadMenuItem('ventanilla');
 })
 
-document.getElementById('tabla-1-filtro').addEventListener('search', BuscarDocumento);
+document.getElementById('tabla-1-filtro').addEventListener('input', BuscarDocumento);
 
 function BuscarDocumento(event) {
     const documento = event.target.value;
