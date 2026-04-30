@@ -14,7 +14,7 @@ function filtrado_input(texto) {
     if(valor === '') {
         return 'vacio';
     }
-    else if(valor.length>0 || valor.length<3){
+    else if(valor.length>0 && valor.length<3){
         return 'incompleto';
     }
     else if(valor.length>2){
