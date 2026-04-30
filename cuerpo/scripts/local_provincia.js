@@ -7,46 +7,80 @@ document.getElementById("ventanilla").addEventListener("click",(e)=>{
 
 document.getElementById('tabla-1-filtro').addEventListener('search', BuscarDocumento);
 
-function BuscarDocumento(event) {
-    const documento = event.target.value;
-    if(documento === '') {
-        // Si el campo de búsqueda está vacío, puedes optar por mostrar todos los registros o limpiar la tabla
-        // emitir_eventos('filtrar documento', documento, 'G');
-        console.log('Campo de búsqueda vacío, mostrando todos los registros');
+function filtrado_input(texto) {    
+    ////lo que hara este evento sera diferenciar si el input ingresado por el usuario es vacio,es una factura,o es nombre de cliente para su envio correctamente al evento
+    const valor = texto.trim();
+    const regexFactura = /^[a-zA-Z][a-zA-Z0-9]{3}-\d{7}$/; // Expresión regular para 12 dígitos
+    if(valor === '') {
+        return 'vacio';
     }
-    else {
-        if(documento.length < 12 || documento.length > 12) {
-            alert('Por favor, ingrese un documento válido para la búsqueda.');
-            return;
+    else if(valor.length>0 || valor.length<3){
+        return 'incompleto';
+    }
+    else if(valor.length>2){
+        if(regexFactura.test(valor)) {
+            return 'factura';
         }
         else {
-            console.log("el evento que se va a emitir es: ",nombre_ev_actual);
-            console.log("el valor que se va a emitir es: ",valor_ev_actual);
-            if(nombre_ev_actual==="ventanilla"){
-                emitir_eventos('filtrar maestro',0 , documento);
-            }
-            else if(nombre_ev_actual === "almacen principal") {
-                emitir_eventos('filtrar maestro',1 , documento);
-            }
-            else if(nombre_ev_actual === "almacen mym") {
-                emitir_eventos('filtrar maestro',8 , documento);
-            }
-            else if(nombre_ev_actual === "cambio zona") {
-                emitir_eventos('filtrar zona',valor_ev_actual , documento);
-            }
-            else if(nombre_ev_actual === "filtrar maestro"){
-                emitir_eventos('filtrar maestro',valor_ev_actual , documento);
-            }
-            else if(nombre_ev_actual === "filtrar zona"){
-                emitir_eventos('filtrar zona',valor_ev_actual , documento);
-            }
-            /////no puede seguir buscando porqe el anterior evento general se perdio y en lugar solo
-            /////conserva el filtrar zona por eso ya no vuelve a buscar
-            else{
-                console.log("deberia ejecutarme? sin ninguna razon");
-            }
-        }        
+            return 'cliente';
+        }
     }
+    
+
+}
+
+function BuscarDocumento(event) {
+    const documento = event.target.value;
+    const destilado = filtrado_input(documento);
+    console.log("el valor destilado es: ",destilado);
+    // if(documento === '') {
+    //     // Si el campo de búsqueda está vacío, puedes optar por mostrar todos los registros o limpiar la tabla
+    //     // emitir_eventos('filtrar documento', documento, 'G');
+    //     console.log('Campo de búsqueda vacío, mostrando todos los registros');
+    // }
+    // else {
+    //     if(documento.length < 12 || documento.length > 12) {
+    //         alert('Por favor, ingrese un documento válido para la búsqueda.');
+    //         return;
+    //     }
+    //     else {
+    //         console.log("el evento que se va a emitir es: ",nombre_ev_actual);
+    //         console.log("el valor que se va a emitir es: ",valor_ev_actual);
+    //         if(nombre_ev_actual==="ventanilla"){
+    //             emitir_eventos('filtrar maestro',0 , documento);
+    //         }
+    //         else if(nombre_ev_actual === "almacen principal") {
+    //             emitir_eventos('filtrar maestro',1 , documento);
+    //         }
+    //         else if(nombre_ev_actual === "almacen mym") {
+    //             emitir_eventos('filtrar maestro',8 , documento);
+    //         }
+    //         else if(nombre_ev_actual === "cambio zona") {
+    //             emitir_eventos('filtrar zona',valor_ev_actual , documento);
+    //         }
+    //         else if(nombre_ev_actual === "despacho"){
+    //             const juntado=salida_ev_actual + '/' + documento;
+    //             salida_ev_actual = 
+    //             emitir_eventos('filtrar despacho',valor_ev_actual , juntado);
+    //         }
+    //         else if(nombre_ev_actual === "filtrar maestro"){
+    //             emitir_eventos('filtrar maestro',valor_ev_actual , documento);
+    //         }
+    //         else if(nombre_ev_actual === "filtrar zona"){
+    //             emitir_eventos('filtrar zona',valor_ev_actual , documento);
+    //         }
+    //         /////falta para despacho su busqueda de filtrado propia
+    //         else if(nombre_ev_actual === "filtrar despacho"){
+    //             const juntado=salida_ev_actual + '/' + documento;
+    //             emitir_eventos('filtrar despacho',valor_ev_actual , juntado);
+    //         }
+    //         /////no puede seguir buscando porqe el anterior evento general se perdio y en lugar solo
+    //         /////conserva el filtrar zona por eso ya no vuelve a buscar
+    //         else{
+    //             console.log("deberia ejecutarme? sin ninguna razon");
+    //         }
+    //     }
+    // }
 }
 
 function pasando_a_ventanilla(){

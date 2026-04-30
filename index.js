@@ -30,6 +30,7 @@ const {nueva_zone} = require('./funciones/new_zone')
 const {almventanilla} = require('./funciones/ventanilla/ventanilla')
 const {almventanilla_filtrado} = require('./funciones/unico_documento/documento_filtrar')
 const {zona_filtrado_documento} = require('./funciones/unico_documento/zona_filtrar')
+const {despacho_filtrado} = require('./funciones/unico_documento/despacho_filtrar')
 const {almprincipal} = require('./funciones/principal/principal')
 const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
@@ -286,6 +287,16 @@ io.on('connection',(socket)=>{
             const grupo=await nueva_zone(socket,"DOCUMENTO");
             await zona_filtrado_documento(socket,zona,documento);
             // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
+        }
+        catch(err){console.log(err)}
+    })
+    socket.on('filtrar despacho',async (alm,doc_salida)=>{
+        try{
+            ////tengo q segmentar el documento para sacar salida y documento
+            const [salida, ndoc] = doc_salida.split('/');
+            const observador=await zonas_limpiador(socket);
+            const grupo=await nueva_zone(socket,"DOCUMENTO");
+            await despacho_filtrado(socket,alm,salida,ndoc);
         }
         catch(err){console.log(err)}
     })
