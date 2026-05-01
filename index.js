@@ -34,6 +34,7 @@ const {despacho_filtrado} = require('./funciones/unico_documento/despacho_filtra
 const {almprincipal} = require('./funciones/principal/principal')
 const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
+const {desempaquetador} = require('./desempaquetador')
 
 const app=express();
 const server=createServer(app);
@@ -272,11 +273,12 @@ io.on('connection',(socket)=>{
         catch(err){console.log(err)}
     })
     //////evento unico para mostrar solo 1 documento en las tablas maestro
-    socket.on('filtrar maestro',async (alm,documento)=>{
+    socket.on('filtrar maestro',async (alm,paquete)=>{
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"DOCUMENTO");
-            await almventanilla_filtrado(socket,alm,documento);
+            const contenido=await desempaquetador(paquete);
+            await almventanilla_filtrado(socket,alm,contenido[0],contenido[1]);
             // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
         }
         catch(err){console.log(err)}

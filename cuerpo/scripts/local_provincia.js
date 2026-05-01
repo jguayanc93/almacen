@@ -25,27 +25,61 @@ function filtrado_input(texto) {
             return 'cliente';
         }
     }
-    
+}
 
+function disparador_de_eventos(tipo,texto){
+    console.log("el evento que se va a emitir es: ",nombre_ev_actual);
+    console.log("el valor que se va a emitir es: ",valor_ev_actual);
+    if(nombre_ev_actual === 'ventanilla'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar maestro',0 , empaquetado);
+    }
+    if(nombre_ev_actual === 'almacen principal'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar maestro',1 , empaquetado);
+    }
+    if(nombre_ev_actual === 'almacen mym'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar maestro',8 , empaquetado);
+    }
+    if(nombre_ev_actual === 'cambio zona'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar zona',valor_ev_actual , empaquetado);
+    }
+    if(nombre_ev_actual === 'despacho'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);        
+    }
+    if(nombre_ev_actual === 'filtrar maestro'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar maestro',valor_ev_actual , empaquetado);
+    }
+    if(nombre_ev_actual === 'filtrar zona'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar zona',valor_ev_actual , empaquetado);
+    }
+    if(nombre_ev_actual === 'filtrar despacho'){
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);
+    }
 }
 
 function BuscarDocumento(event) {
     const documento = event.target.value;
     const destilado = filtrado_input(documento);
     console.log("el valor destilado es: ",destilado);
-    // if(documento === '') {
-    //     // Si el campo de búsqueda está vacío, puedes optar por mostrar todos los registros o limpiar la tabla
-    //     // emitir_eventos('filtrar documento', documento, 'G');
-    //     console.log('Campo de búsqueda vacío, mostrando todos los registros');
-    // }
+    if(destilado === 'vacio') {
+        // Si el campo de búsqueda está vacío, puedes optar por mostrar todos los registros o limpiar la tabla
+        console.log('Campo de búsqueda vacío, mostrando todos los registros');
+    }
+    if(destilado === 'incompleto') {
+        alert('Por favor, ingrese al menos 3 caracteres para realizar la búsqueda.');
+        return;
+    }
+    if(destilado === 'cliente') { disparador_de_eventos('cliente',documento.trim()); }
+    if(destilado === 'factura') { disparador_de_eventos('factura',documento.trim()); }
     // else {
-    //     if(documento.length < 12 || documento.length > 12) {
-    //         alert('Por favor, ingrese un documento válido para la búsqueda.');
-    //         return;
-    //     }
-    //     else {
-    //         console.log("el evento que se va a emitir es: ",nombre_ev_actual);
-    //         console.log("el valor que se va a emitir es: ",valor_ev_actual);
+    //     else {            
     //         if(nombre_ev_actual==="ventanilla"){
     //             emitir_eventos('filtrar maestro',0 , documento);
     //         }

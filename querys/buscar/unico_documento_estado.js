@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function ventanilla_registros2_unico(resolve,reject,conexion,socket,alm,ndoc){
+function ventanilla_registros2_unico(resolve,reject,conexion,socket,alm,tipo,contenido){
     let sp_sql="jc_documento_filtrado_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){

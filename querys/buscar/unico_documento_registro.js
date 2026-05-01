@@ -1,6 +1,17 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc){
+function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,tipo,contenido){
+
+    let tipbusq="";
+    let cliente="";
+    if(tipo==="cliente"){
+        cliente=`%${contenido}%`;
+    }
+    if(tipo==="factura"){
+        let ndoc = contenido;
+    }
+    let caracter=`%${contenido}%`;
+
     let sp_sql="jc_documento_filtrado_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -9,15 +20,7 @@ function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc){
         }
         else{
             if(rows.length==0){
-                if(alm===0){
-                    socket.emit('ventanilla mestro nuevos',{});
-                }
-                else if(alm===1){
-                    socket.emit('ventanilla mestro nuevos',{});
-                }
-                else if(alm===8){
-                    socket.emit('ventanilla mestro nuevos',{});
-                }
+                socket.emit('ventanilla mestro nuevos',{});
                 resolve('ventanilla registros nuevos enviados');
             }
             else{
@@ -35,15 +38,7 @@ function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,ndoc){
                 });
                 Object.assign(respuesta2,respuesta);                
                 // socket.emit('ventanilla mestro nuevos',respuesta2);
-                if(alm===0){
-                    socket.emit('ventanilla mestro nuevos',respuesta2);
-                }
-                else if(alm===1){
-                    socket.emit('ventanilla mestro nuevos',respuesta2);
-                }
-                else if(alm===8){
-                    socket.emit('ventanilla mestro nuevos',respuesta2);
-                }
+                socket.emit('ventanilla mestro nuevos',respuesta2);
                 resolve('ventanilla registros nuevos enviados');
             }
         }
