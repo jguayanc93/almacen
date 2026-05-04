@@ -52,7 +52,9 @@ function ventanilla_registros2_unico(resolve,reject,conexion,socket,alm,tipo,con
     })
     consulta.addParameter('despacho', TYPES.Int,alm);
     consulta.addParameter('mostrar', TYPES.VarChar,'estados');
-    consulta.addParameter('documento', TYPES.VarChar,ndoc);
+    // consulta.addParameter('documento', TYPES.VarChar,ndoc);
+    consulta.addParameter('tipo', TYPES.VarChar,tipo);
+    consulta.addParameter('contenido', TYPES.VarChar,contenido);
     conexion.callProcedure(consulta);
 }
 

@@ -28,6 +28,8 @@ function filtrado_input(texto) {
 }
 
 function disparador_de_eventos(tipo,texto){
+    ///el tipo es para determinar si es factura o nombre de un cliente
+    ///y el texto es lo escrito depende del tipo
     console.log("el evento que se va a emitir es: ",nombre_ev_actual);
     console.log("el valor que se va a emitir es: ",valor_ev_actual);
     if(nombre_ev_actual === 'ventanilla'){

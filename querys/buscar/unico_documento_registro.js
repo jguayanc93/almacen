@@ -1,17 +1,8 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
 function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,tipo,contenido){
-
-    let tipbusq="";
-    let cliente="";
-    if(tipo==="cliente"){
-        cliente=`%${contenido}%`;
-    }
-    if(tipo==="factura"){
-        let ndoc = contenido;
-    }
-    let caracter=`%${contenido}%`;
-
+    
+    // let caracter=`%${contenido}%`;
     let sp_sql="jc_documento_filtrado_maestro";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -45,7 +36,9 @@ function ventanilla_registro_unico(resolve,reject,conexion,socket,alm,tipo,conte
     })
     consulta.addParameter('despacho', TYPES.Int,alm);
     consulta.addParameter('mostrar', TYPES.VarChar,'nuevos');
-    consulta.addParameter('documento', TYPES.VarChar,ndoc);
+    consulta.addParameter('tipo', TYPES.VarChar,tipo);
+    consulta.addParameter('contenido', TYPES.VarChar,contenido);
+    // consulta.addParameter('documento', TYPES.VarChar,ndoc);
     conexion.callProcedure(consulta);
 }
 
