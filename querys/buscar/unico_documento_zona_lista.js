@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function identificar_zona_filtrado(resolve,reject,conexion,socket,zona,ndoc){
+function identificar_zona_filtrado(resolve,reject,conexion,socket,zona,tipo,contenido){
     let sp_sql="jc_documento_filtrado_zonas";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -36,7 +36,9 @@ function identificar_zona_filtrado(resolve,reject,conexion,socket,zona,ndoc){
     })
     consulta.addParameter('zona', TYPES.VarChar,zona);
     consulta.addParameter('nivel', TYPES.VarChar,'nuevos');
-    consulta.addParameter('documento', TYPES.VarChar,ndoc);
+    // consulta.addParameter('documento', TYPES.VarChar,ndoc);
+    consulta.addParameter('tipo', TYPES.VarChar,tipo);
+    consulta.addParameter('contenido', TYPES.VarChar,contenido);
     conexion.callProcedure(consulta);
 }
 

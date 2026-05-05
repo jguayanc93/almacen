@@ -283,11 +283,12 @@ io.on('connection',(socket)=>{
         }
         catch(err){console.log(err)}
     })
-    socket.on('filtrar zona',async (zona,documento)=>{
+    socket.on('filtrar zona',async (zona,paquete)=>{
         try{
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"DOCUMENTO");
-            await zona_filtrado_documento(socket,zona,documento);
+            const contenido=await desempaquetador(paquete);
+            await zona_filtrado_documento(socket,zona,contenido[0],contenido[1]);
             // const segunda_llamada=await obtenerpromesa_contador_consulta(primera_llamada,socket,'cuentalos');
         }
         catch(err){console.log(err)}

@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function listar_picking_filtrado(resolve,reject,conexion,socket,zona,ndoc){
+function listar_picking_filtrado(resolve,reject,conexion,socket,zona,tipo,contenido){
     let sp_sql="jc_documento_filtrado_zonas";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -34,7 +34,8 @@ function listar_picking_filtrado(resolve,reject,conexion,socket,zona,ndoc){
     })
     consulta.addParameter('zona', TYPES.VarChar,zona);
     consulta.addParameter('nivel', TYPES.VarChar,'pick');
-    consulta.addParameter('documento', TYPES.VarChar,ndoc);
+    consulta.addParameter('tipo', TYPES.VarChar,tipo);
+    consulta.addParameter('contenido', TYPES.VarChar,contenido);
     conexion.callProcedure(consulta);
 }
 
