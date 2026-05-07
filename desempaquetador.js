@@ -18,13 +18,13 @@ function desempaquetador_despacho(paquete){
     return new Promise((resolve,reject)=>{
         if(paquete.startsWith("(F)")){
             // const tipo = paquete.slice(0,3);
-            const ndoc = paquete.slice(3);
+            const ndoc = paquete.slice(4);
             const salida = paquete.slice(3,4);
             resolve(["factura",ndoc,salida]);
         }
         if(paquete.startsWith("(C)")){
             // const tipo = paquete.slice(0,3);
-            const cliente = paquete.slice(3);
+            const cliente = paquete.slice(4);
             const salida = paquete.slice(3,4);
             resolve(["cliente",cliente,salida]);
         }
