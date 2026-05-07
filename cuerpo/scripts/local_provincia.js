@@ -50,9 +50,11 @@ function disparador_de_eventos(tipo,texto){
     }
     if(nombre_ev_actual === 'despacho'){
         // const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        ////necesito limpiar primero la salida del evento actual porqe se acumula
+        // salida_ev_actual = salida_ev_actual.slice(3,4);
         const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`)+ texto;
         console.log("el valor del empaquetado es: ",empaquetado);
-        emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);        
+        emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);
     }
     if(nombre_ev_actual === 'filtrar maestro'){
         const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + salida_ev_actual + texto;
@@ -64,6 +66,7 @@ function disparador_de_eventos(tipo,texto){
     }
     if(nombre_ev_actual === 'filtrar despacho'){
         // const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        salida_ev_actual = salida_ev_actual.slice(3,4);
         const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`)+ texto;
         console.log("el valor del empaquetado es: ",empaquetado);
         emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);
