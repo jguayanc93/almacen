@@ -49,11 +49,12 @@ function disparador_de_eventos(tipo,texto){
         emitir_eventos('filtrar zona',valor_ev_actual , empaquetado);
     }
     if(nombre_ev_actual === 'despacho'){
-        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        // const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`) + texto;
         emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);        
     }
     if(nombre_ev_actual === 'filtrar maestro'){
-        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + salida_ev_actual + texto;
         emitir_eventos('filtrar maestro',valor_ev_actual , empaquetado);
     }
     if(nombre_ev_actual === 'filtrar zona'){
@@ -61,7 +62,8 @@ function disparador_de_eventos(tipo,texto){
         emitir_eventos('filtrar zona',valor_ev_actual , empaquetado);
     }
     if(nombre_ev_actual === 'filtrar despacho'){
-        const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        // const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
+        const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`) + texto;
         emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);
     }
 }

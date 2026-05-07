@@ -34,7 +34,7 @@ const {despacho_filtrado} = require('./funciones/unico_documento/despacho_filtra
 const {almprincipal} = require('./funciones/principal/principal')
 const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
-const {desempaquetador} = require('./desempaquetador')
+const {desempaquetador,desempaquetador_despacho} = require('./desempaquetador')
 
 const app=express();
 const server=createServer(app);
@@ -296,10 +296,11 @@ io.on('connection',(socket)=>{
     socket.on('filtrar despacho',async (alm,doc_salida)=>{
         try{
             ////tengo q segmentar el documento para sacar salida y documento
-            const [salida, ndoc] = doc_salida.split('/');
+            // const [salida, ndoc] = doc_salida.split('/');
             const observador=await zonas_limpiador(socket);
             const grupo=await nueva_zone(socket,"DOCUMENTO");
-            await despacho_filtrado(socket,alm,salida,ndoc);
+            const contenido=await desempaquetador_despacho(doc_salida);
+            await despacho_filtrado(socket,alm,contenido[0],contenido[1],contenido[2]);
         }
         catch(err){console.log(err)}
     })

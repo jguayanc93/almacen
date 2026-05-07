@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function despacho_registro_filtrado(resolve,reject,conexion,socket,alm,salida,ndoc){
+function despacho_registro_filtrado(resolve,reject,conexion,socket,alm,tipo,contenido,salida){
     // let sp_sql="select programada.documento,programada.despacho,programada.cliente,CONCAT(programada.hora,':',programada.minutos)as 'hora' from tbl01_api_programar programada join tbl01_api_almacen_documento_impreso imprimido on (programada.documento=imprimido.documento AND z1_imp=0 AND z2_imp=0 AND z3_imp=0 AND desconocido_imp=0) where programada.piking=0 AND despacho<>1";
     let sp_sql="jc_documento_filtrado_despacho";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
@@ -39,8 +39,8 @@ function despacho_registro_filtrado(resolve,reject,conexion,socket,alm,salida,nd
     // conexion.execSql(consulta);
     consulta.addParameter('alm',TYPES.Int,alm);
     consulta.addParameter('mostrar',TYPES.VarChar,'nuevos');
-    consulta.addParameter('salida',TYPES.VarChar,salida);
-    consulta.addParameter('documento',TYPES.VarChar,ndoc);
+    consulta.addParameter('tipo',TYPES.VarChar,tipo);
+    consulta.addParameter('contenido',TYPES.VarChar,contenido);
     conexion.callProcedure(consulta);
 }
 

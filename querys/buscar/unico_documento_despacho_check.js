@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function despacho_recolectado_filtrado(resolve,reject,conexion,socket,alm,ndoc){
+function despacho_recolectado_filtrado(resolve,reject,conexion,socket,alm,tipo,contenido,salida){
     // let sp_sql="select despacho.documento,almacen.cliente from tbl01_api_programar almacen join tbl01_api_despacho_embalados despacho on (despacho.documento=almacen.documento) where almacen.cheking=1 AND despacho.embalado=0";
     // let sp_sql="select a.documento,CASE b.despacho when 3 then 'LIMA' when 4 then 'PROVINCIA' end,b.cliente,b.nomtra,b.nomdep,b.nompro,b.destino,c.observ from tbl01_api_despacho_checking a inner join tbl01_api_programar b on (b.documento=a.documento AND b.cheking=1) inner join mst01fac c on (c.ndocu=a.documento) where a.checkeado=0 AND b.despacho<>1 AND b.almacen='01'";
     let sp_sql="jc_documento_filtrado_despacho";
@@ -39,7 +39,8 @@ function despacho_recolectado_filtrado(resolve,reject,conexion,socket,alm,ndoc){
     })
     consulta.addParameter('alm',TYPES.Int,alm);
     consulta.addParameter('mostrar',TYPES.VarChar,'check');
-    consulta.addParameter('documento',TYPES.VarChar,ndoc);
+    consulta.addParameter('tipo',TYPES.VarChar,tipo);
+    consulta.addParameter('contenido',TYPES.VarChar,contenido);
     conexion.callProcedure(consulta);
 }
 

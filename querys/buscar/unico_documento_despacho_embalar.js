@@ -1,6 +1,6 @@
 const {Request,TYPES} = require('../../conexion/cadena')
 
-function despacho_embalado_filtrado(resolve,reject,conexion,socket,alm,salida,ndoc){
+function despacho_embalado_filtrado(resolve,reject,conexion,socket,alm,tipo,contenido,salida){
     // let sp_sql="select * from tbl01_api_despacho_embalados where embalado=1";
     let sp_sql="jc_documento_filtrado_despacho";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
@@ -38,7 +38,8 @@ function despacho_embalado_filtrado(resolve,reject,conexion,socket,alm,salida,nd
     // conexion.execSql(consulta);
     consulta.addParameter('alm',TYPES.Int,alm);
     consulta.addParameter('mostrar',TYPES.VarChar,'embalados');
-    consulta.addParameter('salida',TYPES.VarChar,salida);
+    consulta.addParameter('tipo',TYPES.VarChar,tipo);
+    consulta.addParameter('contenido',TYPES.VarChar,contenido);
     conexion.callProcedure(consulta);
 }
 
