@@ -50,7 +50,8 @@ function disparador_de_eventos(tipo,texto){
     }
     if(nombre_ev_actual === 'despacho'){
         // const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
-        const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`) + texto;
+        const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`)+ texto;
+        console.log("el valor del empaquetado es: ",empaquetado);
         emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);        
     }
     if(nombre_ev_actual === 'filtrar maestro'){
@@ -63,7 +64,8 @@ function disparador_de_eventos(tipo,texto){
     }
     if(nombre_ev_actual === 'filtrar despacho'){
         // const empaquetado = (tipo === 'factura' ? '(F)' : '(C)') + texto;
-        const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`) + texto;
+        const empaquetado = (tipo === 'factura' ? `(F)${salida_ev_actual}` : `(C)${salida_ev_actual}`)+ texto;
+        console.log("el valor del empaquetado es: ",empaquetado);
         emitir_eventos('filtrar despacho',valor_ev_actual , empaquetado);
     }
 }
