@@ -1,11 +1,11 @@
 // document.getElementById("descargar").addEventListener("click",()=>{})
 
 /////crearemmos 2 eventos para llamar a un buscador y luego otro para mostrar lo buscado
-document.getElementById("crear-ruta-cliente").addEventListener("click",(e)=>{
-    e.preventDefault();
-    // loadMenuItem('ventanilla');
-    // emitir_eventos('cliente ruta','cliente',1);
-})
+// document.getElementById("crear-ruta-cliente").addEventListener("click",(e)=>{
+//     e.preventDefault();
+//     // loadMenuItem('ventanilla');
+//     // emitir_eventos('cliente ruta','cliente',1);
+// })
 
 socket.on('mostrar ruta',()=>{
     document.getElementById("tabla-1-titulo").textContent = "Buscar Cliente";
