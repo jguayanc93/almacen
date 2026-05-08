@@ -4,7 +4,7 @@
 document.getElementById("crear-ruta-cliente").addEventListener("click",(e)=>{
     e.preventDefault();
     loadMenuItem('ventanilla');
-    emitir_eventos('cliente ruta','cliente',1);
+    // emitir_eventos('cliente ruta','cliente',1);
 })
 
 socket.on('mostrar ruta',()=>{
@@ -13,7 +13,7 @@ socket.on('mostrar ruta',()=>{
     document.getElementById("tablero-maestro-control-inicio").innerHTML = "";
     document.getElementById("tabla-2-titulo").textContent="";
     document.getElementById("tabla-2-descripcion").textContent="";
-    document.getElementById("tablero-maestro-control-medio").innerHTML="";
+    document.getElementById("tablero-maestro-control-medio").innerHTML="";0
     document.getElementById("tabla-3-titulo").textContent="";
     document.getElementById("tabla-3-descripcion").textContent="";
     document.getElementById("tablero-maestro-control-fin").innerHTML="";
