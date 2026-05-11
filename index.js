@@ -304,7 +304,7 @@ io.on('connection',(socket)=>{
         }
         catch(err){console.log(err)}
     })
-
+    
     ////////temporal luego mover a otro directorio
     socket.on('cliente ruta',async ()=>{
         try{
