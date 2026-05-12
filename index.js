@@ -313,7 +313,7 @@ io.on('connection',(socket)=>{
             // const grupo=await nueva_zone(socket,"RUTAS")
             // await crear_buscador(data);
             const llamada=await obtenerpromesa_cliente();
-            const respuesta=await obtenerpromesa_cliente_consulta(llamada,data);
+            const respuesta=await obtenerpromesa_cliente_consulta(llamada,data.termino);
             callback({
                 success:true,
                 clientes:respuesta

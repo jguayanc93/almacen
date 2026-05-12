@@ -228,8 +228,11 @@ function mostrarSugerencias(clientes) {
     // Limpiar lista anterior
     suggestionsList.innerHTML = '';
 
+    ///tengo que convertir mi objeto clientes en una array para poder iterar sobre el y mostrarlo en la interfaz, para eso uso Object.values() que me devuelve un array con los valores del objeto clientes
+    const clientesArray = Object.values(clientes);
+
     // Limitar a 5 sugerencias
-    const sugerenciasLimitadas = clientes.slice(0, searchClienteState.MAX_SUGGESTIONS);
+    const sugerenciasLimitadas = clientesArray.slice(0, searchClienteState.MAX_SUGGESTIONS);
 
     if (sugerenciasLimitadas.length === 0) {
         mostrarSugerenciasVacio();
