@@ -266,7 +266,7 @@ function mostrarSugerencias(clientes) {
         
         // Event listener para seleccionar
         li.addEventListener('click', () => {
-            seleccionarCliente(cliente[0]);
+            seleccionarCliente(cliente);
         });
 
         suggestionsList.appendChild(li);
@@ -305,11 +305,11 @@ function mostrarSugerenciasVacio() {
  * @param {Object} cliente - Objeto cliente seleccionado
  */
 function seleccionarCliente(cliente) {
-    searchClienteState.selectedClient = cliente;
+    searchClienteState.selectedClient = cliente[1];
     
     // Actualizar input
     // searchClienteState.inputElement.value = cliente.nombre || cliente.name || '';
-    searchClienteState.inputElement.value = cliente;
+    searchClienteState.inputElement.value = cliente[1];
     
     // Ocultar sugerencias
     searchClienteState.suggestionsContainer.classList.add('hidden');
@@ -319,7 +319,8 @@ function seleccionarCliente(cliente) {
     const clienteNombre = document.getElementById('cliente-nombre');
     const btnConfirmar = document.getElementById('btn-confirmar-cliente');
     
-    clienteNombre.textContent = cliente.nombre || cliente.name || 'Sin nombre';
+    // clienteNombre.textContent = cliente.nombre || cliente.name || 'Sin nombre';
+    clienteNombre.textContent = cliente[1];
     clienteSeleccionadoDiv.classList.remove('hidden');
     
     // Habilitar botón de confirmar
