@@ -233,11 +233,6 @@ function mostrarSugerencias(clientes) {
     // const clientesFiltrados=[];
     console.log('Clientes convertidos a array:', clientesArray);
 
-    // clientesArray.forEach(cliente => {
-    //     console.log('Cliente en array:', cliente);
-    //     clientesFiltrados.push(cliente[1]);
-    // });
-
     // Limitar a 5 sugerencias
     const sugerenciasLimitadas = clientesArray.slice(0, searchClienteState.MAX_SUGGESTIONS);
     // const sugerenciasLimitadas = clientesFiltrados.slice(0, searchClienteState.MAX_SUGGESTIONS);
@@ -305,7 +300,7 @@ function mostrarSugerenciasVacio() {
  * @param {Object} cliente - Objeto cliente seleccionado
  */
 function seleccionarCliente(cliente) {
-    searchClienteState.selectedClient = cliente[1];
+    searchClienteState.selectedClient = cliente[0];
     
     // Actualizar input
     // searchClienteState.inputElement.value = cliente.nombre || cliente.name || '';
