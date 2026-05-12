@@ -258,16 +258,15 @@ function mostrarSugerencias(clientes) {
         //     <p class="font-medium text-gray-800">${cliente.nombre || cliente.name || 'Sin nombre'}</p>
         //     <p class="text-sm text-gray-500">${cliente.ciudad || cliente.city || 'Ciudad no especificada'}</p>
         // `;
-
         info.innerHTML = `
-            <p class="font-medium text-gray-800">${cliente[0] || 'Sin nombre'}</p>
+            <p class="font-medium text-gray-800">${cliente[1] || 'Sin nombre'}</p>
         `;
         
         li.appendChild(info);
         
         // Event listener para seleccionar
         li.addEventListener('click', () => {
-            seleccionarCliente(cliente);
+            seleccionarCliente(cliente[0]);
         });
 
         suggestionsList.appendChild(li);
@@ -309,7 +308,8 @@ function seleccionarCliente(cliente) {
     searchClienteState.selectedClient = cliente;
     
     // Actualizar input
-    searchClienteState.inputElement.value = cliente.nombre || cliente.name || '';
+    // searchClienteState.inputElement.value = cliente.nombre || cliente.name || '';
+    searchClienteState.inputElement.value = cliente;
     
     // Ocultar sugerencias
     searchClienteState.suggestionsContainer.classList.add('hidden');
