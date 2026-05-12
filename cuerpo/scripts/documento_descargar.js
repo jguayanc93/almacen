@@ -336,9 +336,10 @@ function confirmarClienteSeleccionado(cliente) {
     
     // EVENTO SOCKET.IO PARA BACKEND
     // El backend debe procesar la confirmación del cliente y continuar con la creación de ruta
-    socket.emit('cliente_confirmado_ruta', { cliente: cliente }, (respuesta) => {
+    socket.emit('cliente_confirmado_ruta', { codigo: cliente }, (respuesta) => {
         if (respuesta && respuesta.exito) {
             console.log('Cliente confirmado exitosamente');
+            console.log(respuesta);
             // El backend decidirá qué hacer después (mostrar destinos, etc)
         } else {
             alert('Error al confirmar el cliente. Intenta de nuevo.');
