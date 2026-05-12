@@ -231,6 +231,8 @@ function mostrarSugerencias(clientes) {
     ///tengo que convertir mi objeto clientes en una array para poder iterar sobre el y mostrarlo en la interfaz, para eso uso Object.values() que me devuelve un array con los valores del objeto clientes
     const clientesArray = Object.values(clientes);
 
+    console.log('Clientes convertidos a array:', clientesArray);
+
     // Limitar a 5 sugerencias
     const sugerenciasLimitadas = clientesArray.slice(0, searchClienteState.MAX_SUGGESTIONS);
 
@@ -246,6 +248,11 @@ function mostrarSugerencias(clientes) {
         
         // Información del cliente
         const info = document.createElement('div');
+        // info.innerHTML = `
+        //     <p class="font-medium text-gray-800">${cliente.nombre || cliente.name || 'Sin nombre'}</p>
+        //     <p class="text-sm text-gray-500">${cliente.ciudad || cliente.city || 'Ciudad no especificada'}</p>
+        // `;
+
         info.innerHTML = `
             <p class="font-medium text-gray-800">${cliente.nombre || cliente.name || 'Sin nombre'}</p>
             <p class="text-sm text-gray-500">${cliente.ciudad || cliente.city || 'Ciudad no especificada'}</p>
