@@ -221,6 +221,7 @@ function buscarClientes(searchTerm) {
  * @param {Array} clientes - Array de clientes a mostrar
  */
 function mostrarSugerencias(clientes) {
+    console.log('Mostrando sugerencias de clientes:', clientes);
     const suggestionsList = document.getElementById('sugerencias-lista');
     const infoMessage = document.getElementById('info-message');
     

@@ -35,6 +35,7 @@ const {almprincipal} = require('./funciones/principal/principal')
 const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
 const {desempaquetador,desempaquetador_despacho} = require('./desempaquetador')
+const {obtenerpromesa_cliente,obtenerpromesa_cliente_consulta} = require('./buscar_clientes_ruta')
 
 const app=express();
 const server=createServer(app);
@@ -306,20 +307,37 @@ io.on('connection',(socket)=>{
     })
     
     ////////temporal luego mover a otro directorio
-    socket.on('cliente ruta',async ()=>{
+    socket.on('buscar_clientes',async (data,callback)=>{
         try{
             const bservador=await zonas_limpiador(socket);
             // const grupo=await nueva_zone(socket,"RUTAS")
-            await crear_buscador(socket);
+            // await crear_buscador(data);
+            const llamada=await obtenerpromesa_cliente();
+            const respuesta=await obtenerpromesa_cliente_consulta(llamada,data);
+            callback({
+                success:true,
+                clientes:respuesta
+            });
         }
-        catch(err){console.log(err)}
+        catch(err){
+            console.log(err)
+            callback({
+                success:false,
+                clientes:[]
+            })
+        }
 
-        async function crear_buscador(socket){
+        async function crear_buscador(data){
             try{
-                socket.emit('mostrar ruta');
+                // socket.emit('mostrar ruta');
+                const llamada=await obtenerpromesa_cliente();
+                const respuesta=await obtenerpromesa_cliente_consulta(llamada,data);
             }
             catch(err){
-                console.log(err);
+                // console.log(err);
+                callback({
+                    clientes:[]
+                })
             }
         }
     })
