@@ -502,12 +502,17 @@ function guardarFila(fila, destinoOriginal, filaIndex) {
     // Obtener los valores editados
     const inputZona = fila.querySelector('input[data-field-index="3"]');
     const inputReferencia = fila.querySelector('input[data-field-index="4"]');
+
+    ////nuevo metodo de conversion
+    const valoresNuevos = Object.values(destinoOriginal);
     
-    const datosActualizados = [...destinoOriginal];
+    // const datosActualizados = [...destinoOriginal];
+    const datosActualizados = [...valoresNuevos];
     datosActualizados[3] = inputZona.value;
     datosActualizados[4] = inputReferencia.value;
 
     console.log('Guardando fila:', filaIndex, datosActualizados);
+    console.log("revisa el objeto de envio de evento de boton guardar",datosActualizados);
 
     // Enviar al backend
     socket.emit('guardar_destino', { 
