@@ -35,7 +35,7 @@ const {almprincipal} = require('./funciones/principal/principal')
 const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
 const {desempaquetador,desempaquetador_despacho} = require('./desempaquetador')
-const {obtenerpromesa_cliente,obtenerpromesa_cliente_consulta,obtenerpromesa_ruta_consulta} = require('./buscar_clientes_ruta')
+const {obtenerpromesa_cliente,obtenerpromesa_cliente_consulta,obtenerpromesa_ruta_consulta,obtenerpromesa_guardar_ruta_consulta} = require('./buscar_clientes_ruta')
 
 const app=express();
 const server=createServer(app);
@@ -334,6 +334,22 @@ io.on('connection',(socket)=>{
             // const grupo=await nueva_zone(socket,"RUTAS")
             const llamada=await obtenerpromesa_cliente();
             const respuesta=await obtenerpromesa_ruta_consulta(llamada,cliente.codigo);
+            callback({
+                success:true,
+                exito:respuesta
+            });
+        }
+        catch(err){
+            console.log(err)
+            callback({success:false,exito:[]})
+        }
+    })
+
+    socket.on('guardar_destino',async (data,callback)=>{
+        try{
+            const bservador=await zonas_limpiador(socket);
+            const llamada=await obtenerpromesa_cliente();
+            const respuesta=await obtenerpromesa_guardar_ruta_consulta(llamada,data);
             callback({
                 success:true,
                 exito:respuesta

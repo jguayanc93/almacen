@@ -186,8 +186,6 @@ function initSearchClienteFunctionality() {
  * @param {string} searchTerm - Término de búsqueda ingresado por el usuario
  */
 function buscarClientes(searchTerm) {
-    console.log('Buscando clientes con término:', searchTerm);
-    
     // EVENTO SOCKET.IO PARA BACKEND
     // El backend debe retornar un array de clientes que coincidan
     // Estructura esperada: [{ id: '123', nombre: 'Cliente 1', ciudad: 'Bogotá' }, ...]
@@ -198,9 +196,6 @@ function buscarClientes(searchTerm) {
             mostrarSugerenciasVacio();
         }
     });
-    
-    // Alternativa si usas socket.on (sin callback):
-    // socket.emit('buscar_clientes', { termino: searchTerm });
 }
 
 /**
@@ -221,7 +216,6 @@ function buscarClientes(searchTerm) {
  * @param {Array} clientes - Array de clientes a mostrar
  */
 function mostrarSugerencias(clientes) {
-    console.log('Mostrando sugerencias de clientes:', clientes);
     const suggestionsList = document.getElementById('sugerencias-lista');
     const infoMessage = document.getElementById('info-message');
     
@@ -333,8 +327,7 @@ function confirmarClienteSeleccionado(cliente) {
     // El backend debe procesar la confirmación del cliente y continuar con la creación de ruta
     socket.emit('cliente_confirmado_ruta', { codigo: cliente }, (respuesta) => {
         if (respuesta && respuesta.exito) {
-            console.log('Cliente confirmado exitosamente');
-            console.log(respuesta);
+            console.log('Cliente confirmado exitosamente',respuesta);
             // Mostrar tabla de destinos/datos recibidos
             mostrarTablaDestinos(respuesta.exito);
         } else {
@@ -505,6 +498,7 @@ function crearFilaTabla(destino, index) {
  * @param {number} filaIndex - Índice de la fila
  */
 function guardarFila(fila, destinoOriginal, filaIndex) {
+    console.log('parametros enviados de boton:', fila, filaIndex, destinoOriginal);
     // Obtener los valores editados
     const inputZona = fila.querySelector('input[data-field-index="3"]');
     const inputReferencia = fila.querySelector('input[data-field-index="4"]');

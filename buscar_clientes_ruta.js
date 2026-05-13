@@ -105,5 +105,47 @@ function ruta_cliente_seleccionado(resolve,reject,conexion,codigo){
     consulta.addParameter('cliente',TYPES.VarChar,codigo);
     conexion.execSql(consulta);
 }
+///////consulta para guardar la zona y referencia de cada direccion de cliente selecionado
+function obtenerpromesa_guardar_ruta_consulta(conexion,codigo){
+    return new Promise((resolve,reject)=>{
+        ruta_guardar_seleccionado(resolve,reject,conexion,codigo)
+    })
+}
+    
+function ruta_guardar_seleccionado(resolve,reject,conexion,codigo){
+    let sp_sql="update tbl01_api_almacen_rutas set zona=@zona,referencia=@refer where codcli=@cliente AND dirid=@direccionid";
+    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            conexion.close();
+            if(rows.length==0){
+                resolve({})
+            }
+            else{
+                let respuesta=[];
+                let respuesta2={};
+                let contador=0;
+                rows.forEach(fila=>{
+                    let tmp={};
+                    fila.map(data=>{
+                        if(contador>=fila.length) contador=0;
+                        typeof data.value=='string' ? tmp[contador]=data.value.trim() : tmp[contador]=data.value;
+                        contador++;
+                    })
+                    respuesta.push(tmp);
+                });
+                Object.assign(respuesta2,respuesta);
+                resolve(respuesta2);
+            }
+        }
+    })
+    consulta.addParameter('zona',TYPES.VarChar,'');
+    consulta.addParameter('refer',TYPES.VarChar,'');
+    consulta.addParameter('cliente',TYPES.VarChar,'');
+    consulta.addParameter('direccionid',TYPES.Int,'');
+    conexion.execSql(consulta);
+}
 
-module.exports={obtenerpromesa_cliente,obtenerpromesa_cliente_consulta,obtenerpromesa_ruta_consulta}
+module.exports={obtenerpromesa_cliente,obtenerpromesa_cliente_consulta,obtenerpromesa_ruta_consulta,obtenerpromesa_guardar_ruta_consulta}
