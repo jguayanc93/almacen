@@ -349,7 +349,7 @@ io.on('connection',(socket)=>{
         try{
             const bservador=await zonas_limpiador(socket);
             const llamada=await obtenerpromesa_cliente();
-            const respuesta=await obtenerpromesa_guardar_ruta_consulta(llamada,data);
+            const respuesta=await obtenerpromesa_guardar_ruta_consulta(llamada,data.datos);
             callback({
                 success:true,
                 exito:respuesta
