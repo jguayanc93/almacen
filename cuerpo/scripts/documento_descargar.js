@@ -335,23 +335,241 @@ function confirmarClienteSeleccionado(cliente) {
         if (respuesta && respuesta.exito) {
             console.log('Cliente confirmado exitosamente');
             console.log(respuesta);
-            // El backend decidirá qué hacer después (mostrar destinos, etc)
+            // Mostrar tabla de destinos/datos recibidos
+            mostrarTablaDestinos(respuesta);
         } else {
             alert('Error al confirmar el cliente. Intenta de nuevo.');
         }
     });
-    
     // Alternativa sin callback:
     // socket.emit('cliente_confirmado_ruta', { cliente: cliente });
 }
-//         }
 
-//         fila.appendChild(cliente);
-//         fila.appendChild(dirprincipal);
-//         cuerpo.appendChild(fila);
+/**
+ * Muestra una tabla con los datos recibidos del cliente
+ * Permite editar zona (índice 3) y referencia (índice 4)
+ * @param {Object} respuesta - Respuesta del servidor con los datos
+ */
+function mostrarTablaDestinos(respuesta) {
+    const mainContent = document.querySelector('.main-content > .p-8');
+    
+    // Convertir objeto a array si es necesario
+    const destinosArray = respuesta.clientes ? Object.values(respuesta.clientes) : [respuesta];
+    
+    console.log('Destinos a mostrar:', destinosArray);
 
-//         cuerpo.appendChild(fila);
-//         rowIndex++;
-//     }
-//     document.getElementById("tablero-maestro-control-inicio").appendChild(cuerpo);
-// })
+    mainContent.innerHTML = `
+        <div class="bg-white rounded-xl shadow-md p-8">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Destinos del Cliente</h2>
+                <p class="text-gray-600">Completa los campos editables (Zona y Referencia) y guarda cada fila</p>
+            </div>
+
+            <!-- Tabla de destinos -->
+            <div class="overflow-x-auto mb-6">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead class="bg-indigo-600 text-white">
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-3 text-left">Código</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left">Cliente</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left">Dirección Entrega</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left">Zona</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left">Referencia</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left">Dirección Principal</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left">ID</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-destinos-body">
+                        <!-- Las filas se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botón Cancelar -->
+            <div class="flex gap-3 justify-end">
+                <button 
+                    id="btn-cancelar-tabla"
+                    type="button"
+                    class="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+                >
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    `;
+
+    // Llenar la tabla con datos
+    const tableBody = document.getElementById('tabla-destinos-body');
+    destinosArray.forEach((destino, index) => {
+        const row = crearFilaTabla(destino, index);
+        tableBody.appendChild(row);
+    });
+
+    // Event listener para cancelar
+    document.getElementById('btn-cancelar-tabla').addEventListener('click', () => {
+        loadBuscarClienteRuta();
+    });
+}
+
+/**
+ * Crea una fila de la tabla con datos editables
+ * @param {Array} destino - Array con los datos del destino
+ * @param {number} index - Índice de la fila
+ * @returns {HTMLElement} - Elemento fila de la tabla
+ */
+function crearFilaTabla(destino, index) {
+    const tr = document.createElement('tr');
+    tr.id = `fila-destino-${index}`;
+    tr.className = 'hover:bg-gray-50 transition';
+    
+    // Columna 0: Código (no editable)
+    const tdCodigo = document.createElement('td');
+    tdCodigo.className = 'border border-gray-300 px-4 py-3 bg-gray-50 font-medium';
+    tdCodigo.textContent = destino[0] || '';
+    tdCodigo.dataset.index = 0;
+    tr.appendChild(tdCodigo);
+
+    // Columna 1: Cliente (no editable)
+    const tdCliente = document.createElement('td');
+    tdCliente.className = 'border border-gray-300 px-4 py-3 bg-gray-50';
+    tdCliente.textContent = destino[1] || '';
+    tdCliente.dataset.index = 1;
+    tr.appendChild(tdCliente);
+
+    // Columna 2: Dirección Entrega (no editable)
+    const tdDireccionEntrega = document.createElement('td');
+    tdDireccionEntrega.className = 'border border-gray-300 px-4 py-3 bg-gray-50';
+    tdDireccionEntrega.textContent = destino[2] || '';
+    tdDireccionEntrega.dataset.index = 2;
+    tr.appendChild(tdDireccionEntrega);
+
+    // Columna 3: Zona (EDITABLE)
+    const tdZona = document.createElement('td');
+    tdZona.className = 'border border-gray-300 px-4 py-3';
+    tdZona.dataset.index = 3;
+    const inputZona = document.createElement('input');
+    inputZona.type = 'text';
+    inputZona.className = 'w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 editable-field';
+    inputZona.value = destino[3] || '';
+    inputZona.dataset.fieldIndex = 3;
+    tdZona.appendChild(inputZona);
+    tr.appendChild(tdZona);
+
+    // Columna 4: Referencia (EDITABLE)
+    const tdReferencia = document.createElement('td');
+    tdReferencia.className = 'border border-gray-300 px-4 py-3';
+    tdReferencia.dataset.index = 4;
+    const inputReferencia = document.createElement('input');
+    inputReferencia.type = 'text';
+    inputReferencia.className = 'w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 editable-field';
+    inputReferencia.value = destino[4] || '';
+    inputReferencia.dataset.fieldIndex = 4;
+    tdReferencia.appendChild(inputReferencia);
+    tr.appendChild(tdReferencia);
+
+    // Columna 5: Dirección Principal (no editable)
+    const tdDireccionPrincipal = document.createElement('td');
+    tdDireccionPrincipal.className = 'border border-gray-300 px-4 py-3 bg-gray-50';
+    tdDireccionPrincipal.textContent = destino[5] || '';
+    tdDireccionPrincipal.dataset.index = 5;
+    tr.appendChild(tdDireccionPrincipal);
+
+    // Columna 6: ID (no editable)
+    const tdId = document.createElement('td');
+    tdId.className = 'border border-gray-300 px-4 py-3 bg-gray-50 font-mono text-sm';
+    tdId.textContent = destino[6] || '';
+    tdId.dataset.index = 6;
+    tr.appendChild(tdId);
+
+    // Columna 7: Botón Guardar
+    const tdAccion = document.createElement('td');
+    tdAccion.className = 'border border-gray-300 px-4 py-3 text-center';
+    const btnGuardar = document.createElement('button');
+    btnGuardar.type = 'button';
+    btnGuardar.className = 'px-4 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition btn-guardar-fila';
+    btnGuardar.textContent = 'Guardar';
+    btnGuardar.dataset.filaIndex = index;
+    btnGuardar.addEventListener('click', () => guardarFila(tr, destino, index));
+    tdAccion.appendChild(btnGuardar);
+    tr.appendChild(tdAccion);
+
+    return tr;
+}
+
+/**
+ * Guarda una fila individual enviando datos al backend
+ * @param {HTMLElement} fila - Elemento fila de la tabla
+ * @param {Array} destinoOriginal - Datos originales del destino
+ * @param {number} filaIndex - Índice de la fila
+ */
+function guardarFila(fila, destinoOriginal, filaIndex) {
+    // Obtener los valores editados
+    const inputZona = fila.querySelector('input[data-field-index="3"]');
+    const inputReferencia = fila.querySelector('input[data-field-index="4"]');
+    
+    const datosActualizados = [...destinoOriginal];
+    datosActualizados[3] = inputZona.value;
+    datosActualizados[4] = inputReferencia.value;
+
+    console.log('Guardando fila:', filaIndex, datosActualizados);
+
+    // Enviar al backend
+    socket.emit('guardar_destino', { 
+        fila: filaIndex, 
+        datos: datosActualizados 
+    }, (respuesta) => {
+        if (respuesta && respuesta.exito) {
+            console.log('Fila guardada exitosamente');
+            
+            // Mostrar mensaje de confirmación
+            mostrarMensajeConfirmacion(`Destino guardado exitosamente`);
+            
+            // Deshabilitar la fila
+            deshabilitarFila(fila);
+        } else {
+            alert('Error al guardar la fila. Intenta de nuevo.');
+            console.error('Error:', respuesta);
+        }
+    });
+}
+
+/**
+ * Deshabilita una fila después de guardarla
+ * @param {HTMLElement} fila - Elemento fila a deshabilitar
+ */
+function deshabilitarFila(fila) {
+    // Deshabilitar inputs editables
+    const inputs = fila.querySelectorAll('.editable-field');
+    inputs.forEach(input => {
+        input.disabled = true;
+        input.classList.add('bg-gray-100', 'cursor-not-allowed');
+    });
+
+    // Cambiar apariencia del botón
+    const btnGuardar = fila.querySelector('.btn-guardar-fila');
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = 'Guardado ✓';
+    btnGuardar.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+    btnGuardar.classList.add('bg-green-600', 'cursor-not-allowed');
+
+    // Cambiar color de fila a indicar que está guardada
+    fila.classList.add('bg-green-50');
+}
+
+/**
+ * Muestra un mensaje de confirmación temporal
+ * @param {string} mensaje - Mensaje a mostrar
+ */
+function mostrarMensajeConfirmacion(mensaje) {
+    const mainContent = document.querySelector('.main-content');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-pulse z-50';
+    messageDiv.textContent = mensaje;
+    mainContent.appendChild(messageDiv);
+
+    // Remover mensaje después de 3 segundos
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 3000);
+}
