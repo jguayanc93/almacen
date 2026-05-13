@@ -333,7 +333,7 @@ io.on('connection',(socket)=>{
             const bservador=await zonas_limpiador(socket);
             // const grupo=await nueva_zone(socket,"RUTAS")
             const llamada=await obtenerpromesa_cliente();
-            const respuesta=await obtenerpromesa_ruta_consulta(llamada,cliente);
+            const respuesta=await obtenerpromesa_ruta_consulta(llamada,cliente.codigo);
             callback({
                 success:true,
                 exito:respuesta
@@ -341,7 +341,7 @@ io.on('connection',(socket)=>{
         }
         catch(err){
             console.log(err)
-            callback({success:false,clientes:[]})
+            callback({success:false,exito:[]})
         }
     })
 

@@ -74,10 +74,9 @@ function obtenerpromesa_ruta_consulta(conexion,codigo){
 }
 
 function ruta_cliente_seleccionado(resolve,reject,conexion,codigo){
-    let sp_sql="select * from tbl01_api_almacen_rutas where codcli=@cli";
+    let sp_sql="select * from tbl01_api_almacen_rutas where codcli= @cliente";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
-            console.log("error de consulta general para tabla maestro")
             console.log(err);
         }
         else{
@@ -103,7 +102,7 @@ function ruta_cliente_seleccionado(resolve,reject,conexion,codigo){
             }
         }
     })
-    consulta.addParameter('cli',TYPES.VarChar,codigo);
+    consulta.addParameter('cliente',TYPES.VarChar,codigo);
     conexion.execSql(consulta);
 }
 
