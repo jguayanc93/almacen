@@ -67,13 +67,13 @@ function busqueda_cliente(resolve,reject,conexion,cliente){
 }
 
 
-function obtenerpromesa_ruta_consulta(conexion,cliente){
+function obtenerpromesa_ruta_consulta(conexion,codigo){
     return new Promise((resolve,reject)=>{
-        ruta_cliente_seleccionado(resolve,reject,conexion,cliente)
+        ruta_cliente_seleccionado(resolve,reject,conexion,codigo)
     })
 }
 
-function ruta_cliente_seleccionado(resolve,reject,conexion,cliente){    
+function ruta_cliente_seleccionado(resolve,reject,conexion,codigo){
     let sp_sql="select * from tbl01_api_almacen_rutas where codcli=@cli";
     let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
         if(err){
@@ -99,11 +99,11 @@ function ruta_cliente_seleccionado(resolve,reject,conexion,cliente){
                     respuesta.push(tmp);
                 });
                 Object.assign(respuesta2,respuesta);
-                resolve(respuesta2[0]);
+                resolve(respuesta2);
             }
         }
     })
-    consulta.addParameter('cli', TYPES.VarChar,cliente);
+    consulta.addParameter('cli',TYPES.VarChar,codigo);
     conexion.execSql(consulta);
 }
 

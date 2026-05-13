@@ -332,12 +332,11 @@ io.on('connection',(socket)=>{
         try{
             const bservador=await zonas_limpiador(socket);
             // const grupo=await nueva_zone(socket,"RUTAS")
-            // await crear_buscador(data);
             const llamada=await obtenerpromesa_cliente();
-            const respuesta=await obtenerpromesa_ruta_consulta(llamada,cliente.codigo);
+            const respuesta=await obtenerpromesa_ruta_consulta(llamada,cliente);
             callback({
                 success:true,
-                clientes:respuesta
+                exito:respuesta
             });
         }
         catch(err){
