@@ -336,7 +336,7 @@ function confirmarClienteSeleccionado(cliente) {
             console.log('Cliente confirmado exitosamente');
             console.log(respuesta);
             // Mostrar tabla de destinos/datos recibidos
-            mostrarTablaDestinos(respuesta);
+            mostrarTablaDestinos(respuesta.exito);
         } else {
             alert('Error al confirmar el cliente. Intenta de nuevo.');
         }
@@ -354,7 +354,8 @@ function mostrarTablaDestinos(respuesta) {
     const mainContent = document.querySelector('.main-content > .p-8');
     
     // Convertir objeto a array si es necesario
-    const destinosArray = respuesta.clientes ? Object.values(respuesta.clientes) : [respuesta];
+    // const destinosArray = respuesta.clientes ? Object.values(respuesta.clientes) : [respuesta];
+    const destinosArray = respuesta ? Object.values(respuesta) : [respuesta];
     
     console.log('Destinos a mostrar:', destinosArray);
 
