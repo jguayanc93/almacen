@@ -72,7 +72,7 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         const ruta=document.createElement('td')
         // ruta.textContent='NORTE';
         ruta.className="px-6 py-4 border-b border-gray-200";
-        fechaHora.innerHTML=`<div>NORTE</div><div class="text-sm text-gray-600 mt-1">SAN MIGUEL</div>`;
+        ruta.innerHTML=`<div>NORTE</div><div class="text-sm text-gray-600 mt-1">/SAN MIGUEL</div>`;
 
         const fila=document.createElement('tr');
         // Colores alternados y hover
