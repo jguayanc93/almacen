@@ -1,0 +1,134 @@
+const {config,Connection,Request,TYPES} = require('./conexion/cadena')
+
+function obtenerpromesa_tiempo(){
+    return new Promise((resolve,reject)=>{
+        factura_conexion(resolve,reject);
+    });
+}
+
+function factura_conexion(resolve,reject){
+    let conexion = new Connection(config);
+    conexion.connect();
+    conexion.on('connect',(err)=>{
+        if(err){
+            reject(err);
+        }
+        else{
+            resolve(conexion);
+        }
+    });
+}
+
+function obtenerpromesa_factura_consulta_tiempo(conexion,cliente){
+    return new Promise((resolve,reject)=>{
+        busqueda_cliente(resolve,reject,conexion,cliente)
+    })
+}
+
+function busqueda_cliente(resolve,reject,conexion,cliente){
+    let sugerencia=`%${cliente}%`;
+    // let sp_sql="select top 5 codcli,nomcli from tbl01_api_almacen_rutas where nomcli like @pista group by codcli,nomcli";
+    let sp_sql="";
+    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
+        if(err){
+            conexion.close();
+            reject(err);
+        }
+        else{
+            conexion.close();
+            if(rows.length==0){
+                // socket.emit('ventanilla mestro nuevos',{});
+                // resolve("usuario no aceptado")
+                resolve({})
+            }
+            else{
+                let respuesta=[];
+                let respuesta2={};
+                let contador=0;
+                rows.forEach(fila=>{
+                    let tmp={};
+                    fila.map(data=>{
+                        if(contador>=fila.length) contador=0;
+                        typeof data.value=='string' ? tmp[contador]=data.value.trim() : tmp[contador]=data.value;
+                        contador++;
+                    })
+                    respuesta.push(tmp);
+                });
+                Object.assign(respuesta2,respuesta);
+                // socket.emit('ventanilla mestro nuevos',respuesta2);
+                // resolve("usuario aceptado")
+                resolve(respuesta2)
+            }
+        }
+    })
+    // consulta.addParameter('despacho', TYPES.Int,0);
+    consulta.addParameter('pista', TYPES.VarChar,sugerencia);
+    conexion.execSql(consulta);
+}
+
+
+function obtenerpromesa_ruta_consulta(conexion,codigo){
+    return new Promise((resolve,reject)=>{
+        ruta_cliente_seleccionado(resolve,reject,conexion,codigo)
+    })
+}
+
+function ruta_cliente_seleccionado(resolve,reject,conexion,codigo){
+    let sp_sql="select * from tbl01_api_almacen_rutas where codcli= @cliente";
+    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            conexion.close();
+            if(rows.length==0){
+                resolve({})
+            }
+            else{
+                let respuesta=[];
+                let respuesta2={};
+                let contador=0;
+                rows.forEach(fila=>{
+                    let tmp={};
+                    fila.map(data=>{
+                        if(contador>=fila.length) contador=0;
+                        typeof data.value=='string' ? tmp[contador]=data.value.trim() : tmp[contador]=data.value;
+                        contador++;
+                    })
+                    respuesta.push(tmp);
+                });
+                Object.assign(respuesta2,respuesta);
+                resolve(respuesta2);
+            }
+        }
+    })
+    consulta.addParameter('cliente',TYPES.VarChar,codigo);
+    conexion.execSql(consulta);
+}
+///////consulta para guardar la zona y referencia de cada direccion de cliente selecionado
+function obtenerpromesa_guardar_ruta_consulta(conexion,data){
+    return new Promise((resolve,reject)=>{
+        ruta_guardar_seleccionado(resolve,reject,conexion,data)
+    })
+}
+    
+function ruta_guardar_seleccionado(resolve,reject,conexion,data){
+    let sp_sql="update tbl01_api_almacen_rutas set zona=@zona,referencia=@refer where codcli=@cliente AND dirid=@direccionid";
+    let consulta = new Request(sp_sql,(err,rowCount,rows)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            conexion.close();
+            resolve("ruta creada exitosamente");
+        }
+    })
+    consulta.addParameter('zona',TYPES.VarChar,data[3]);
+    consulta.addParameter('refer',TYPES.VarChar,data[4]);
+    consulta.addParameter('cliente',TYPES.VarChar,data[0]);
+    consulta.addParameter('direccionid',TYPES.Int,data[6]);
+    conexion.execSql(consulta);
+}
+
+module.exports={obtenerpromesa_tiempo,obtenerpromesa_factura_consulta_tiempo,
+    obtenerpromesa_ruta_consulta,obtenerpromesa_guardar_ruta_consulta}

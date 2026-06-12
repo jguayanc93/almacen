@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Remisión Electrónica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 10px;
+        }
+
+        .documento {
+            max-width: 950px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Encabezado Principal */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .logo-section {
+            flex: 0 0 auto;
+            text-align: center;
+        }
+
+        .logo-section h1 {
+            color: #003da5;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 1px;
+        }
+
+        .logo-section p {
+            color: #d00;
+            font-size: 8px;
+            font-weight: bold;
+        }
+
+        .empresa-info {
+            flex: 1;
+            font-size: 9px;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .empresa-info p {
+            margin: 1px 0;
+        }
+
+        .empresa-info strong {
+            font-weight: bold;
+        }
+
+        .empresa-info a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .titulo-derecha {
+            flex: 0 0 auto;
+            background-color: #0066cc;
+            color: white;
+            padding: 8px 12px;
+            border: 2px solid #333;
+            text-align: center;
+            width: 170px;
+        }
+
+        .titulo-derecha h2 {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            line-height: 1.1;
+        }
+
+        .titulo-derecha p {
+            font-size: 10px;
+            margin: 1px 0;
+            font-weight: bold;
+        }
+
+        /* Tabla de datos */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 9px;
+        }
+
+        th {
+            background-color: #d9d9d9;
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            border: 1px solid #000;
+            padding: 4px;
+            vertical-align: top;
+        }
+
+        tr {
+            height: auto;
+        }
+
+        .titulo-seccion {
+            background-color: #d9d9d9;
+            font-weight: bold;
+            border: 1px solid #000;
+        }
+
+        /* Contenedor de tabla con 4 columnas */
+        .tabla-traslado {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 9px;
+        }
+
+        .tabla-traslado th {
+            background-color: #d9d9d9;
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: left;
+            font-weight: bold;
+            height: 20px;
+        }
+
+        .tabla-traslado td {
+            border: 1px solid #000;
+            padding: 3px 4px;
+            height: 25px;
+        }
+
+        .seccion-contenido {
+            border: 1px solid #000;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .documento {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="documento">
+        <!-- ENCABEZADO PRINCIPAL -->
+        <div class="header">
+            <div class="logo-section">
+                <h1>COMPUDISKETT</h1>
+                <p>SOLUCIONES TECNOLÓGICAS</p>
+            </div>
+            <div class="empresa-info">
+                <p><strong>Domicilio Fiscal:</strong> AV. REPÚBLICA DE CHILE NRO. 504 - JESÚS MARÍA - LIMA - LIMA</p>
+                <p><strong>Teléfono:</strong> 614-3800 / 640-0150</p>
+                <p><strong>WebSite:</strong> <a href="#">http://www.compudiskett.com.pe</a><br>
+                   <a href="#">http://store.compudiskett.com.pe</a></p>
+                <p><strong>Email:</strong> informes@compudiskett.com.pe</p>
+            </div>
+            <div class="titulo-derecha">
+                <h2>GUÍA DE REMISIÓN<br>ELECTRÓNICA</h2>
+                <p>R.U.C. 20123053037</p>
+                <p>Nº T007-0037837</p>
+            </div>
+        </div>
+
+        <!-- DATOS DEL INICIO DEL TRASLADO -->
+        <table class="tabla-traslado">
+            <thead>
+                <tr>
+                    <th colspan="4">DATOS DEL INICIO DEL TRASLADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Fecha de emisión</strong><br>06/03/2025</td>
+                    <td><strong>Fecha de traslado</strong><br>06/03/2025</td>
+                    <td><strong>Motivo del traslado</strong><br>VENTA DE PRODUCTOS</td>
+                    <td><strong>Modalidad de transporte</strong><br>PRIVADO</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- DATOS DEL DESTINATARIO -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">DATOS DEL DESTINATARIO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Razón social del destinatario</strong><br>INVERSIONES LAK TRADING S.A.C<br><br><strong>Dirección de partida</strong><br>AV REPÚBLICA DE CHILE 504</td>
+                    <td><strong>Documento de identidad</strong><br>RUC - 20559977307<br><br><strong>Dirección de llegada</strong><br>JR. AYACUCHO NRO. 250 INT. B (2DO PISO - AL FRENTE DE LA QUI)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- DATOS DEL TRANSPORTISTA -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="4">DATOS DEL TRANSPORTISTA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Razón social del transportista</strong><br>COMPUDISKETT S.R.L.</td>
+                    <td><strong>Número de RUC</strong><br>20123053037</td>
+                    <td><strong>Placa del vehículo</strong><br>BTI-922</td>
+                    <td><strong>Marca</strong><br>HYUNDAI</td>
+                </tr>
+                <tr>
+                    <td><strong>Nombre del chofer</strong><br>MORALES OLIVERA CARLOS</td>
+                    <td><strong>Doc. Identidad</strong><br>09931670</td>
+                    <td><strong>Licencia</strong><br>Q09931670</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- DATOS DE LA AGENCIA DE TRANSPORTE -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">DATOS DE LA AGENCIA DE TRANSPORTE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Razón social de la agencia</strong><br>EXPRESO CHAN CHAN S.A</td>
+                    <td><strong>Número de RUC</strong><br>20398018410</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>Dirección de la agencia</strong><br>AV.28 DE JULIO 298 JESÚS MARÍA</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- TABLA DE PRODUCTOS -->
+        <table style="margin-top: 8px;">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">MARCA</th>
+                    <th style="width: 45%;">DESCRIPCIÓN</th>
+                    <th style="width: 8%;">U.M.</th>
+                    <th style="width: 10%;">CANTIDAD</th>
+                    <th style="width: 10%;">PESO</th>
+                    <th style="width: 10%;">PESO TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T664120-AL NEGRO PARA L200</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T664220-AL CIAN PARA L200</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T664320-AL MAGENTA PARA L200</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T664420-AL YELLOW PARA L200</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">9.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T544120-AL NEGRO PARA L3110</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T544220-AL CIAN PARA L3110</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T544420-AL YELLOW PARA L3110</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T504120-AL NEGRO</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T504220-AL CIAN</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T504320-AL MAGENTA</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>EPSON</td>
+                    <td>BOTELLA TINTA EPSON T504420-AL YELLOW</td>
+                    <td>UND</td>
+                    <td style="text-align: right;">90.00</td>
+                    <td></td>
+                    <td style="text-align: right;">10.00</td>
+                </tr>
+                <tr>
+                    <td>ND</td>
+                    <td>DSCTO/PROM: EPSON T664X20 DSCTO MARZO 25</td>
+                    <td></td>
+                    <td style="text-align: right;">1.00</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ND</td>
+                    <td>DSCTO/PROM: EPSON T544X20 DSCTO MARZO 25</td>
+                    <td></td>
+                    <td style="text-align: right;">1.00</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ND</td>
+                    <td>DSCTO/PROM: EPSON T504X20 DSCTO MARZO 25</td>
+                    <td></td>
+                    <td style="text-align: right;">1.00</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ND</td>
+                    <td>DSCTO/PROM: FLETE PROVINCIA LA LIBERTAD 2024 (CK)</td>
+                    <td></td>
+                    <td style="text-align: right;">1.00</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- RESUMEN FINAL -->
+        <table style="margin-top: 8px; margin-bottom: 8px;">
+            <tbody>
+                <tr style="height: 50px;">
+                    <td style="width: 25%;"><strong>Documentos de referencia:</strong><br>01/F009-0555903</td>
+                    <td style="width: 25%;"><strong>Cant. Bultos:</strong><br>5.00</td>
+                    <td style="width: 25%;"><strong>Item's Totales:</strong><br>15</td>
+                    <td style="width: 25%; text-align: center;">
+                        <div style="width: 60px; height: 60px; background-color: #f0f0f0; border: 1px solid #999; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #999;">
+                            [QR]
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- INFORMACIÓN FINAL -->
+        <table style="margin-bottom: 8px;">
+            <tbody>
+                <tr style="height: 30px;">
+                    <td colspan="2" style="width: 75%;"><strong>Representación impresa de la Guía de Remisión Electrónica. Podrá ser consultada en<br>www.compudiskett.com.pe/cpe</strong></td>
+                    <td style="width: 25%; text-align: center;"><strong>Peso total<br>109.00</strong></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td colspan="3"><strong>Autorizado mediante Resolución de Intendencia Nº<br>Nº018-005-0002664/SUNAT</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- OBSERVACIONES -->
+        <table style="margin-bottom: 8px;">
+            <thead>
+                <tr>
+                    <th>Observaciones:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 60px;">
+                    <td>KAROL LAZARO ALFARO|40084658|996464280<br>DESTINO: TRUJILLO ENVÍO A DOMICILIO ATTE: KAROL LAZARO ALFARO DNI: 40084658 TELF: 922636554</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

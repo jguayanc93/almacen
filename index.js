@@ -36,6 +36,7 @@ const {almmym} = require('./funciones/mym/mym')
 const {zonaseleccion} = require('./funciones/zonas/zona')
 const {desempaquetador,desempaquetador_despacho} = require('./desempaquetador')
 const {obtenerpromesa_cliente,obtenerpromesa_cliente_consulta,obtenerpromesa_ruta_consulta,obtenerpromesa_guardar_ruta_consulta} = require('./buscar_clientes_ruta')
+// const {obtenerpromesa_tiempo} = require('./buscar_factura_tiempo')
 
 const app=express();
 const server=createServer(app);
@@ -361,6 +362,20 @@ io.on('connection',(socket)=>{
         }
     })
 
+    // socket.on('factura_tiempos',async (ndoc,callback)=>{
+    //     try{
+    //         const llamada=await obtenerpromesa_usuario();
+    //         const respuesta=await obtenerpromesa_factura_tiempos_consulta(llamada,ndoc);
+    //         callback({
+    //             success:true,
+    //             exito:respuesta
+    //         });
+    //     }
+    //     catch(err){
+    //         console.log(err)
+    //         callback({success:false,exito:[]})
+    //     }
+    // })
 })
 
 server.listen(port,()=>{console.log(`server levantado en http://localhost:${port}`)})

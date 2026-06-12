@@ -39,7 +39,7 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     const thead = document.createElement('thead');
     thead.className = 'bg-indigo-600 text-white sticky top-0';
     const headerRow = document.createElement('tr');
-    const headers = ['Fecha', 'Hora', 'Documento', 'Cliente', 'Zona'];
+    const headers = ['Fecha-Hora', 'Documento', 'Cliente', 'Zona', 'Ruta'];
     headers.forEach(header => {
         const th = document.createElement('th');
         th.textContent = header;
@@ -53,13 +53,9 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     const cuerpo=document.createElement('tbody');
     let rowIndex = 0;
     for(let doc in registros){
-        const fecha=document.createElement('td')
-        fecha.textContent=registros[doc][0];
-        fecha.className="px-6 py-4 border-b border-gray-200";
-
-        const hora=document.createElement('td')
-        hora.textContent=registros[doc][1];
-        hora.className="px-6 py-4 border-b border-gray-200";
+        const fechaHora=document.createElement('td')
+        fechaHora.className="px-6 py-4 border-b border-gray-200";
+        fechaHora.innerHTML=`<div>${registros[doc][0]}</div><div class="text-sm text-gray-600 mt-1">${registros[doc][1]}</div>`;
 
         const documento=document.createElement('td')
         documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600";
@@ -73,6 +69,11 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         zonas.textContent=registros[doc][4];
         zonas.className="px-6 py-4 border-b border-gray-200 font-medium";
 
+        const ruta=document.createElement('td')
+        // ruta.textContent='NORTE';
+        ruta.className="px-6 py-4 border-b border-gray-200";
+        fechaHora.innerHTML=`<div>NORTE</div><div class="text-sm text-gray-600 mt-1">SAN MIGUEL</div>`;
+
         const fila=document.createElement('tr');
         // Colores alternados y hover
         if(rowIndex % 2 === 0) {
@@ -80,11 +81,11 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         } else {
             fila.className="bg-gray-50 hover:bg-indigo-50 transition";
         }
-        fila.appendChild(fecha)
-        fila.appendChild(hora)
+        fila.appendChild(fechaHora)
         fila.appendChild(documento)
         fila.appendChild(cliente)
         fila.appendChild(zonas)
+        fila.appendChild(ruta)
 
         cuerpo.appendChild(fila);
         rowIndex++;
