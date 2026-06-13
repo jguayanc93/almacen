@@ -58,8 +58,10 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         fechaHora.innerHTML=`<div>${registros[doc][0]}</div><div class="text-sm text-gray-600 mt-1">${registros[doc][1]}</div>`;
 
         const documento=document.createElement('td')
-        documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600";
-        documento.textContent=registros[doc][2];
+        // documento.className="font-mono px-6 py-4 border-b border-gray-200 font-semibold text-indigo-600";
+        // documento.textContent=registros[doc][2];
+        documento.className="px-6 py-4 border-b border-gray-200";
+        documento.innerHTML=`<div>${(registros[doc][2]).startsWith("F008") ? 'GRATUITA' : 'FACTURA'}</div><div class="text-sm text-gray-600 mt-1">${registros[doc][2]}</div>`;
 
         const cliente=document.createElement('td')
         cliente.textContent=registros[doc][3];
