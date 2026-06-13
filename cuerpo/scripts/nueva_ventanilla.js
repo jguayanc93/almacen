@@ -36,11 +36,16 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
     // console.log("ESTOS REGISTROS SON UNICOS PARA EL LLAMADO DE CIERTAS ZONAS REVISAR SI SE REPITE")
     // console.log(registros);
     
+    // Determinar si incluir columna ruta según nombre_ev_actual
+    const incluirRuta = nombre_ev_actual !== 'ventanilla';
+    
     // Crear encabezados (thead)
     const thead = document.createElement('thead');
     thead.className = 'bg-indigo-600 text-white sticky top-0';
     const headerRow = document.createElement('tr');
-    const headers = ['Fecha-Hora', 'Documento', 'Cliente', 'Zona', 'Ruta'];
+    const headers = incluirRuta 
+        ? ['Fecha-Hora', 'Documento', 'Cliente', 'Zona', 'Ruta']
+        : ['Fecha-Hora', 'Documento', 'Cliente', 'Zona'];
     headers.forEach(header => {
         const th = document.createElement('th');
         th.textContent = header;
@@ -72,11 +77,6 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         zonas.textContent=registros[doc][4];
         zonas.className="px-6 py-4 border-b border-gray-200 font-medium";
 
-        const ruta=document.createElement('td')
-        // ruta.textContent='NORTE';
-        ruta.className="px-6 py-4 border-b border-gray-200";
-        ruta.innerHTML=`<div>NORTE</div><div class="text-sm text-gray-600 mt-1">/SAN MIGUEL</div>`;
-
         const fila=document.createElement('tr');
         // Colores alternados y hover
         if(rowIndex % 2 === 0) {
@@ -88,7 +88,15 @@ socket.on('ventanilla mestro nuevos',(registros)=>{
         fila.appendChild(documento)
         fila.appendChild(cliente)
         fila.appendChild(zonas)
-        fila.appendChild(ruta)
+        
+        // Solo agregar columna ruta si no es ventanilla
+        if(incluirRuta) {
+            const ruta=document.createElement('td')
+            // ruta.textContent='NORTE';
+            ruta.className="px-6 py-4 border-b border-gray-200";
+            ruta.innerHTML=`<div>NORTE</div><div class="text-sm text-gray-600 mt-1">/SAN MIGUEL</div>`;
+            fila.appendChild(ruta)
+        }
 
         cuerpo.appendChild(fila);
         rowIndex++;
