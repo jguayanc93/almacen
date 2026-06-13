@@ -27,6 +27,7 @@ function mostrar_nuevos_documentos(){
 }
 /////////PROTOTIPO PARA MOSTRAR LA TABLA MAESTRO DESTRUCTURADA
 socket.on('ventanilla mestro nuevos',(registros)=>{
+    console.log(nombre_ev_actual,valor_ev_actual,salida_ev_actual);
     console.log("revisa los registros nuevos para la busqueda unica",registros);
     document.getElementById("tabla-1-titulo").textContent="Nuevos Documentos";
     document.getElementById("tabla-1-descripcion").textContent="Nuevos documentos programados para ser trabajados";
